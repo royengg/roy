@@ -112,6 +112,7 @@ export default function KeyboardDemo() {
           rows={1}
           maxLength={MAX_THOUGHT_LENGTH}
           spellCheck
+          suppressHydrationWarning
           aria-label="What I care about"
           aria-describedby="about-editor-instructions"
           data-keyboard-editor
