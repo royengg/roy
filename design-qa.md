@@ -13,6 +13,7 @@
 - Checked the contribution, experience, project, and contact sections at desktop width for consistent alignment, spacing, hairlines, and type hierarchy.
 - Verified the official Aceternity keyboard sits directly below the About serif lead, remains inside the left column at desktop width, and preserves its interactive key-press and mechanical-sound behavior.
 - Verified the fixed “I care about” lead remains intact while the editable suffix replaces its sample on the first physical or on-screen key press, then supports insertion, selection, Backspace, Delete, spaces, line breaks, paste, and automatic height growth.
+- Verified an outside pointer interaction or page scroll restores the original About sentence and removes editor focus, while pointer interactions inside the editor/keyboard group continue the current edit.
 - Rechecked the contribution card at the 780px content rail after scaling. The 738px graph aligns exactly with the card's inner width, uses larger 10px cells and 12px month labels, and retains horizontal scrolling rather than shrinking on narrow screens.
 - Inspected rapid-hover behavior across the vertical project list. Each card uses an independent, interruptible CSS transform transition, lifts 6px without changing document flow, and retargets from its current position as the pointer moves to another card.
 

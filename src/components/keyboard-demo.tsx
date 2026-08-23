@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Keyboard,
   type KeyboardInputAction,
@@ -12,8 +18,32 @@ const MAX_THOUGHT_LENGTH = 140;
 export default function KeyboardDemo() {
   const [thought, setThought] = useState(DEFAULT_THOUGHT);
   const editorRef = useRef<HTMLTextAreaElement>(null);
+  const interactionRef = useRef<HTMLDivElement>(null);
   const hasEditedRef = useRef(false);
   const pendingCaretRef = useRef<number | null>(null);
+
+  const resetThought = useCallback(() => {
+    hasEditedRef.current = false;
+    pendingCaretRef.current = null;
+    setThought(DEFAULT_THOUGHT);
+    editorRef.current?.blur();
+  }, []);
+
+  useEffect(() => {
+    const handleOutsidePointer = (event: PointerEvent) => {
+      const target = event.target;
+      if (target instanceof Node && interactionRef.current?.contains(target)) return;
+      resetThought();
+    };
+
+    document.addEventListener("pointerdown", handleOutsidePointer, true);
+    window.addEventListener("scroll", resetThought, { passive: true });
+
+    return () => {
+      document.removeEventListener("pointerdown", handleOutsidePointer, true);
+      window.removeEventListener("scroll", resetThought);
+    };
+  }, [resetThought]);
 
   useLayoutEffect(() => {
     const editor = editorRef.current;
@@ -24,7 +54,7 @@ export default function KeyboardDemo() {
 
     if (pendingCaretRef.current !== null) {
       const caret = pendingCaretRef.current;
-      editor.focus();
+      editor.focus({ preventScroll: true });
       editor.setSelectionRange(caret, caret);
       pendingCaretRef.current = null;
     }
@@ -73,7 +103,7 @@ export default function KeyboardDemo() {
   }, []);
 
   return (
-    <>
+    <div ref={interactionRef} className="about-keyboard-interaction">
       <div className="about-lede">
         <span className="about-lede-prefix">I care about</span>
         <textarea
@@ -110,6 +140,7 @@ export default function KeyboardDemo() {
       </div>
       <span id="about-editor-instructions" className="sr-only">
         Type here or use the keyboard below. Your first keystroke replaces the sample text.
+        The sample returns when you click elsewhere or scroll the page.
       </span>
       <div className="about-keyboard-demo">
         <Keyboard
@@ -118,6 +149,6 @@ export default function KeyboardDemo() {
           className="mx-0 [zoom:0.8] sm:[zoom:0.8] md:[zoom:0.65] lg:[zoom:0.65] xl:[zoom:0.65]"
         />
       </div>
-    </>
+    </div>
   );
 }

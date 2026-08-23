@@ -482,7 +482,12 @@ const KeyboardProvider = ({
       playSoundDown(keyCode);
       setPressed(keyCode);
 
-      if (shouldType) typeKey(keyCode, e.key);
+      if (shouldType) {
+        if (!isEditableTarget && (keyCode === "Space" || keyCode === "Backspace")) {
+          e.preventDefault();
+        }
+        typeKey(keyCode, e.key);
+      }
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
