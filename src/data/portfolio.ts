@@ -104,6 +104,49 @@ export const projects: Project[] = [
     github: "https://github.com/royengg/vedaai-assignment",
     live: "https://vedaai.cooldash.xyz/assignments",
   },
+  {
+    slug: "litmus-ai",
+    title: "Litmus AI",
+    year: "2025",
+    category: "AI fact-checking pipeline",
+    summary: "Queued fact-checking with multi-source retrieval and credibility scoring.",
+    description:
+      "A fact-checking assistant that turns submitted claims and URLs into evidence-backed credibility analysis. A Next.js workspace sends long-running work to an Express and BullMQ pipeline, where retrieval, scraping, and Gemini analysis run outside the request cycle before results are persisted for review.",
+    image: "/projects/litmus-ai.png",
+    imageAlt: "GitHub repository preview for the Litmus AI fact-checking assistant",
+    color: "#63d8c9",
+    textColor: "#102522",
+    stack: ["Next.js", "Express", "BullMQ", "Redis", "PostgreSQL", "Gemini"],
+    highlights: [
+      "BullMQ workers isolate scraping, retrieval, and model analysis from API requests",
+      "Exa search and Pinecone retrieval ground credibility assessments in external context",
+      "Redis-backed queue controls cover monitoring, capacity limits, and job recovery",
+      "Clerk authentication and Prisma persistence keep analysis history tied to each user",
+    ],
+    github: "https://github.com/royengg/Litmus-AI",
+  },
+  {
+    slug: "leadly-live",
+    title: "Leadly",
+    year: "2026",
+    category: "AI lead intelligence",
+    summary: "Autonomous Reddit monitoring that qualifies high-intent conversations.",
+    description:
+      "A full-stack lead intelligence product that continuously monitors Reddit for high-intent conversations. Scheduled workers collect posts, Gemini scores them against an ideal customer profile, and the product turns qualified signals into enriched leads and personalized outreach.",
+    image: "/projects/leadly.png",
+    imageAlt: "Leadly workspace overview with monitoring and lead intelligence metrics",
+    color: "#d7a5aa",
+    textColor: "#2f1419",
+    stack: ["Next.js", "Express", "BullMQ", "Redis", "PostgreSQL", "Gemini"],
+    highlights: [
+      "Scheduled Reddit and keyword monitors feed dedicated BullMQ workers",
+      "Gemini scores relevance, buyer intent, sentiment, and ideal-customer fit",
+      "Tier-aware quotas and Dodo Payments webhooks control subscription access",
+      "Cursor-based collection, rate limiting, and Redis idempotency protect the pipeline",
+    ],
+    github: "https://github.com/royengg/leadly-live",
+    live: "https://leadly.live",
+  },
 ];
 
 export const experiences = [

@@ -31,6 +31,16 @@ const repositories = [
     folder: "vedaai-assignment",
     url: "https://github.com/royengg/vedaai-assignment",
   },
+  {
+    slug: "litmus-ai",
+    folder: "Litmus-AI",
+    url: "https://github.com/royengg/Litmus-AI",
+  },
+  {
+    slug: "leadly-live",
+    folder: "leadly-live",
+    url: "https://github.com/royengg/leadly-live",
+  },
 ];
 
 const ignoredSegments = new Set([
