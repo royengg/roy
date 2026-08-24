@@ -14,6 +14,7 @@
 - Verified the official Aceternity keyboard sits directly below the About serif lead, remains inside the left column at desktop width, and preserves its interactive key-press and mechanical-sound behavior.
 - Verified the fixed “I care about” lead remains intact while the editable suffix replaces its sample on the first physical or on-screen key press, then supports insertion, selection, Backspace, Delete, spaces, line breaks, paste, and automatic height growth.
 - Verified an outside pointer interaction or page scroll restores the original About sentence and removes editor focus, while pointer interactions inside the editor/keyboard group continue the current edit.
+- Verified focusing and typing in the About editor shows only the caret/selection in light and dark mode, without the former orange perimeter; Windows forced-colors mode retains a system `Highlight` outline.
 - Rechecked the contribution card at the 780px content rail after scaling. The 738px graph aligns exactly with the card's inner width, uses larger 10px cells and 12px month labels, and retains horizontal scrolling rather than shrinking on narrow screens.
 - Inspected rapid-hover behavior across the vertical project list. Each card uses an independent, interruptible CSS transform transition, lifts 6px without changing document flow, and retargets from its current position as the pointer moves to another card.
 
@@ -47,6 +48,10 @@
 - Verified the Aceternity 3D Marquee fills the 780px desktop crop with fifteen visible logo tiles, keeps twenty tiles inside the 390px mobile crop without document overflow, exposes only one accessible set of the twelve technologies, and stops its column and hover transforms for reduced-motion users.
 - Verified every transformed marquee card keeps its 80px logo and one-line 22px label inside the colored surface with increased lower-edge breathing room at desktop and mobile sizes.
 - Verified the container-scaled marquee keeps at least three diagonal card bands visible through the alternating column cycle, and that hover uses a stationary hit area with an interruptible 300ms child transform rather than moving the pointer target itself.
+- Verified every marquee hit area now fills its 406px source-grid column, producing approximately 386px-wide transformed tiles at the 780px desktop rail; the stronger 2px dashed guides remain visible between surfaces in light and dark mode without becoming card borders.
+- Verified the pull cord toggles the complete semantic light/dark palette by click, 66px drag, Enter, and Space; exposes a 44px target with a changing accessible name and `aria-pressed`; and persists the chosen theme across reloads without a hydration warning.
+- Verified the dark appearance preserves the bright project and stack surfaces, switches the keyboard, graph, dock, structural surfaces, shadows, borders, and text roles, and introduces no horizontal overflow at 1280px or 390px.
+- Verified reduced-motion mode bypasses the circular View Transition while retaining an immediate theme change, and the dark primary, secondary, accent, status, and interactive-border pairs measure 15.89:1, 7.43:1, 6.44:1, 8.48:1, and 3.09:1 against the declared page background.
 - Verified the About editor exposes a labelled multiline textbox, the keyboard is one tab stop rather than 78, every rendered key has an accessible name and pressed state, and the keyboard receives a visible focus ring.
 - Verified the shared technology component reveals the correct software name in both project cards and project details, and neither expanded row overflows its container.
 - Verified Lenis is disabled for reduced-motion users and hover movement is gated to fine pointers.
