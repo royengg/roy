@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Lenis from "lenis";
 import { AnimatePresence, MotionConfig, motion, useReducedMotion } from "motion/react";
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
@@ -36,8 +36,13 @@ import {
 import type { IconType } from "react-icons";
 import { CalBookingButton } from "@/components/cal-booking-button";
 import KeyboardDemo from "@/components/keyboard-demo";
+import { ThreeDMarquee, type ThreeDMarqueeItem } from "@/components/ui/3d-marquee";
+import { FloatingDock, type FloatingDockItem } from "@/components/ui/floating-dock";
+import { MagneticButton } from "@/components/ui/magnetic-button";
 import contributions from "@/data/contributions.json";
 import { experiences, projects, type Project } from "@/data/portfolio";
+
+const INITIAL_VISIBLE_PROJECTS = 4;
 
 const ProjectChat = dynamic(
   () => import("@/components/project-chat").then((module) => module.ProjectChat),
@@ -58,6 +63,49 @@ const stack = [
   { name: "Tailwind", icon: SiTailwindcss, color: "#06b6d4", tint: "#d8f5f8" },
   { name: "Gemini", icon: SiGooglegemini, color: "#7c4dff", tint: "#ece4ff" },
 ];
+
+const stackMarqueeItems = Array.from({ length: 3 }, (_, repetition) =>
+  stack.map(({ name, icon: Icon, color, tint }) => ({
+    id: `${name}-${repetition}`,
+    label: name,
+    ariaHidden: repetition > 0,
+    content: (
+      <div className="stack-marquee-card" style={{ backgroundColor: tint }}>
+        <Icon className="stack-marquee-logo" color={color} aria-hidden="true" />
+        <span>{name}</span>
+      </div>
+    ),
+  })),
+).flat() satisfies ThreeDMarqueeItem[];
+
+const contactLinks = [
+  {
+    title: "Email",
+    icon: <HugeiconsIcon icon={Mail01Icon} className="h-full w-full" strokeWidth={1.5} />,
+    href: "mailto:rudrakshroywork@gmail.com",
+  },
+  {
+    title: "LinkedIn",
+    icon: <HugeiconsIcon icon={Linkedin01Icon} className="h-full w-full" strokeWidth={1.5} />,
+    href: "https://linkedin.com/in/rudraksh-roy",
+    target: "_blank",
+    rel: "noreferrer",
+  },
+  {
+    title: "GitHub",
+    icon: <HugeiconsIcon icon={Github01Icon} className="h-full w-full" strokeWidth={1.5} />,
+    href: "https://github.com/royengg",
+    target: "_blank",
+    rel: "noreferrer",
+  },
+  {
+    title: "Wabi Sabi",
+    icon: <HugeiconsIcon icon={Globe02Icon} className="h-full w-full" strokeWidth={1.5} />,
+    href: "https://wabisabi.pics",
+    target: "_blank",
+    rel: "noreferrer",
+  },
+] satisfies FloatingDockItem[];
 
 type ProjectTechIcon =
   | { type: "brand"; icon: IconType; color: string }
@@ -178,12 +226,29 @@ function ContributionGraph() {
 
 function ExperienceRows() {
   const [open, setOpen] = useState(0);
+  const [hovered, setHovered] = useState<number | null>(null);
+
   return (
-    <div className="experience-list">
+    <div
+      className="experience-list"
+      onPointerLeave={(event) => {
+        if (event.pointerType !== "touch") setHovered(null);
+      }}
+    >
       {experiences.map((item, index) => {
         const isOpen = open === index;
+        const isDimmed = hovered !== null && hovered !== index;
+
         return (
-          <div className="experience-item" key={item.name}>
+          <motion.div
+            className="experience-item"
+            key={item.name}
+            onPointerEnter={(event) => {
+              if (event.pointerType !== "touch") setHovered(index);
+            }}
+            animate={{ opacity: isDimmed ? 0.4 : 1 }}
+            transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
+          >
             <button
               className="experience-trigger"
               onClick={() => setOpen(isOpen ? -1 : index)}
@@ -212,19 +277,33 @@ function ExperienceRows() {
                 <p>{item.detail}</p>
               </div>
             )}
-          </div>
+          </motion.div>
         );
       })}
     </div>
   );
 }
 
-function ProjectCard({ project, index, onOpen }: { project: Project; index: number; onOpen: () => void }) {
+function ProjectCard({
+  project,
+  index,
+  onOpen,
+  preview = false,
+}: {
+  project: Project;
+  index: number;
+  onOpen?: () => void;
+  preview?: boolean;
+}) {
   return (
     <motion.button
+      type="button"
       className="project-card"
       style={{ backgroundColor: project.color, color: project.textColor }}
       onClick={onOpen}
+      disabled={preview}
+      tabIndex={preview ? -1 : undefined}
+      aria-hidden={preview || undefined}
     >
       <div className="project-copy">
         <div className="project-meta">
@@ -238,7 +317,7 @@ function ProjectCard({ project, index, onOpen }: { project: Project; index: numb
       </div>
       <motion.div
         className="project-image-wrap"
-        layoutId={`image-${project.slug}`}
+        layoutId={preview ? undefined : `image-${project.slug}`}
         transition={{ layout: { duration: 0.28, ease: [0.77, 0, 0.175, 1] } }}
       >
         <Image src={project.image} alt={project.imageAlt} fill sizes="(max-width: 760px) 92vw, 680px" />
@@ -247,6 +326,86 @@ function ProjectCard({ project, index, onOpen }: { project: Project; index: numb
         <HugeiconsIcon icon={ArrowUpRight01Icon} size={20} strokeWidth={2} />
       </span>
     </motion.button>
+  );
+}
+
+function ProjectList({
+  onOpen,
+  onExpand,
+}: {
+  onOpen: (project: Project) => void;
+  onExpand: () => void;
+}) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const initialProjects = projects.slice(0, INITIAL_VISIBLE_PROJECTS);
+  const additionalProjects = projects.slice(INITIAL_VISIBLE_PROJECTS);
+  const nextProject = additionalProjects[0];
+  const hasMoreProjects = additionalProjects.length > 0;
+  const revealProjects = () => {
+    setIsExpanded(true);
+    requestAnimationFrame(onExpand);
+  };
+
+  return (
+    <div className="project-list">
+      {initialProjects.map((project, index) => (
+        <ProjectCard
+          key={project.slug}
+          project={project}
+          index={index}
+          onOpen={() => onOpen(project)}
+        />
+      ))}
+
+      {hasMoreProjects && !isExpanded && nextProject ? (
+        <div className="project-reveal">
+          <div className="project-reveal-preview" aria-hidden="true" inert>
+            <ProjectCard
+              project={nextProject}
+              index={INITIAL_VISIBLE_PROJECTS}
+              preview
+            />
+          </div>
+          <div className="project-reveal-mask" aria-hidden="true" />
+          <button
+            type="button"
+            className="project-reveal-button"
+            onClick={revealProjects}
+            aria-expanded={isExpanded}
+            aria-controls="additional-projects"
+          >
+            <span>View more</span>
+          </button>
+        </div>
+      ) : null}
+
+      <div
+        id="additional-projects"
+        className="project-additional"
+        hidden={!isExpanded}
+      >
+        {isExpanded
+          ? additionalProjects.map((project, index) => (
+              <motion.div
+                key={project.slug}
+                initial={{ opacity: 0, transform: "translateY(16px)" }}
+                animate={{ opacity: 1, transform: "translateY(0)" }}
+                transition={{
+                  duration: 0.24,
+                  delay: Math.min(index * 0.04, 0.12),
+                  ease: [0.23, 1, 0.32, 1],
+                }}
+              >
+                <ProjectCard
+                  project={project}
+                  index={index + INITIAL_VISIBLE_PROJECTS}
+                  onOpen={() => onOpen(project)}
+                />
+              </motion.div>
+            ))
+          : null}
+      </div>
+    </div>
   );
 }
 
@@ -395,10 +554,16 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
 export default function Portfolio() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const reduceMotion = useReducedMotion();
+  const lenisRef = useRef<Lenis | null>(null);
+
+  const refreshScrollDimensions = useCallback(() => {
+    lenisRef.current?.resize();
+  }, []);
 
   useEffect(() => {
     if (reduceMotion) return;
     const lenis = new Lenis({ lerp: 0.085, smoothWheel: true, wheelMultiplier: 0.9 });
+    lenisRef.current = lenis;
     let frame = 0;
     const raf = (time: number) => {
       lenis.raf(time);
@@ -408,6 +573,7 @@ export default function Portfolio() {
     return () => {
       cancelAnimationFrame(frame);
       lenis.destroy();
+      lenisRef.current = null;
     };
   }, [reduceMotion]);
 
@@ -424,8 +590,12 @@ export default function Portfolio() {
             I build dependable products from the data model outward—APIs, realtime systems, queues, caches, and the interfaces that make all of it useful.
           </p>
           <div className="hero-links">
-            <a href="#work">See selected work <HugeiconsIcon icon={ArrowUpRight01Icon} size={16} strokeWidth={2} /></a>
-            <a href="https://github.com/royengg" target="_blank" rel="noreferrer">GitHub <HugeiconsIcon icon={Github01Icon} size={16} strokeWidth={1.5} /></a>
+            <MagneticButton className="rounded-full">
+              <a href="#work">See selected work <HugeiconsIcon icon={ArrowUpRight01Icon} size={16} strokeWidth={2} /></a>
+            </MagneticButton>
+            <MagneticButton className="rounded-full">
+              <a href="https://github.com/royengg" target="_blank" rel="noreferrer">GitHub <HugeiconsIcon icon={Github01Icon} size={16} strokeWidth={1.5} /></a>
+            </MagneticButton>
             <CalBookingButton />
           </div>
         </section>
@@ -446,12 +616,12 @@ export default function Portfolio() {
         <section className="section stack-section">
           <SectionHeading index="02">stack</SectionHeading>
           <p className="section-note">Tools I reach for when reliability, speed, and clarity matter.</p>
-          <div className="stack-grid">
-            {stack.map(({ name, icon: Icon, color, tint }) => (
-              <div key={name} className="stack-item" style={{ backgroundColor: tint }}>
-                <Icon size={26} color={color} aria-hidden="true" /><span>{name}</span>
-              </div>
-            ))}
+          <div className="stack-marquee-frame">
+            <ThreeDMarquee
+              ariaLabel="Technology stack"
+              className="stack-marquee"
+              items={stackMarqueeItems}
+            />
           </div>
         </section>
 
@@ -467,20 +637,19 @@ export default function Portfolio() {
         <section id="work" className="section projects-section">
           <SectionHeading index="05">projects</SectionHeading>
           <p className="section-note">Selected systems, shown from the inside out. Click any card to explore the build.</p>
-          <div className="project-list">
-            {projects.map((project, index) => <ProjectCard key={project.slug} project={project} index={index} onOpen={() => setSelectedProject(project)} />)}
-          </div>
+          <ProjectList onOpen={setSelectedProject} onExpand={refreshScrollDimensions} />
         </section>
 
         <section id="contact" className="section contact-section">
           <SectionHeading index="06">contact</SectionHeading>
           <p className="contact-lede">Have a difficult backend problem or a product that needs to become real?</p>
-          <div className="contact-links">
-            <a href="mailto:rudrakshroywork@gmail.com"><HugeiconsIcon icon={Mail01Icon} size={19} strokeWidth={1.5} /> Email</a>
-            <a href="https://linkedin.com/in/rudraksh-roy" target="_blank" rel="noreferrer"><HugeiconsIcon icon={Linkedin01Icon} size={19} strokeWidth={1.5} /> LinkedIn</a>
-            <a href="https://github.com/royengg" target="_blank" rel="noreferrer"><HugeiconsIcon icon={Github01Icon} size={19} strokeWidth={1.5} /> GitHub</a>
-            <a href="https://wabisabi.pics" target="_blank" rel="noreferrer"><HugeiconsIcon icon={Globe02Icon} size={19} strokeWidth={1.5} /> Wabi Sabi</a>
-          </div>
+          <nav className="contact-dock" aria-label="Contact links">
+            <FloatingDock
+              desktopClassName="contact-dock-desktop"
+              mobileClassName="contact-dock-mobile"
+              items={contactLinks}
+            />
+          </nav>
           <p className="contact-note">Based in Kolkata · Open to thoughtful engineering work</p>
         </section>
       </main>
