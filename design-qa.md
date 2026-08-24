@@ -45,6 +45,8 @@
 - Verified Book a Call opens Cal.com's official dark `rudraksh/30min` modal, locks body scrolling, displays the 30-minute calendar and available times, and exposes Cal.com's native close control.
 - Verified technology icons have accessible labels and native hover titles.
 - Verified the Aceternity 3D Marquee fills the 780px desktop crop with fifteen visible logo tiles, keeps twenty tiles inside the 390px mobile crop without document overflow, exposes only one accessible set of the twelve technologies, and stops its column and hover transforms for reduced-motion users.
+- Verified every transformed marquee card keeps its 80px logo and one-line 22px label inside the colored surface with increased lower-edge breathing room at desktop and mobile sizes.
+- Verified the container-scaled marquee keeps at least three diagonal card bands visible through the alternating column cycle, and that hover uses a stationary hit area with an interruptible 300ms child transform rather than moving the pointer target itself.
 - Verified the About editor exposes a labelled multiline textbox, the keyboard is one tab stop rather than 78, every rendered key has an accessible name and pressed state, and the keyboard receives a visible focus ring.
 - Verified the shared technology component reveals the correct software name in both project cards and project details, and neither expanded row overflows its container.
 - Verified Lenis is disabled for reduced-motion users and hover movement is gated to fine pointers.

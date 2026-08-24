@@ -48,7 +48,10 @@ export const ThreeDMarquee = ({
       )}
     >
       <div className="flex size-full items-center justify-center">
-        <div className="size-[1720px] shrink-0 scale-50 sm:scale-75 lg:scale-100">
+        <div
+          data-slot="three-d-marquee-stage"
+          className="size-[1720px] shrink-0 scale-50 sm:scale-75 lg:scale-100"
+        >
           <div
             data-slot="three-d-marquee-grid"
             style={{
@@ -60,7 +63,7 @@ export const ThreeDMarquee = ({
               <motion.div
                 animate={shouldReduceMotion ? undefined : { y: colIndex % 2 === 0 ? 100 : -100 }}
                 transition={{
-                  duration: colIndex % 2 === 0 ? 10 : 15,
+                  duration: colIndex % 2 === 0 ? 8.5 : 12.5,
                   repeat: Infinity,
                   repeatType: "reverse",
                 }}
@@ -75,26 +78,25 @@ export const ThreeDMarquee = ({
                     role="listitem"
                     aria-label={item.label}
                     aria-hidden={item.type === "content" && item.ariaHidden ? true : undefined}
+                    data-slot="three-d-marquee-hit-area"
                   >
                     <GridLineHorizontal className="-top-4" offset="20px" />
                     {item.type === "image" ? (
                       <motion.img
-                        whileHover={shouldReduceMotion ? undefined : { y: -10 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        data-slot="three-d-marquee-visual"
                         src={item.src}
                         alt={item.label}
-                        className="aspect-[970/700] rounded-lg object-cover ring ring-gray-950/5 hover:shadow-2xl"
+                        className="aspect-[970/700] rounded-lg object-cover ring ring-gray-950/5"
                         width={970}
                         height={700}
                       />
                     ) : (
-                      <motion.div
-                        whileHover={shouldReduceMotion ? undefined : { y: -10 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="aspect-[970/700] w-full rounded-lg ring ring-gray-950/5 hover:shadow-2xl"
+                      <div
+                        data-slot="three-d-marquee-visual"
+                        className="aspect-[970/700] w-full rounded-lg ring ring-gray-950/5"
                       >
                         {item.content}
-                      </motion.div>
+                      </div>
                     )}
                   </div>
                 ))}
