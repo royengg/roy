@@ -1,6 +1,6 @@
 # Rudraksh Roy — Portfolio
 
-A centered editorial portfolio built with Next.js, TypeScript, Tailwind CSS, Motion, and Lenis. Project details open in a focused modal with a repository-grounded Gemini chat for each featured public repository.
+A centered editorial portfolio built with Next.js, TypeScript, Tailwind CSS, Motion, and Lenis. The project list keeps four selected builds visible and reveals two more through a Hanabi-derived preview disclosure. Project details open in a focused modal with a repository-grounded Gemini chat for each featured public repository.
 
 ## Local development
 
@@ -36,10 +36,13 @@ bunx @google/design.md lint DESIGN.md
 ## Structure
 
 - `src/app` — page shell and server API routes
-- `src/components` — portfolio, project chat, and Cal.com UI
+- `src/components` — portfolio compositions and component demos
+- `src/components/ui` — shadcn-compatible source components, including the keyboard, magnetic button, floating dock, and 3D marquee
 - `src/data` — portfolio content, GitHub contributions, and repository snapshots
 - `src/lib` — server-only repository prompt assembly
 - `scripts` — repeatable repository-context generation
 - `public/projects` — project imagery
 - `DESIGN.md` — design tokens and interface guidance
 - `design-qa.md` — visual, interaction, accessibility, and automated verification notes
+
+`components.json` maps `@/components` to `src/components` and `@/components/ui` to `src/components/ui`; `src/app/globals.css` is the configured Tailwind v4 stylesheet.
