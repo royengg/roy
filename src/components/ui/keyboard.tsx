@@ -617,7 +617,7 @@ export const Keyboard = ({
 
 export const Keypad = () => {
   return (
-    <div className="h-full w-fit rounded-xl bg-neutral-200 p-1 shadow-sm ring-1 shadow-black/5 ring-black/5">
+    <div data-slot="keyboard-shell" className="h-full w-fit rounded-xl bg-neutral-200 p-1 shadow-sm ring-1 shadow-black/5 ring-black/5">
       {/* Function Row */}
       <Row>
         <Key
@@ -955,6 +955,7 @@ const Key = ({
   return (
     <div className={cn("rounded-[4px] p-[0.5px]", containerClassName)}>
       <button
+        data-slot="keyboard-key"
         type="button"
         tabIndex={-1}
         aria-label={ariaLabel ?? (keyCode ? getKeyAccessibleLabel(keyCode) : "Key")}
@@ -1021,6 +1022,7 @@ const ModifierKey = ({
   return (
     <div className={cn("rounded-[4px] p-[0.5px]", containerClassName)}>
       <button
+        data-slot="keyboard-key"
         type="button"
         tabIndex={-1}
         aria-label={keyCode ? getKeyAccessibleLabel(keyCode) : "Modifier key"}

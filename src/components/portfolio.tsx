@@ -39,6 +39,7 @@ import KeyboardDemo from "@/components/keyboard-demo";
 import { ThreeDMarquee, type ThreeDMarqueeItem } from "@/components/ui/3d-marquee";
 import { FloatingDock, type FloatingDockItem } from "@/components/ui/floating-dock";
 import { MagneticButton } from "@/components/ui/magnetic-button";
+import { PullCord } from "@/components/pull-cord";
 import contributions from "@/data/contributions.json";
 import { experiences, projects, type Project } from "@/data/portfolio";
 
@@ -134,7 +135,7 @@ function ProjectTech({ name }: { name: string }) {
   return (
     <span
       className="modal-tech-icon"
-      role="img"
+      role="group"
       aria-label={name}
       title={name}
     >
@@ -185,16 +186,20 @@ function ContributionGraph() {
   }, [days]);
 
   const levelColor = (count: number) => {
-    if (!count) return "#ddd8ce";
+    if (!count) return "var(--color-graph-empty)";
     const ratio = count / max;
-    if (ratio < 0.2) return "#c9dcff";
-    if (ratio < 0.42) return "#84adff";
-    if (ratio < 0.68) return "#4f70ee";
-    return "#ff654d";
+    if (ratio < 0.2) return "var(--color-graph-low)";
+    if (ratio < 0.42) return "var(--color-graph-medium)";
+    if (ratio < 0.68) return "var(--color-graph-high)";
+    return "var(--color-graph-peak)";
   };
 
   return (
-    <div className="contribution-shell" aria-label={`${contributions.total} GitHub contributions in the last year`}>
+    <div
+      className="contribution-shell"
+      role="group"
+      aria-label={`${contributions.total} GitHub contributions in the last year`}
+    >
       <div className="contribution-scroller">
         <div className="month-row" aria-hidden="true">
           {monthLabels.map((label) => (
@@ -580,6 +585,7 @@ export default function Portfolio() {
   return (
     <MotionConfig reducedMotion="user">
       <a className="skip-link" href="#main-content">Skip to content</a>
+      <PullCord />
       <main id="main-content" className="site-shell">
         <section className="hero">
           <div className="availability"><span /> Available for backend &amp; full-stack work</div>

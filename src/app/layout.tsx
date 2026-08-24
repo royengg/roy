@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { Agentation } from "agentation";
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,8 +34,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased`}
     >
       <body>
-        {children}
-        {process.env.NODE_ENV === "development" && <Agentation />}
+        <ThemeProvider>
+          {children}
+          {process.env.NODE_ENV === "development" && <Agentation />}
+        </ThemeProvider>
       </body>
     </html>
   );

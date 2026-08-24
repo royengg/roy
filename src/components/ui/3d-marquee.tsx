@@ -68,12 +68,12 @@ export const ThreeDMarquee = ({
                   repeatType: "reverse",
                 }}
                 key={colIndex + "marquee"}
-                className="flex flex-col items-start gap-8"
+                className="relative flex w-full flex-col items-start gap-8"
               >
                 <GridLineVertical className="-left-4" offset="80px" />
                 {subarray.map((item) => (
                   <div
-                    className="relative"
+                    className="relative w-full"
                     key={item.id}
                     role="listitem"
                     aria-label={item.label}
@@ -120,13 +120,12 @@ const GridLineHorizontal = ({
     <div
       style={
         {
-          "--background": "#ffffff",
-          "--color": "rgba(0, 0, 0.2)",
-          "--height": "1px",
-          "--width": "5px",
+          "--background": "var(--color-bg-page)",
+          "--color": "var(--color-marquee-line)",
+          "--height": "2px",
+          "--width": "6px",
           "--fade-stop": "90%",
           "--offset": offset || "200px", //-100px if you want to keep the line inside
-          "--color-dark": "rgba(255, 255, 0.2)",
           maskComposite: "exclude",
         } as React.CSSProperties
       }
@@ -137,7 +136,6 @@ const GridLineHorizontal = ({
         "[mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)]",
         "[mask-composite:exclude]",
         "z-30",
-        "dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)]",
         className,
       )}
     ></div>
@@ -155,13 +153,12 @@ const GridLineVertical = ({
     <div
       style={
         {
-          "--background": "#ffffff",
-          "--color": "rgba(0, 0, 0.2)",
-          "--height": "5px",
-          "--width": "1px",
+          "--background": "var(--color-bg-page)",
+          "--color": "var(--color-marquee-line)",
+          "--height": "6px",
+          "--width": "2px",
           "--fade-stop": "90%",
           "--offset": offset || "150px", //-100px if you want to keep the line inside
-          "--color-dark": "rgba(255, 255, 0.2)",
           maskComposite: "exclude",
         } as React.CSSProperties
       }
@@ -172,7 +169,6 @@ const GridLineVertical = ({
         "[mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)]",
         "[mask-composite:exclude]",
         "z-30",
-        "dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)]",
         className,
       )}
     ></div>
