@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
-import { Agentation } from "agentation";
+import { DevelopmentTools } from "@/components/development-tools";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
@@ -36,7 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <ThemeProvider>
           {children}
-          {process.env.NODE_ENV === "development" && <Agentation />}
+          {process.env.NODE_ENV === "development" && <DevelopmentTools />}
         </ThemeProvider>
       </body>
     </html>

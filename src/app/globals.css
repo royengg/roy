@@ -209,6 +209,142 @@ button { font: inherit; }
   background: color-mix(in srgb, var(--color-accent-solid) 10%, transparent);
 }
 
+.waveform-scrollbar {
+  position: fixed;
+  z-index: 50;
+  inset-block-start: 50%;
+  inset-inline-end: max(14px, env(safe-area-inset-right));
+  width: 56px;
+  height: 320px;
+  display: none;
+  transform: translate3d(0, -50%, 0);
+}
+.waveform-scrollbar-range {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: default;
+  touch-action: none;
+  writing-mode: vertical-lr;
+  direction: rtl;
+  appearance: slider-vertical;
+}
+.waveform-scrollbar-shell {
+  width: 56px;
+  height: 320px;
+  padding: 16px 8px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 28px;
+  background: transparent;
+  opacity: 0.72;
+  pointer-events: none;
+  transition: opacity 150ms var(--ease-out);
+}
+.waveform-scrollbar-bars {
+  position: relative;
+  width: 40px;
+  height: 288px;
+  display: grid;
+  grid-template-rows: repeat(37, 1fr);
+  align-items: center;
+}
+.waveform-scrollbar-row {
+  position: relative;
+  z-index: 1;
+  width: 40px;
+  height: 3px;
+  display: block;
+}
+.waveform-scrollbar-bar {
+  position: absolute;
+  inset: 0;
+  border-radius: 1px;
+  background: color-mix(in srgb, var(--color-text-secondary) 62%, transparent);
+  transform-origin: center;
+}
+.waveform-scrollbar-bar-active { background: var(--color-accent-solid); }
+.waveform-scrollbar-preview {
+  position: absolute;
+  z-index: 5;
+  inset-block-start: 50%;
+  inset-inline-end: calc(100% + 12px);
+  width: 304px;
+  padding: 7px;
+  border: 1px solid color-mix(in srgb, var(--color-border-default) 78%, transparent);
+  border-radius: 18px;
+  display: grid;
+  gap: 7px;
+  background: var(--color-bg-elevated);
+  box-shadow: none;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(8px, -50%, 0) scale(0.98);
+  transform-origin: right center;
+  transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out);
+}
+.waveform-scrollbar-preview-viewport {
+  width: 100%;
+  height: 192px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--color-border-subtle) 72%, transparent);
+  border-radius: 11px;
+  background: var(--color-bg-page);
+}
+.waveform-scrollbar-preview-frame {
+  width: 900px;
+  height: 600px;
+  border: 0;
+  display: block;
+  background: var(--color-bg-page);
+  pointer-events: none;
+  transform: scale(0.32);
+  transform-origin: top left;
+}
+.waveform-scrollbar-preview-meta {
+  min-height: 30px;
+  padding-inline: 6px;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-secondary);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.waveform-scrollbar-preview-meta strong {
+  overflow: hidden;
+  color: var(--color-text-primary);
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 560;
+  letter-spacing: 0;
+  text-overflow: ellipsis;
+  text-transform: none;
+  white-space: nowrap;
+}
+.waveform-scrollbar-range:focus-visible ~ .waveform-scrollbar-shell {
+  outline: 2px solid var(--color-accent-solid);
+  outline-offset: 3px;
+  opacity: 1;
+}
+.waveform-scrollbar:focus-within .waveform-scrollbar-preview,
+.waveform-scrollbar[data-dragging="true"] .waveform-scrollbar-preview {
+  opacity: 1;
+  transform: translate3d(0, -50%, 0) scale(1);
+}
+.waveform-scrollbar:focus-within .waveform-scrollbar-preview { transition-duration: 0ms; }
+.waveform-scrollbar[data-dragging="true"] .waveform-scrollbar-shell {
+  opacity: 1;
+}
+
 .site-shell,
 .site-footer { width: min(var(--content-width), calc(100% - 40px)); margin-inline: auto; }
 
@@ -548,9 +684,10 @@ button { font: inherit; }
 .contact-section { padding-block-end: 120px; }
 .contact-lede { max-width: 24ch; margin: 0 0 34px; font-family: var(--font-instrument-serif), serif; font-size: clamp(33px, 6vw, 54px); line-height: 1.08; letter-spacing: -0.03em; text-wrap: balance; }
 .contact-dock { width: fit-content; min-height: 80px; display: flex; align-items: flex-end; }
-.contact-dock-desktop { margin-inline: 0; border: 1px solid var(--color-border-dock); background: var(--color-bg-dock); box-shadow: var(--shadow-dock); }
+.contact-dock-desktop { margin-inline: 0; display: flex; border: 1px solid var(--color-border-dock); background: var(--color-bg-dock); box-shadow: var(--shadow-dock); }
 .contact-dock-desktop [data-slot="floating-dock-item"] { border: 1px solid var(--color-border-dock); background: var(--color-bg-dock-control); color: var(--color-text-primary); box-shadow: var(--shadow-dock-control); }
 .contact-dock-desktop [data-slot="floating-dock-tooltip"] { border-color: var(--color-border-subtle); background: var(--color-text-primary); color: var(--color-bg-elevated); box-shadow: 0 4px 14px rgba(24, 23, 21, 0.18); }
+.contact-dock-mobile { display: none; }
 .contact-dock-mobile > button,
 .contact-dock-mobile a { border: 1px solid var(--color-border-dock); background: var(--color-bg-dock-control); color: var(--color-text-primary); box-shadow: var(--shadow-dock-control); }
 .contact-note { margin-block-start: 35px; color: var(--color-text-secondary); font-size: 12px; }
@@ -727,6 +864,14 @@ button { font: inherit; }
 
 :focus-visible { outline: 2px solid var(--color-accent-solid); outline-offset: 3px; }
 
+@media (any-hover: hover) and (any-pointer: fine) {
+  .waveform-scrollbar:hover .waveform-scrollbar-shell { opacity: 1; }
+  .waveform-scrollbar:hover .waveform-scrollbar-preview {
+    opacity: 1;
+    transform: translate3d(0, -50%, 0) scale(1);
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .stack-marquee [data-slot="three-d-marquee-hit-area"]:hover [data-slot="three-d-marquee-visual"] { transform: translateY(-10px); }
   .hero-links a:hover,
@@ -743,6 +888,10 @@ button { font: inherit; }
   .modal-links a:hover { background: rgba(255, 255, 255, 0.12); }
   .modal-tabs button:hover { color: #d8d3ca; }
   .chat-suggestions button:not(:disabled):hover { border-color: rgba(255, 255, 255, 0.3); background: #22221f; color: #f7f2e8; }
+}
+
+@media (min-width: 900px) and (any-pointer: fine) {
+  .waveform-scrollbar[data-scrollable="true"] { display: block; }
 }
 
 @container (min-width: 600px) {
@@ -797,6 +946,45 @@ button { font: inherit; }
   .contact-lede { font-size: 38px; }
 }
 
+@media (max-width: 500px) {
+  .project-card {
+    min-height: 0;
+    padding: 22px 22px 0;
+  }
+  .project-copy { width: 100%; }
+  .project-card-stack {
+    flex-wrap: nowrap;
+    gap: 5px;
+    margin-block-start: 16px;
+  }
+  .project-card-stack .modal-tech-icon {
+    width: 36px;
+    min-width: 0;
+    height: auto;
+    flex: 0 1 36px;
+    aspect-ratio: 1;
+    padding: clamp(5px, 1.8vw, 7px);
+  }
+  .project-card-stack .modal-tech-mark {
+    width: 20px;
+    height: 20px;
+    flex: 0 1 20px;
+  }
+  .project-card-stack .modal-tech-mark svg {
+    width: 100%;
+    height: 100%;
+  }
+  .project-card-stack .modal-tech-label { display: none; }
+  .project-image-wrap {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: 245px;
+    flex: 0 0 245px;
+    margin-block-start: 14px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *,
@@ -816,10 +1004,18 @@ button { font: inherit; }
   .modal-links a,
   .modal-close,
   .chat-form button { transform: none !important; transition-property: color, background-color, opacity; transition-duration: 120ms; }
+  .waveform-scrollbar-shell,
+  .waveform-scrollbar-preview { transition-property: opacity; transition-duration: 120ms; }
+  .waveform-scrollbar-preview { transform: translate3d(0, -50%, 0) scale(1); }
 }
 
 @media (forced-colors: active) {
   :focus-visible { outline-color: Highlight; }
   .about-lede-editor:focus-visible { outline-color: Highlight; }
   .project-open { background: Canvas; }
+  .waveform-scrollbar-shell { background: transparent; box-shadow: none; }
+  .waveform-scrollbar-bar { background: GrayText; }
+  .waveform-scrollbar-bar-active { background: Highlight; }
+  .waveform-scrollbar-preview { border-color: CanvasText; background: Canvas; box-shadow: none; }
+  .waveform-scrollbar-range:focus-visible ~ .waveform-scrollbar-shell { outline-color: Highlight; }
 }

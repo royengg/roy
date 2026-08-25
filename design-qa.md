@@ -23,14 +23,19 @@
 - Checked the page at 390 × 844 with no document-level horizontal overflow.
 - Confirmed the wider desktop rail collapses back to the existing 14px mobile gutters without changing the small-screen reading order.
 - Verified the hero, 3D technology marquee, horizontal contribution scroller, compact experience rows, project cards, and stacked project modal at mobile width.
-- Verified all six circular stack icons fit on each mobile project card without colliding with metadata or controls.
+- Verified all six circular stack icons stay on one line at 390px and 320px: the 390px card row uses 241px of its 318px content rail, while the 320px card keeps the full row inside its 248px rail without wrapping or card-level overflow. In all six project cards, the image is relatively positioned after the copy with a measured 14px icon-to-image gap, including after “View more” mounts Litmus AI and Leadly.
 - Verified coarse-pointer layouts keep the compact circular stack icons and do not expose hover-only labels.
 - Verified the chat modal at 390 × 844: the image/detail split, tabs, empty state, horizontal suggestions, composer, and close control fit without document-level horizontal overflow.
 
 ## Interaction and accessibility checks
 
 - Verified the registry-installed Aceternity dock rests as four 40px Hugeicon circles, expands the focused control to 80px with proportional neighbor response, and displays the correct hover tooltip using the source `150 / 12 / 0.1` spring values.
-- Verified the contact dock remains a semantic labelled navigation region, exposes an accessible name for every icon link, and switches to the source disclosure interaction without horizontal overflow at a 390px viewport.
+- Verified the contact dock remains a semantic labelled navigation region, exposes an accessible name for every icon link, and keeps all four direct controls visible inside the same 242 × 80 px tray at a 390px viewport. The mobile disclosure is absent, both themes have zero horizontal overflow, and the scoped accessibility audit reports no violations.
+- Verified the 56 × 320 px waveform exposes exactly one native vertical slider with section-aware value text. Home and End move the root document to exact 0% and 100% positions, and the control remains inside the inert page shell when project details are open.
+- Verified the waveform’s 304 × 240 px hover/focus card contains a single inert, unfocusable live page miniature rather than a recreated index. Section-anchor mapping keeps the child on the matching content and maps both parent and miniature to their respective scroll limits at Contact. The footer shows only `06` and `Contact`, while the native slider retains `100 percent scrolled, Contact section` for assistive technology; light and dark themes stay synchronized.
+- Verified the miniature route renders no nested waveform, pull cord, or development Agentation overlay; the card and waveform rail both compute to `box-shadow: none`. At 390 × 844 and without a fine pointer, the widget is hidden, no preview iframe is requested, and the document has no horizontal overflow.
+- Verified the transparent range retains the normal default cursor, the waveform renders only its 37 signal bars with no generated center/per-row guides, and the visual preview footer contains no percentage.
+- Verified reduced-motion mode removes preview translation and waveform energy, holds the miniature still while scrolling within a section, then updates it immediately at the next section boundary. The accessibility tree exposes the slider only, with no iframe descendants.
 - Verified “View more” refreshes Lenis after the additional project cards mount; the document remains scrollable from the reveal through Contact and the footer instead of retaining the collapsed scroll boundary.
 - Verified the experience list tracks the active row with React state, keeps it at full opacity, dims only its siblings to 40%, and restores all rows when the pointer leaves the list.
 - Verified touch pointer entry does not activate or leave behind the experience focus treatment; native disclosure behavior and visible keyboard focus remain unchanged.

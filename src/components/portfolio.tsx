@@ -40,6 +40,7 @@ import { ThreeDMarquee, type ThreeDMarqueeItem } from "@/components/ui/3d-marque
 import { FloatingDock, type FloatingDockItem } from "@/components/ui/floating-dock";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { PullCord } from "@/components/pull-cord";
+import { WaveformScrollScrubber } from "@/components/waveform-scroll-scrubber";
 import contributions from "@/data/contributions.json";
 import { experiences, projects, type Project } from "@/data/portfolio";
 
@@ -556,8 +557,13 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   );
 }
 
-export default function Portfolio() {
+type PortfolioProps = {
+  isWaveformPreview?: boolean;
+};
+
+export default function Portfolio({ isWaveformPreview = false }: PortfolioProps) {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null);
   const reduceMotion = useReducedMotion();
   const lenisRef = useRef<Lenis | null>(null);
 
@@ -566,9 +572,10 @@ export default function Portfolio() {
   }, []);
 
   useEffect(() => {
-    if (reduceMotion) return;
+    if (reduceMotion || isWaveformPreview) return;
     const lenis = new Lenis({ lerp: 0.085, smoothWheel: true, wheelMultiplier: 0.9 });
     lenisRef.current = lenis;
+    const publishFrame = requestAnimationFrame(() => setLenisInstance(lenis));
     let frame = 0;
     const raf = (time: number) => {
       lenis.raf(time);
@@ -576,18 +583,25 @@ export default function Portfolio() {
     };
     frame = requestAnimationFrame(raf);
     return () => {
+      cancelAnimationFrame(publishFrame);
       cancelAnimationFrame(frame);
       lenis.destroy();
       lenisRef.current = null;
+      setLenisInstance(null);
     };
-  }, [reduceMotion]);
+  }, [isWaveformPreview, reduceMotion]);
 
   return (
     <MotionConfig reducedMotion="user">
       <a className="skip-link" href="#main-content">Skip to content</a>
-      <PullCord />
-      <main id="main-content" className="site-shell">
-        <section className="hero">
+      {isWaveformPreview ? null : <PullCord />}
+      <main
+        id="main-content"
+        className="site-shell"
+        data-waveform-preview={isWaveformPreview || undefined}
+      >
+        {isWaveformPreview ? null : <WaveformScrollScrubber lenis={lenisInstance} />}
+        <section id="intro" className="hero">
           <div className="availability"><span /> Available for backend &amp; full-stack work</div>
           <p className="hero-kicker">Namaste, I&apos;m</p>
           <h1>Rudraksh Roy<span className="accent-dot">.</span></h1>
@@ -619,7 +633,7 @@ export default function Portfolio() {
           </div>
         </section>
 
-        <section className="section stack-section">
+        <section id="stack" className="section stack-section">
           <SectionHeading index="02">stack</SectionHeading>
           <p className="section-note">Tools I reach for when reliability, speed, and clarity matter.</p>
           <div className="stack-marquee-frame">
@@ -631,12 +645,12 @@ export default function Portfolio() {
           </div>
         </section>
 
-        <section className="section github-section">
+        <section id="open-source" className="section github-section">
           <SectionHeading index="03">open source</SectionHeading>
           <ContributionGraph />
         </section>
 
-        <section className="section experience-section">
+        <section id="experience" className="section experience-section">
           <SectionHeading index="04">experience</SectionHeading><ExperienceRows />
         </section>
 

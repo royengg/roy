@@ -111,6 +111,7 @@ export default function KeyboardDemo() {
           value={thought}
           rows={1}
           maxLength={MAX_THOUGHT_LENGTH}
+          inputMode="none"
           spellCheck
           suppressHydrationWarning
           aria-label="What I care about"
