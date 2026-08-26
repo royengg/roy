@@ -681,6 +681,70 @@ button { font: inherit; }
 .modal-image img { object-fit: cover; object-position: center top; }
 .project-open { position: absolute; inset-inline-end: 24px; inset-block-start: 24px; z-index: 4; width: 40px; height: 40px; border-radius: 999px; display: grid; place-items: center; background: rgba(251, 248, 241, 0.52); backdrop-filter: blur(8px); pointer-events: none; }
 
+.now-showing-section { overflow: visible; }
+.now-showing-stage {
+  position: relative;
+  width: min(980px, calc(100vw - 32px));
+  height: 560px;
+  margin-inline-start: 50%;
+  transform: translateX(-50%);
+}
+.now-showing-gallery {
+  height: calc(100% - 34px);
+  overscroll-behavior-inline: contain;
+}
+.now-showing-gallery canvas { display: block; width: 100%; height: 100%; }
+.now-showing-pending {
+  height: calc(100% - 34px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  overflow: hidden;
+}
+.now-showing-pending span {
+  width: clamp(118px, 18vw, 176px);
+  aspect-ratio: 2 / 3;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  background: var(--color-bg-surface);
+  outline: 1px solid color-mix(in srgb, var(--color-text-primary) 10%, transparent);
+  outline-offset: -1px;
+}
+.now-showing-pending span:nth-child(1),
+.now-showing-pending span:nth-child(4) { opacity: 0.36; transform: translateY(38px) rotate(6deg); }
+.now-showing-pending span:nth-child(2) { opacity: 0.62; transform: translateY(12px) rotate(2deg); }
+.now-showing-pending span:nth-child(3) { transform: translateY(-6px) rotate(-2deg); }
+.watchlist-static {
+  width: min(980px, calc(100vw - 32px));
+  margin: 0 0 0 50%;
+  padding: 2px 2px 14px;
+  display: grid;
+  grid-auto-columns: 190px;
+  grid-auto-flow: column;
+  gap: 16px;
+  overflow-x: auto;
+  list-style: none;
+  scroll-snap-type: inline mandatory;
+  scrollbar-width: thin;
+  transform: translateX(-50%);
+}
+.watchlist-static li { min-width: 0; scroll-snap-align: start; }
+.watchlist-static-poster {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  margin-block-end: 12px;
+  overflow: hidden;
+  border-radius: 10px;
+  outline: 1px solid color-mix(in srgb, var(--color-text-primary) 10%, transparent);
+  outline-offset: -1px;
+}
+.watchlist-static-poster img { object-fit: cover; }
+.watchlist-static strong,
+.watchlist-static span { display: block; }
+.watchlist-static strong { overflow: hidden; font-size: 13px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.watchlist-static span { margin-block-start: 4px; color: var(--color-text-secondary); font-family: var(--font-geist-mono), monospace; font-size: 10px; }
+
 .contact-section { padding-block-end: 120px; }
 .contact-lede { max-width: 24ch; margin: 0 0 34px; font-family: var(--font-instrument-serif), serif; font-size: clamp(33px, 6vw, 54px); line-height: 1.08; letter-spacing: -0.03em; text-wrap: balance; }
 .contact-dock { width: fit-content; min-height: 80px; display: flex; align-items: flex-end; }
@@ -918,6 +982,8 @@ button { font: inherit; }
   .project-reveal-button { inset-block-start: 44px; min-height: 44px; }
   .project-reveal-button span { min-height: 42px; }
   .project-image-wrap { inset-inline: 22px; height: 270px; }
+  .now-showing-stage { height: 440px; }
+  .watchlist-static { grid-auto-columns: min(46vw, 180px); }
   .modal-backdrop { padding: 12px; align-items: end; }
   .project-modal { width: 100%; height: calc(100dvh - 24px); min-height: calc(100dvh - 24px); max-height: calc(100dvh - 24px); grid-template-columns: 1fr; grid-template-rows: 38% 62%; border-radius: 18px; }
   .modal-visual { padding: 12px; }
@@ -943,6 +1009,7 @@ button { font: inherit; }
   .project-card { min-height: 410px; }
   .project-card h3 { font-size: 38px; }
   .project-image-wrap { height: 245px; bottom: -18px; }
+  .now-showing-stage { width: calc(100vw - 20px); height: 400px; }
   .contact-lede { font-size: 38px; }
 }
 
@@ -1007,6 +1074,7 @@ button { font: inherit; }
   .waveform-scrollbar-shell,
   .waveform-scrollbar-preview { transition-property: opacity; transition-duration: 120ms; }
   .waveform-scrollbar-preview { transform: translate3d(0, -50%, 0) scale(1); }
+  .now-showing-pending span { transform: none; }
 }
 
 @media (forced-colors: active) {

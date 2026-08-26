@@ -40,6 +40,7 @@ import { ThreeDMarquee, type ThreeDMarqueeItem } from "@/components/ui/3d-marque
 import { FloatingDock, type FloatingDockItem } from "@/components/ui/floating-dock";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { PullCord } from "@/components/pull-cord";
+import { NowShowing } from "@/components/now-showing";
 import { WaveformScrollScrubber } from "@/components/waveform-scroll-scrubber";
 import contributions from "@/data/contributions.json";
 import { experiences, projects, type Project } from "@/data/portfolio";
@@ -660,8 +661,14 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
           <ProjectList onOpen={setSelectedProject} onExpand={refreshScrollDimensions} />
         </section>
 
+        <section id="now-showing" className="section now-showing-section">
+          <SectionHeading index="06">now showing</SectionHeading>
+          <p className="section-note">Stories I keep returning to when I step away from the terminal.</p>
+          <NowShowing staticMode={isWaveformPreview} />
+        </section>
+
         <section id="contact" className="section contact-section">
-          <SectionHeading index="06">contact</SectionHeading>
+          <SectionHeading index="07">contact</SectionHeading>
           <p className="contact-lede">Have a difficult backend problem or a product that needs to become real?</p>
           <nav className="contact-dock" aria-label="Contact links">
             <FloatingDock
