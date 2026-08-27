@@ -673,7 +673,7 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
           <h1>Rudraksh Roy<span className="accent-dot"></span></h1>
           <p className="hero-role">Product engineer with a full-stack habit.</p>
           <p className="hero-intro">
-            I build fullstack products from the data model outward—APIs, realtime systems, queues, caches, and the interfaces that make all of it useful.
+            I am a product-focused engineer from India who likes to ship fast and work with a business oriented mindset that can handle more than the fullstack work.
           </p>
           <div className="hero-links">
             <MagneticButton className="rounded-full">
@@ -700,8 +700,8 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
         </section>
 
         <section id="stack" className="section stack-section">
-          <SectionHeading index="02">stack</SectionHeading>
-          <p className="section-note">Tools I reach for when reliability, speed, and clarity matter.</p>
+          <SectionHeading index="02">tech stack</SectionHeading>
+         
           <div className="stack-marquee-frame">
             <ThreeDMarquee
               ariaLabel="Technology stack"
@@ -722,19 +722,19 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
 
         <section id="work" className="section projects-section">
           <SectionHeading index="05">projects</SectionHeading>
-          <p className="section-note">Selected systems, shown from the inside out. Click any card to explore the build.</p>
+         
           <ProjectList onOpen={setSelectedProject} onExpand={refreshScrollDimensions} />
         </section>
 
         <section id="now-showing" className="section now-showing-section">
           <SectionHeading index="06">now showing</SectionHeading>
-          <p className="section-note">Stories I keep returning to when I step away from the terminal.</p>
+        
           <NowShowing staticMode={isWaveformPreview} />
         </section>
 
         <section id="now-playing" className="section spotify-section">
           <SectionHeading index="07">now playing</SectionHeading>
-          <p className="section-note">What is in my headphones right now, plus a few records I keep close.</p>
+         
           <SpotifyPlayer staticMode={isWaveformPreview} />
         </section>
 
