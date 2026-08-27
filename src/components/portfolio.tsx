@@ -159,7 +159,7 @@ function SectionHeading({ index, children }: { index: string; children: React.Re
     <div className="section-heading">
       <span className="section-index">({index})</span>
       <h2>
-        {children}<span className="accent-dot">.</span>
+        {children}<span className="accent-dot"></span>
       </h2>
     </div>
   );
@@ -328,7 +328,7 @@ function ExperienceRows() {
             >
               <span className="experience-number">{item.index}</span>
               <span className="experience-name">
-                {item.name}<span className="accent-dot">.</span>
+                {item.name}<span className="accent-dot"></span>
               </span>
               <span className="experience-type">{item.type}</span>
               <span className="experience-period">{item.period}</span>
@@ -670,10 +670,10 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
         <section id="intro" className="hero">
           <div className="availability"><span /> Available for backend &amp; full-stack work</div>
           <p className="hero-kicker">Namaste, I&apos;m</p>
-          <h1>Rudraksh Roy<span className="accent-dot">.</span></h1>
-          <p className="hero-role">Backend engineer with a full-stack habit.</p>
+          <h1>Rudraksh Roy<span className="accent-dot"></span></h1>
+          <p className="hero-role">Product engineer with a full-stack habit.</p>
           <p className="hero-intro">
-            I build dependable products from the data model outward—APIs, realtime systems, queues, caches, and the interfaces that make all of it useful.
+            I build fullstack products from the data model outward—APIs, realtime systems, queues, caches, and the interfaces that make all of it useful.
           </p>
           <div className="hero-links">
             <MagneticButton className="rounded-full">

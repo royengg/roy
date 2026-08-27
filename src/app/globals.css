@@ -7,6 +7,8 @@
   --color-bg-elevated: #fbf8f1;
   --color-bg-control: rgba(251, 248, 241, 0.38);
   --color-bg-control-hover: rgba(251, 248, 241, 0.72);
+  --color-bg-spotify-card: #171715;
+  --color-border-spotify-card: rgba(255, 255, 255, 0.1);
   --color-bg-dock: #f7f7f3;
   --color-bg-dock-control: #fffefb;
   --color-text-primary: #181715;
@@ -57,6 +59,8 @@
   --color-bg-elevated: #24211d;
   --color-bg-control: rgba(255, 255, 255, 0.045);
   --color-bg-control-hover: rgba(255, 255, 255, 0.085);
+  --color-bg-spotify-card: #1b1a18;
+  --color-border-spotify-card: #302e29;
   --color-bg-dock: #1b1a17;
   --color-bg-dock-control: #27241f;
   --color-text-primary: #f1ede4;
@@ -753,14 +757,15 @@ button { font: inherit; }
   min-height: 440px;
   overflow: hidden;
   border-radius: 20px;
+  box-shadow: none;
 }
 .spotify-live-card {
   padding: 22px;
   display: flex;
   flex-direction: column;
-  background: #171715;
+  border: 1px solid var(--color-border-spotify-card);
+  background: var(--color-bg-spotify-card);
   color: #f7f4ed;
-  box-shadow: var(--shadow-card);
 }
 .spotify-live-topline {
   min-height: 24px;
@@ -770,27 +775,6 @@ button { font: inherit; }
   gap: 16px;
 }
 .spotify-live-topline > svg { width: 23px; height: 23px; color: #1ed760; }
-.spotify-live-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: #aaa69f;
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.spotify-live-status > span {
-  width: 7px;
-  height: 7px;
-  flex: 0 0 7px;
-  border-radius: 50%;
-  background: #716d67;
-}
-.spotify-live-status > span[data-playing="true"] {
-  background: #1ed760;
-  box-shadow: 0 0 0 4px rgba(30, 215, 96, 0.12);
-}
 .spotify-live-artwork {
   position: relative;
   width: min(230px, 72%);
@@ -806,14 +790,6 @@ button { font: inherit; }
 .spotify-live-artwork img { object-fit: cover; }
 .spotify-live-artwork > svg { width: 52px; height: 52px; color: #1ed760; }
 .spotify-live-copy { min-width: 0; margin-block-start: auto; }
-.spotify-live-eyebrow {
-  margin: 0 0 8px;
-  color: #8f8a83;
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-}
 .spotify-live-copy h3 {
   margin: 0;
   overflow: hidden;
@@ -876,6 +852,10 @@ button { font: inherit; }
   flex-direction: column;
   border: 1px solid var(--color-border-subtle);
   background: var(--color-bg-control);
+}
+.dark .spotify-preset-card {
+  border-color: var(--color-border-spotify-card);
+  background: var(--color-bg-spotify-card);
 }
 .spotify-preset-heading {
   margin-block-end: 16px;

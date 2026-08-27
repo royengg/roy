@@ -41,15 +41,6 @@ function formatDuration(milliseconds: number | null) {
   return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
 }
 
-function statusCopy(data: SpotifyNowPlaying | null) {
-  if (!data) return "Checking Spotify";
-  if (!data.configured) return "Spotify setup pending";
-  if (data.status === "playing") return "Live on Spotify";
-  if (data.status === "paused") return "Paused on Spotify";
-  if (data.status === "recent") return "Recently played";
-  return "Between tracks";
-}
-
 export function SpotifyPlayer({ staticMode = false }: { staticMode?: boolean }) {
   const [nowPlaying, setNowPlaying] = useState<SpotifyNowPlaying | null>(null);
   const [selectedPreset, setSelectedPreset] = useState(0);
@@ -112,10 +103,6 @@ export function SpotifyPlayer({ staticMode = false }: { staticMode?: boolean }) 
     <div className="spotify-player-grid" ref={sectionRef}>
       <article className="spotify-live-card" aria-labelledby="spotify-live-title">
         <div className="spotify-live-topline">
-          <span className="spotify-live-status" aria-live="polite">
-            <span data-playing={nowPlaying?.status === "playing" || undefined} />
-            {statusCopy(nowPlaying)}
-          </span>
           <SiSpotify aria-hidden="true" />
         </div>
 
@@ -140,11 +127,8 @@ export function SpotifyPlayer({ staticMode = false }: { staticMode?: boolean }) 
               )}
             </a>
             <div className="spotify-live-copy">
-              <p className="spotify-live-eyebrow" id="spotify-live-title">
-                {nowPlaying?.status === "recent" ? "Last in the headphones" : "In the headphones"}
-              </p>
               <a href={track.spotifyUrl} target="_blank" rel="noreferrer">
-                <h3>{track.title}</h3>
+                <h3 id="spotify-live-title">{track.title}</h3>
                 <p>{track.artists.join(", ")}</p>
               </a>
               <span className="spotify-live-album">{track.album}</span>
@@ -189,9 +173,9 @@ export function SpotifyPlayer({ staticMode = false }: { staticMode?: boolean }) 
         <div className="spotify-preset-heading">
           <div>
             <span>On repeat</span>
-            <h3>Pick a preset</h3>
+            <h3>Play a song</h3>
           </div>
-          <span className="spotify-preset-count">0{selectedPreset + 1} / 0{spotifyPresets.length}</span>
+       
         </div>
 
         <div className="spotify-preset-list" aria-label="Song presets">
