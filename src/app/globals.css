@@ -603,6 +603,11 @@ button { font: inherit; }
 .about-keyboard-demo [data-slot="keyboard-key"] > div {
   color: var(--color-keyboard-text);
 }
+@media (min-width: 1024px) {
+  .about-keyboard-demo [data-slot="keyboard-shell"] {
+    zoom: 1.18;
+  }
+}
 .dark .about-keyboard-demo [data-slot="keyboard-shell"] {
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 10px 26px rgba(0, 0, 0, 0.24);
 }

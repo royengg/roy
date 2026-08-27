@@ -151,7 +151,7 @@ export default function KeyboardDemo() {
         <Keyboard
           enableSound
           onType={handleType}
-          className="mx-0 [zoom:0.8] sm:[zoom:0.8] md:[zoom:0.65] lg:[zoom:0.65] xl:[zoom:0.65]"
+          className="mx-0 [zoom:0.8] sm:[zoom:0.8] md:[zoom:0.65] lg:[zoom:0.72] xl:[zoom:0.72]"
         />
       </div>
     </div>
