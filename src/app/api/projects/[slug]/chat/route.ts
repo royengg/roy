@@ -1,9 +1,14 @@
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { createTextStreamResponse, streamText, toTextStream, type ModelMessage } from "ai";
+import { createTextStreamResponse, streamText, type ModelMessage } from "ai";
 import { getRepositoryPrompt } from "@/lib/repository-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
+
+const MODEL_ID = "gemini-3.6-flash";
+const MODEL_TIMEOUT_MS = 20_000;
+const MODEL_FAILURE_MESSAGE =
+  "The repository assistant is temporarily unavailable. Please try again in a moment.";
 
 type IncomingMessage = {
   role: "user" | "assistant";
@@ -19,6 +24,35 @@ const MAX_TOTAL_CHARACTERS = 12_000;
 
 function jsonError(message: string, status: number) {
   return Response.json({ error: message }, { status });
+}
+
+function createSafeTextStream(
+  textStream: AsyncIterable<string>,
+  requestSignal: AbortSignal,
+) {
+  return new ReadableStream<string>({
+    async start(controller) {
+      let hasText = false;
+
+      try {
+        for await (const delta of textStream) {
+          if (!delta) continue;
+          hasText = true;
+          controller.enqueue(delta);
+        }
+
+        if (!hasText && !requestSignal.aborted) {
+          controller.enqueue(MODEL_FAILURE_MESSAGE);
+        }
+      } catch {
+        if (!hasText && !requestSignal.aborted) {
+          controller.enqueue(MODEL_FAILURE_MESSAGE);
+        }
+      } finally {
+        controller.close();
+      }
+    },
+  });
 }
 
 function getClientIdentifier(request: Request) {
@@ -108,11 +142,24 @@ export async function POST(
 
   const google = createGoogleGenerativeAI({ apiKey });
   const result = streamText({
-    model: google("gemini-3.7-flash"),
+    model: google(MODEL_ID),
     system: repositoryPrompt.system,
     messages: messages satisfies ModelMessage[],
     maxOutputTokens: 700,
-    temperature: 0.2,
+    maxRetries: 0,
+    timeout: MODEL_TIMEOUT_MS,
+    abortSignal: request.signal,
+    providerOptions: {
+      google: {
+        thinkingConfig: {
+          thinkingLevel: "low",
+        },
+      },
+    },
+    onError: ({ error }) => {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error(`[project-chat] ${MODEL_ID} request failed for ${slug}: ${message}`);
+    },
   });
 
   return createTextStreamResponse({
@@ -120,6 +167,6 @@ export async function POST(
       "Cache-Control": "no-store",
       "X-Content-Type-Options": "nosniff",
     },
-    stream: toTextStream({ stream: result.fullStream }),
+    stream: createSafeTextStream(result.textStream, request.signal),
   });
 }
