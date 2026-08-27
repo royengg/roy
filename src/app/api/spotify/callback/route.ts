@@ -29,7 +29,7 @@ function callbackPage(ok: boolean) {
   const status = ok ? 200 : 400;
 
   return new NextResponse(
-    `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>html{color-scheme:light dark;font-family:system-ui,sans-serif}body{min-height:100vh;margin:0;display:grid;place-items:center;background:#141311;color:#f1ede4}.card{width:min(460px,calc(100% - 40px));padding:32px;border:1px solid #37332e;border-radius:20px;background:#1c1a17;box-sizing:border-box}p{color:#aaa399;line-height:1.6}a{display:inline-flex;margin-top:12px;color:inherit;text-underline-offset:4px}</style></head><body><main class="card"><h1>${title}</h1><p>${copy}</p><a href="/#now-playing">Return to the music player</a></main></body></html>`,
+    `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>html{color-scheme:light dark;font-family:system-ui,sans-serif}body{min-height:100vh;margin:0;display:grid;place-items:center;background:#050505;color:#f1ede4}.card{width:min(460px,calc(100% - 40px));padding:32px;border:1px solid #37332e;border-radius:20px;background:#1c1a17;box-sizing:border-box}p{color:#aaa399;line-height:1.6}a{display:inline-flex;margin-top:12px;color:inherit;text-underline-offset:4px}</style></head><body><main class="card"><h1>${title}</h1><p>${copy}</p><a href="/#now-playing">Return to the music player</a></main></body></html>`,
     {
       status,
       headers: {

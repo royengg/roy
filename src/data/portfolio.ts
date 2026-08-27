@@ -159,6 +159,17 @@ export const experiences = [
     location: "United Kingdom · Remote",
     detail:
       "Working across software infrastructure and frontend development for a remote UK team.",
+    stack: [
+      "TypeScript",
+      "React Native",
+      "Expo",
+      "Next.js",
+      "Tailwind CSS",
+      "Supabase",
+      "PostgreSQL",
+      "LiveKit / WebRTC",
+      "ElevenLabs / AI",
+    ],
   },
   {
     index: "02",
@@ -169,6 +180,17 @@ export const experiences = [
     location: "Kolkata, India · Remote",
     detail:
       "Contributing to product software development as a freelance engineer across backend and full-stack delivery.",
+    stack: [
+      "TypeScript",
+      "Next.js",
+      "Tailwind CSS",
+      "Bun",
+      "Express",
+      "PostgreSQL",
+      "Prisma",
+      "Redis",
+      "ElevenLabs",
+    ],
   },
   {
     index: "03",

@@ -172,10 +172,8 @@ export function SpotifyPlayer({ staticMode = false }: { staticMode?: boolean }) 
       <div className="spotify-preset-card">
         <div className="spotify-preset-heading">
           <div>
-            <span>On repeat</span>
             <h3>Play a song</h3>
           </div>
-       
         </div>
 
         <div className="spotify-preset-list" aria-label="Song presets">
