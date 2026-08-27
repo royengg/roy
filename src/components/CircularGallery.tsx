@@ -1,7 +1,7 @@
 "use client";
 
 import { Camera, Mesh, Plane, Program, Renderer, Texture, Transform } from 'ogl';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 type GL = Renderer['gl'];
 
@@ -253,6 +253,7 @@ interface MediaProps {
   font?: string;
   itemHeight: number;
   itemWidth: number;
+  onReady: () => void;
 }
 
 class Media {
@@ -273,6 +274,7 @@ class Media {
   font?: string;
   itemHeight: number;
   itemWidth: number;
+  onReady: () => void;
   program!: Program;
   plane!: Mesh;
   title!: Title;
@@ -301,7 +303,8 @@ class Media {
     borderRadius = 0,
     font,
     itemHeight,
-    itemWidth
+    itemWidth,
+    onReady
   }: MediaProps) {
     this.geometry = geometry;
     this.gl = gl;
@@ -319,6 +322,7 @@ class Media {
     this.font = font;
     this.itemHeight = itemHeight;
     this.itemWidth = itemWidth;
+    this.onReady = onReady;
     this.createShader();
     this.createMesh();
     this.createTitle();
@@ -397,6 +401,7 @@ class Media {
     img.onload = () => {
       texture.image = img;
       this.program.uniforms.uImageSizes.value = [img.naturalWidth, img.naturalHeight];
+      this.onReady();
     };
   }
 
@@ -419,7 +424,7 @@ class Media {
     });
   }
 
-  update(scroll: { current: number; last: number }, direction: 'right' | 'left') {
+  update(scroll: { current: number; last: number }, direction: 'right' | 'left'): boolean {
     this.plane.position.x = this.x - scroll.current - this.extra;
 
     const x = this.plane.position.x;
@@ -454,11 +459,15 @@ class Media {
     if (direction === 'right' && this.isBefore) {
       this.extra -= this.widthTotal;
       this.isBefore = this.isAfter = false;
+      return true;
     }
     if (direction === 'left' && this.isAfter) {
       this.extra += this.widthTotal;
       this.isBefore = this.isAfter = false;
+      return true;
     }
+
+    return false;
   }
 
   onResize({ screen, viewport }: { screen?: ScreenSize; viewport?: Viewport } = {}) {
@@ -513,7 +522,12 @@ class App {
   screen!: { width: number; height: number };
   viewport!: { width: number; height: number };
   raf: number = 0;
+  isVisible: boolean = false;
+  isDestroyed: boolean = false;
+  visibilityObserver: IntersectionObserver | null = null;
 
+  boundUpdate!: () => void;
+  boundRequestRender!: () => void;
   boundOnResize!: () => void;
   boundOnWheel!: (e: Event) => void;
   boundOnTouchDown!: (e: MouseEvent | TouchEvent) => void;
@@ -545,21 +559,23 @@ class App {
     this.scrollSpeed = scrollSpeed;
     this.scroll = { ease: scrollEase, current: 0, target: 0, last: 0 };
     this.onCheckDebounce = debounce(this.onCheck.bind(this), 200);
+    this.boundUpdate = this.update.bind(this);
+    this.boundRequestRender = this.requestRender.bind(this);
     this.createRenderer();
     this.createCamera();
     this.createScene();
     this.onResize();
     this.createGeometry();
     this.createMedias(items, bend, textColor, borderRadius, font, itemHeight, itemWidth);
-    this.update();
     this.addEventListeners();
+    this.observeVisibility();
   }
 
   createRenderer() {
     this.renderer = new Renderer({
       alpha: true,
       antialias: true,
-      dpr: Math.min(window.devicePixelRatio || 1, 2)
+      dpr: Math.min(window.devicePixelRatio || 1, 1.5)
     });
     this.gl = this.renderer.gl;
     this.gl.clearColor(0, 0, 0, 0);
@@ -578,8 +594,8 @@ class App {
 
   createGeometry() {
     this.planeGeometry = new Plane(this.gl, {
-      heightSegments: 50,
-      widthSegments: 100
+      heightSegments: 24,
+      widthSegments: 48
     });
   }
 
@@ -661,9 +677,38 @@ class App {
         borderRadius,
         font,
         itemHeight,
-        itemWidth
+        itemWidth,
+        onReady: this.boundRequestRender
       });
     });
+  }
+
+  observeVisibility() {
+    if (!("IntersectionObserver" in window)) {
+      this.isVisible = true;
+      this.requestRender();
+      return;
+    }
+
+    this.visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        this.isVisible = entry.isIntersecting;
+
+        if (this.isVisible) {
+          this.requestRender();
+        } else if (this.raf) {
+          window.cancelAnimationFrame(this.raf);
+          this.raf = 0;
+        }
+      },
+      { rootMargin: "160px 0px" }
+    );
+    this.visibilityObserver.observe(this.container);
+  }
+
+  requestRender() {
+    if (this.isDestroyed || !this.isVisible || this.raf) return;
+    this.raf = window.requestAnimationFrame(this.boundUpdate);
   }
 
   onTouchDown(e: MouseEvent | TouchEvent) {
@@ -692,6 +737,7 @@ class App {
 
     const distance = (this.start - x) * (this.scrollSpeed * 0.025);
     this.scroll.target = (this.scroll.position ?? 0) + distance;
+    this.requestRender();
   }
 
   onTouchUp() {
@@ -714,6 +760,7 @@ class App {
           : 0;
     if (delta === 0) return;
     this.scroll.target += (delta > 0 ? this.scrollSpeed : -this.scrollSpeed) * 0.2;
+    this.requestRender();
     this.onCheckDebounce();
   }
 
@@ -722,12 +769,14 @@ class App {
       case 'ArrowRight':
         e.preventDefault();
         this.scroll.target += this.scrollSpeed * 5;
+        this.requestRender();
         this.onCheckDebounce();
         break;
 
       case 'ArrowLeft':
         e.preventDefault();
         this.scroll.target -= this.scrollSpeed * 5;
+        this.requestRender();
         this.onCheckDebounce();
         break;
     }
@@ -739,6 +788,7 @@ class App {
     const itemIndex = Math.round(Math.abs(this.scroll.target) / width);
     const item = width * itemIndex;
     this.scroll.target = this.scroll.target < 0 ? -item : item;
+    this.requestRender();
   }
 
   onResize() {
@@ -757,17 +807,29 @@ class App {
     if (this.medias) {
       this.medias.forEach(media => media.onResize({ screen: this.screen, viewport: this.viewport }));
     }
+    this.requestRender();
   }
 
   update() {
-    this.scroll.current = lerp(this.scroll.current, this.scroll.target, this.scroll.ease);
-    const direction = this.scroll.current > this.scroll.last ? 'right' : 'left';
-    if (this.medias) {
-      this.medias.forEach(media => media.update(this.scroll, direction));
+    this.raf = 0;
+    const remainingDistance = this.scroll.target - this.scroll.current;
+
+    if (Math.abs(remainingDistance) < 0.001) {
+      this.scroll.current = this.scroll.target;
+    } else {
+      this.scroll.current = lerp(this.scroll.current, this.scroll.target, this.scroll.ease);
     }
+    const direction = this.scroll.current > this.scroll.last ? 'right' : 'left';
+    const needsLayoutPass = this.medias.some(media => media.update(this.scroll, direction));
     this.renderer.render({ scene: this.scene, camera: this.camera });
     this.scroll.last = this.scroll.current;
-    this.raf = window.requestAnimationFrame(this.update.bind(this));
+
+    // A wrapped media updates its loop offset after its position was calculated.
+    // Render one more frame so offscreen items land on the opposite edge even
+    // when the demand-driven renderer is otherwise idle after a hard load.
+    if (needsLayoutPass || Math.abs(this.scroll.target - this.scroll.current) >= 0.001) {
+      this.requestRender();
+    }
   }
 
   addEventListeners() {
@@ -795,6 +857,8 @@ class App {
   }
 
   destroy() {
+    this.isDestroyed = true;
+    this.visibilityObserver?.disconnect();
     window.cancelAnimationFrame(this.raf);
     window.removeEventListener('resize', this.boundOnResize);
     this.container.removeEventListener('wheel', this.boundOnWheel);
@@ -807,6 +871,7 @@ class App {
     if (this.renderer && this.renderer.gl && this.renderer.gl.canvas.parentNode) {
       this.renderer.gl.canvas.parentNode.removeChild(this.renderer.gl.canvas as HTMLCanvasElement);
     }
+    this.gl.getExtension("WEBGL_lose_context")?.loseContext();
     if (this.container) {
       this.container.removeEventListener(
         'keydown',
@@ -825,6 +890,7 @@ interface CircularGalleryProps {
   font?: string;
   fontUrl?: string;
   scrollSpeed?: number;
+  mobileScrollSpeed?: number;
   scrollEase?: number;
   itemHeight?: number;
   itemWidth?: number;
@@ -840,6 +906,7 @@ export default function CircularGallery({
   font = 'bold 30px Figtree',
   fontUrl,
   scrollSpeed = 2,
+  mobileScrollSpeed,
   scrollEase = 0.05,
   itemHeight = 900,
   itemWidth = 700,
@@ -847,10 +914,32 @@ export default function CircularGallery({
   ariaLabel = 'Circular image gallery. Drag horizontally or use the Left and Right Arrow keys to navigate.'
 }: CircularGalleryProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  // Keep the effect dependency array stable while still reacting when either
+  // desktop or mobile speed changes. Fast Refresh compares dependency-array
+  // length across renders and warns when an optional prop is added directly.
+  const speedConfig = useMemo(
+    () => ({ desktop: scrollSpeed, mobile: mobileScrollSpeed }),
+    [scrollSpeed, mobileScrollSpeed]
+  );
+
   useEffect(() => {
     if (!containerRef.current) return;
     let app: App | undefined;
     let isMounted = true;
+    const mobileQuery = speedConfig.mobile === undefined
+      ? null
+      : window.matchMedia('(max-width: 720px)');
+    const getScrollSpeed = () =>
+      mobileQuery?.matches && speedConfig.mobile !== undefined
+        ? speedConfig.mobile
+        : speedConfig.desktop;
+
+    const updateScrollSpeed = () => {
+      if (app) app.scrollSpeed = getScrollSpeed();
+    };
+
+    mobileQuery?.addEventListener('change', updateScrollSpeed);
+
     resolveFont(font, fontUrl).then(resolvedFont => {
       if (!isMounted || !containerRef.current) return;
       app = new App(containerRef.current, {
@@ -859,7 +948,7 @@ export default function CircularGallery({
         textColor,
         borderRadius,
         font: resolvedFont,
-        scrollSpeed,
+        scrollSpeed: getScrollSpeed(),
         scrollEase,
         itemHeight,
         itemWidth
@@ -867,9 +956,10 @@ export default function CircularGallery({
     });
     return () => {
       isMounted = false;
+      mobileQuery?.removeEventListener('change', updateScrollSpeed);
       if (app) app.destroy();
     };
-  }, [items, bend, textColor, borderRadius, font, fontUrl, scrollSpeed, scrollEase, itemHeight, itemWidth]);
+  }, [items, bend, textColor, borderRadius, font, fontUrl, speedConfig, scrollEase, itemHeight, itemWidth]);
   return (
     <div
       className={`w-full h-full overflow-hidden cursor-grab touch-pan-y active:cursor-grabbing ${className}`}

@@ -41,6 +41,7 @@ import { FloatingDock, type FloatingDockItem } from "@/components/ui/floating-do
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { PullCord } from "@/components/pull-cord";
 import { NowShowing } from "@/components/now-showing";
+import { SpotifyPlayer } from "@/components/spotify-player";
 import { WaveformScrollScrubber } from "@/components/waveform-scroll-scrubber";
 import contributions from "@/data/contributions.json";
 import { experiences, projects, type Project } from "@/data/portfolio";
@@ -164,8 +165,71 @@ function SectionHeading({ index, children }: { index: string; children: React.Re
   );
 }
 
+type ContributionDay = {
+  date: string;
+  count: number;
+  weekday: number;
+};
+
+type ContributionData = {
+  total: number;
+  days: ContributionDay[];
+  source?: "github-calendar" | "github-graphql";
+  updatedAt?: string;
+};
+
+function isContributionData(value: unknown): value is ContributionData {
+  if (!value || typeof value !== "object") return false;
+  const data = value as Partial<ContributionData>;
+  return (
+    typeof data.total === "number" &&
+    Array.isArray(data.days) &&
+    data.days.length >= 300 &&
+    data.days.every(
+      (day) =>
+        day &&
+        typeof day.date === "string" &&
+        typeof day.count === "number" &&
+        typeof day.weekday === "number",
+    )
+  );
+}
+
 function ContributionGraph() {
-  const days = contributions.days;
+  const [data, setData] = useState<ContributionData>(contributions);
+
+  useEffect(() => {
+    let disposed = false;
+
+    const loadContributions = async () => {
+      try {
+        const response = await fetch("/api/github/contributions", {
+          cache: "no-store",
+        });
+        if (!response.ok) return;
+
+        const next = (await response.json()) as unknown;
+        if (!disposed && isContributionData(next)) setData(next);
+      } catch {
+        // Keep the last known calendar if GitHub is temporarily unavailable.
+      }
+    };
+
+    void loadContributions();
+    const interval = window.setInterval(loadContributions, 15 * 60 * 1000);
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") void loadContributions();
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      disposed = true;
+      window.clearInterval(interval);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
+  const days = data.days;
   const max = Math.max(...days.map((day) => day.count), 1);
   const monthLabels = useMemo(() => {
     const labels: { name: string; column: number }[] = [];
@@ -200,7 +264,8 @@ function ContributionGraph() {
     <div
       className="contribution-shell"
       role="group"
-      aria-label={`${contributions.total} GitHub contributions in the last year`}
+      aria-label={`${data.total} GitHub contributions in the last year`}
+      title={data.updatedAt ? `Last synced ${new Date(data.updatedAt).toLocaleString()}` : undefined}
     >
       <div className="contribution-scroller">
         <div className="month-row" aria-hidden="true">
@@ -222,7 +287,7 @@ function ContributionGraph() {
         </div>
       </div>
       <div className="contribution-meta">
-        <span>{contributions.total.toLocaleString()} contributions in the last year</span>
+        <span>{data.total.toLocaleString()} contributions in the last year</span>
         <a href="https://github.com/royengg" target="_blank" rel="noreferrer">
           View profile <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} strokeWidth={2} />
         </a>
@@ -667,8 +732,14 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
           <NowShowing staticMode={isWaveformPreview} />
         </section>
 
+        <section id="now-playing" className="section spotify-section">
+          <SectionHeading index="07">now playing</SectionHeading>
+          <p className="section-note">What is in my headphones right now, plus a few records I keep close.</p>
+          <SpotifyPlayer staticMode={isWaveformPreview} />
+        </section>
+
         <section id="contact" className="section contact-section">
-          <SectionHeading index="07">contact</SectionHeading>
+          <SectionHeading index="08">contact</SectionHeading>
           <p className="contact-lede">Have a difficult backend problem or a product that needs to become real?</p>
           <nav className="contact-dock" aria-label="Contact links">
             <FloatingDock

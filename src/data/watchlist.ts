@@ -30,4 +30,10 @@ export const watchlist: WatchlistItem[] = [
     poster: "/posters/true-detective-season-1-2014.jpg",
     posterAlt: "True Detective season one poster showing two detectives beside a car",
   },
+  {
+    title: "Musafir Cafe",
+    year: "2026",
+    poster: "/posters/musafir-cafe-2026.jpg",
+    posterAlt: "Musafir Cafe poster featuring its three lead characters",
+  },
 ];

@@ -11,7 +11,7 @@ const CircularGallery = dynamic(() => import("@/components/CircularGallery"), {
   ssr: false,
   loading: () => (
     <div className="now-showing-pending" aria-hidden="true">
-      {Array.from({ length: 4 }, (_, index) => <span key={index} />)}
+      {Array.from({ length: 5 }, (_, index) => <span key={index} />)}
     </div>
   ),
 });
@@ -45,7 +45,9 @@ export function NowShowing({ staticMode = false }: { staticMode?: boolean }) {
     () =>
       watchlist.map((item) => ({
         image: item.poster,
-        text: item.year === "—" ? item.title : `${item.title} · ${item.year}`,
+        // Poster art carries the visual story; keep the canvas free of a
+        // second title line beneath each image.
+        text: "",
       })),
     [],
   );
@@ -58,13 +60,14 @@ export function NowShowing({ staticMode = false }: { staticMode?: boolean }) {
     <div className="now-showing-stage">
       <CircularGallery
         ariaLabel="Movies and shows I watch. Drag horizontally or use the Left and Right Arrow keys to browse."
-        bend={2.4}
+        bend={1}
         borderRadius={0.035}
         className="now-showing-gallery"
         font="600 24px Arial"
         itemHeight={960}
         itemWidth={640}
         items={galleryItems}
+        mobileScrollSpeed={2.3}
         scrollEase={0.065}
         scrollSpeed={1.75}
         textColor={resolvedTheme === "dark" ? "#f1ede4" : "#181715"}

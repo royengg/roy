@@ -109,7 +109,10 @@ export function WaveformScrollScrubber({ lenis }: WaveformScrollScrubberProps) {
   const resizeFrameRef = useRef<number | null>(null);
   const keyboardScrollUntilRef = useRef(0);
   const previewSectionRef = useRef<PageSectionId>(PAGE_SECTIONS[0].id);
+  const previewActiveRef = useRef(false);
   const pointerActiveRef = useRef(false);
+  const pointerWithinRef = useRef(false);
+  const focusWithinRef = useRef(false);
   const previousNativeScrollRef = useRef({ position: 0, time: 0 });
   const [activeSection, setActiveSection] = useState<PageSectionId>(PAGE_SECTIONS[0].id);
   const [canRenderPreview, setCanRenderPreview] = useState(false);
@@ -156,6 +159,8 @@ export function WaveformScrollScrubber({ lenis }: WaveformScrollScrubberProps) {
         position: nextScrollPosition,
         limit: parentScrollLimit,
       };
+
+      if (!previewActiveRef.current) return;
 
       const previewWindow = previewFrameRef.current?.contentWindow;
       const previewDocument = previewFrameRef.current?.contentDocument;
@@ -238,6 +243,22 @@ export function WaveformScrollScrubber({ lenis }: WaveformScrollScrubberProps) {
     },
     [],
   );
+
+  const updatePreviewActivity = useCallback(() => {
+    const nextActive =
+      pointerWithinRef.current ||
+      focusWithinRef.current ||
+      pointerActiveRef.current;
+
+    if (previewActiveRef.current === nextActive) return;
+    previewActiveRef.current = nextActive;
+
+    if (nextActive) {
+      const latestScroll = latestPreviewScrollRef.current;
+      previewScrollMappingRef.current = null;
+      syncPreview(latestScroll.position, latestScroll.limit);
+    }
+  }, [syncPreview]);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(
@@ -437,11 +458,13 @@ export function WaveformScrollScrubber({ lenis }: WaveformScrollScrubberProps) {
     if (!event.isPrimary) return;
     pointerActiveRef.current = true;
     setIsDragging(true);
+    updatePreviewActivity();
   };
 
   const endPointerInteraction = () => {
     pointerActiveRef.current = false;
     setIsDragging(false);
+    updatePreviewActivity();
   };
 
   const activeSectionMeta =
@@ -453,6 +476,14 @@ export function WaveformScrollScrubber({ lenis }: WaveformScrollScrubberProps) {
       data-dragging={isDragging}
       data-scrollable={isScrollable}
       data-slot="waveform-scrollbar"
+      onPointerEnter={() => {
+        pointerWithinRef.current = true;
+        updatePreviewActivity();
+      }}
+      onPointerLeave={() => {
+        pointerWithinRef.current = false;
+        updatePreviewActivity();
+      }}
     >
       <input
         ref={inputRef}
@@ -464,8 +495,15 @@ export function WaveformScrollScrubber({ lenis }: WaveformScrollScrubberProps) {
         defaultValue={0}
         max={RANGE_MAX}
         min={0}
-        onBlur={endPointerInteraction}
+        onBlur={() => {
+          focusWithinRef.current = false;
+          endPointerInteraction();
+        }}
         onChange={handleChange}
+        onFocus={() => {
+          focusWithinRef.current = true;
+          updatePreviewActivity();
+        }}
         onLostPointerCapture={endPointerInteraction}
         onPointerCancel={endPointerInteraction}
         onPointerDown={handlePointerDown}
