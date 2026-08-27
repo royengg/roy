@@ -20,9 +20,12 @@ import {
   SiBetterauth,
   SiBun,
   SiDocker,
+  SiElevenlabs,
   SiExpress,
+  SiExpo,
   SiGooglegemini,
   SiHono,
+  SiLivekit,
   SiNextdotjs,
   SiNodedotjs,
   SiPostgresql,
@@ -30,6 +33,7 @@ import {
   SiReact,
   SiRedis,
   SiSocketdotio,
+  SiSupabase,
   SiTailwindcss,
   SiTypescript,
 } from "react-icons/si";
@@ -42,6 +46,7 @@ import { MagneticButton } from "@/components/ui/magnetic-button";
 import { PullCord } from "@/components/pull-cord";
 import { NowShowing } from "@/components/now-showing";
 import { SpotifyPlayer } from "@/components/spotify-player";
+import { VisitorGreeting } from "@/components/visitor-greeting";
 import { WaveformScrollScrubber } from "@/components/waveform-scroll-scrubber";
 import contributions from "@/data/contributions.json";
 import { experiences, projects, type Project } from "@/data/portfolio";
@@ -111,28 +116,36 @@ const contactLinks = [
   },
 ] satisfies FloatingDockItem[];
 
-type ProjectTechIcon =
+type TechIconDefinition =
   | { type: "brand"; icon: IconType; color: string }
   | { type: "interface"; icon: IconSvgElement; color: string };
 
-const projectTechIcons: Record<string, ProjectTechIcon> = {
+const techIcons: Record<string, TechIconDefinition> = {
   "Amazon S3": { type: "interface", icon: CloudIcon, color: "#ff6b35" },
   "Better Auth": { type: "brand", icon: SiBetterauth, color: "#f5f5f2" },
   BullMQ: { type: "interface", icon: Queue01Icon, color: "#c8ff58" },
   Bun: { type: "brand", icon: SiBun, color: "#f3dfc4" },
+  ElevenLabs: { type: "brand", icon: SiElevenlabs, color: "#f5f5f2" },
+  "ElevenLabs / AI": { type: "brand", icon: SiElevenlabs, color: "#f5f5f2" },
   Express: { type: "brand", icon: SiExpress, color: "#f5f5f2" },
+  Expo: { type: "brand", icon: SiExpo, color: "#f5f5f2" },
   Gemini: { type: "brand", icon: SiGooglegemini, color: "#8ab4f8" },
   Hono: { type: "brand", icon: SiHono, color: "#ff6d1f" },
+  "LiveKit / WebRTC": { type: "brand", icon: SiLivekit, color: "#f5f5f2" },
   "Next.js": { type: "brand", icon: SiNextdotjs, color: "#f5f5f2" },
   PostgreSQL: { type: "brand", icon: SiPostgresql, color: "#6f9cff" },
   Prisma: { type: "brand", icon: SiPrisma, color: "#dce8f4" },
   React: { type: "brand", icon: SiReact, color: "#61dafb" },
+  "React Native": { type: "brand", icon: SiReact, color: "#61dafb" },
   Redis: { type: "brand", icon: SiRedis, color: "#ff493d" },
   "Socket.IO": { type: "brand", icon: SiSocketdotio, color: "#f5f5f2" },
+  Supabase: { type: "brand", icon: SiSupabase, color: "#3ecf8e" },
+  "Tailwind CSS": { type: "brand", icon: SiTailwindcss, color: "#38bdf8" },
+  TypeScript: { type: "brand", icon: SiTypescript, color: "#5e9eff" },
 };
 
-function ProjectTech({ name }: { name: string }) {
-  const tech = projectTechIcons[name];
+function TechIcon({ name }: { name: string }) {
+  const tech = techIcons[name];
   if (!tech) return null;
 
   return (
@@ -347,6 +360,16 @@ function ExperienceRows() {
                   <span>{item.location}</span>
                 </div>
                 <p>{item.detail}</p>
+                {item.stack?.length ? (
+                  <div
+                    className="tech-icon-row experience-stack"
+                    aria-label={`${item.name} technology stack`}
+                  >
+                    {item.stack.map((technology) => (
+                      <TechIcon key={technology} name={technology} />
+                    ))}
+                  </div>
+                ) : null}
               </div>
             )}
           </motion.div>
@@ -384,7 +407,7 @@ function ProjectCard({
         <h3>{project.title}</h3>
         <p>{project.summary}</p>
         <div className="tech-icon-row project-card-stack" aria-label="Technology stack">
-          {project.stack.map((item) => <ProjectTech key={item} name={item} />)}
+          {project.stack.map((item) => <TechIcon key={item} name={item} />)}
         </div>
       </div>
       <motion.div
@@ -593,14 +616,14 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
             hidden={activeTab !== "details"}
           >
             <span className="modal-eyebrow">{project.category} · {project.year}</span>
-            <h2>{project.title}<span className="accent-dot">.</span></h2>
+            <h2>{project.title}</h2>
             <p className="modal-lede">{project.description}</p>
             <div className="modal-block">
               <h3>Architecture &amp; build</h3>
               <ul>{project.highlights.map((item) => <li key={item}>{item}</li>)}</ul>
             </div>
             <div className="tech-icon-row modal-stack" aria-label="Technology stack">
-              {project.stack.map((item) => <ProjectTech key={item} name={item} />)}
+              {project.stack.map((item) => <TechIcon key={item} name={item} />)}
             </div>
             <div className="modal-links">
               <a href={project.github} target="_blank" rel="noreferrer"><HugeiconsIcon icon={Github01Icon} size={18} strokeWidth={1.5} /> Repository</a>
@@ -669,11 +692,11 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
         {isWaveformPreview ? null : <WaveformScrollScrubber lenis={lenisInstance} />}
         <section id="intro" className="hero">
           <div className="availability"><span /> Available for backend &amp; full-stack work</div>
-          <p className="hero-kicker">Namaste, I&apos;m</p>
+          <p className="hero-kicker"><VisitorGreeting /></p>
           <h1>Rudraksh Roy<span className="accent-dot"></span></h1>
           <p className="hero-role">Product engineer with a full-stack habit.</p>
           <p className="hero-intro">
-            I am a product-focused engineer from India who likes to ship fast and work with a business oriented mindset that can handle more than the fullstack work.
+            I am a product-focused engineer from India who likes to ship fast and work with a business oriented mindset that can handle more than the fullstack work. Always keep it real with no bs and set expectations which i always keep.
           </p>
           <div className="hero-links">
             <MagneticButton className="rounded-full">
@@ -693,8 +716,8 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
               <KeyboardDemo />
             </div>
             <div className="about-body">
-              <p>My work sits where product thinking meets backend engineering. I enjoy turning complicated workflows into clear contracts, predictable state, and interfaces that feel surprisingly simple.</p>
-              <p>Recently, that has meant realtime auctions, queued AI analysis, document pipelines, community products, and production deployment across modern TypeScript stacks.</p>
+              <p>I completely obsess over small details that may or may not be important depending upon the day, think from first principles and make choices that saves time and cost in the most effective way.</p>
+              <p>I’ve worked on applied AI, multimodal RAG, realtime auctions, ai pipelines, lead generation, deal aggregation, ai video direction pipeline, internet scrapers, full-stack web apps, and mobile apps and production deployment. Mostly with TypeScript, Python or whatever gets the job done.</p>
             </div>
           </div>
         </section>

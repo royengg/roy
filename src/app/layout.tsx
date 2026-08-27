@@ -21,7 +21,7 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Rudraksh Roy — Backend Engineer",
+  title: "Rudraksh Roy",
   description:
     "Backend and full-stack engineer building realtime systems, AI workflows, and dependable product infrastructure.",
 };
@@ -31,7 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased dark`}
     >
       <body>
         <ThemeProvider>
