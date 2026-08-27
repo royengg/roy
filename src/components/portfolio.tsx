@@ -616,7 +616,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
             hidden={activeTab !== "details"}
           >
             <span className="modal-eyebrow">{project.category} · {project.year}</span>
-            <h2>{project.title}<span className="accent-dot">.</span></h2>
+            <h2>{project.title}</h2>
             <p className="modal-lede">{project.description}</p>
             <div className="modal-block">
               <h3>Architecture &amp; build</h3>

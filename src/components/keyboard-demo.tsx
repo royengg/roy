@@ -23,10 +23,13 @@ export default function KeyboardDemo() {
   const pendingCaretRef = useRef<number | null>(null);
 
   const resetThought = useCallback(() => {
+    const editor = editorRef.current;
+    if (!hasEditedRef.current && document.activeElement !== editor) return;
+
     hasEditedRef.current = false;
     pendingCaretRef.current = null;
     setThought(DEFAULT_THOUGHT);
-    editorRef.current?.blur();
+    editor?.blur();
   }, []);
 
   useEffect(() => {

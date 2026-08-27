@@ -20,7 +20,7 @@ export const projects: Project[] = [
     slug: "savekaro",
     title: "SaveKaro",
     year: "2026",
-    category: "Deal intelligence platform",
+    category: "Deal aggregation platform",
     summary: "Community-ranked deals, price history, alerts, and automated discovery.",
     description:
       "A full-stack deal aggregation platform built for shoppers in India. The system collects and classifies deals, supports community voting and threaded discussion, and adds price tracking, alerts, and gamification around the discovery loop.",
@@ -42,7 +42,7 @@ export const projects: Project[] = [
     slug: "one-auction",
     title: "1Auction",
     year: "2026",
-    category: "Realtime systems",
+    category: "Realtime auction",
     summary: "Server-authoritative live auctions with atomic bidding and presence.",
     description:
       "A realtime auction room where hosts list inventory and bidders compete live. Redis owns fast-moving auction state while PostgreSQL stores durable results, with the socket server acting as the single authoritative writer.",
@@ -64,7 +64,7 @@ export const projects: Project[] = [
     slug: "homework-ai",
     title: "HomeworkAI",
     year: "2026",
-    category: "Document intelligence",
+    category: "Assignment Solver",
     summary: "Queued PDF analysis with structured, step-by-step AI explanations.",
     description:
       "A production-oriented SaaS workflow for processing academic PDFs. Uploads are stored securely, parsed asynchronously, analyzed with Gemini, and returned as structured explanations with live job status.",

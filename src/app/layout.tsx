@@ -21,7 +21,7 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Rudraksh Roy — Backend Engineer",
+  title: "Rudraksh Roy",
   description:
     "Backend and full-stack engineer building realtime systems, AI workflows, and dependable product infrastructure.",
 };
