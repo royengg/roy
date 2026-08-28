@@ -7,6 +7,7 @@ export type Project = {
   description: string;
   image: string;
   imageAlt: string;
+  mobileImage?: string;
   detailImage?: string;
   detailImageAlt?: string;
   color: string;
@@ -96,6 +97,7 @@ export const projects: Project[] = [
       "An assessment creation platform for teachers. A guided form captures the exam structure, queues generation work outside the request cycle, and turns the model response into a structured paper that can be reviewed and exported.",
     image: "/projects/vedaai-workspace-hq-clean.png",
     imageAlt: "VedaAI assignment workspace with generated question-paper cards",
+    mobileImage: "/projects/vedaai-workspace-mobile-hq.png",
     detailImage: "/projects/vedaai-detail-hq.png",
     detailImageAlt: "VedaAI generated question paper with exam details and student instructions",
     color: "#c9ff73",

@@ -443,13 +443,18 @@ function ProjectCard({
         layoutId={preview ? undefined : `image-${project.slug}`}
         transition={{ layout: { duration: 0.28, ease: [0.77, 0, 0.175, 1] } }}
       >
-        <Image
-          src={project.image}
-          alt={project.imageAlt}
-          fill
-          sizes="(max-width: 760px) 92vw, 1200px"
-          quality={100}
-        />
+        <picture>
+          {project.mobileImage ? (
+            <source media="(max-width: 500px)" srcSet={project.mobileImage} />
+          ) : null}
+          <Image
+            src={project.image}
+            alt={project.imageAlt}
+            fill
+            sizes="(max-width: 760px) 92vw, 1200px"
+            quality={100}
+          />
+        </picture>
       </motion.div>
       <span className="project-open" aria-hidden="true">
         <HugeiconsIcon icon={ArrowUpRight01Icon} size={20} strokeWidth={2} />

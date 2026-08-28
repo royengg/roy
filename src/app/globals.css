@@ -807,7 +807,7 @@ button { font: inherit; }
 .project-image-wrap img,
 .modal-image img { object-fit: cover; object-position: center top; }
 @media (min-width: 501px) {
-  /* Keep the full VedaAI sidebar in the wide desktop preview. */
+  /* Keep the full VedaAI sidebar in the desktop preview. */
   .project-image-wrap[data-project-slug="veda-ai"] img { object-position: left top; }
 }
 .project-open { position: absolute; inset-inline-end: 24px; inset-block-start: 24px; z-index: 4; width: 40px; height: 40px; border-radius: 999px; display: grid; place-items: center; background: rgba(251, 248, 241, 0.52); backdrop-filter: blur(8px); pointer-events: none; }
@@ -1399,6 +1399,7 @@ button { font: inherit; }
     flex: 0 0 245px;
     margin-block-start: 14px;
   }
+  .project-image-wrap[data-project-slug="veda-ai"] img { object-position: left top; }
 }
 
 @media (prefers-reduced-motion: reduce) {
