@@ -806,6 +806,10 @@ button { font: inherit; }
 .project-image-wrap { position: absolute; inset-inline: 28px; bottom: -36px; height: 315px; overflow: hidden; border-radius: 15px 15px 0 0; background: white; outline: 1px solid rgba(0, 0, 0, 0.1); outline-offset: -1px; box-shadow: 0 22px 45px rgba(0, 0, 0, 0.2); transition: transform 180ms var(--ease-out); }
 .project-image-wrap img,
 .modal-image img { object-fit: cover; object-position: center top; }
+@media (min-width: 501px) {
+  /* Keep the full VedaAI sidebar in the wide desktop preview. */
+  .project-image-wrap[data-project-slug="veda-ai"] img { object-position: left top; }
+}
 .project-open { position: absolute; inset-inline-end: 24px; inset-block-start: 24px; z-index: 4; width: 40px; height: 40px; border-radius: 999px; display: grid; place-items: center; background: rgba(251, 248, 241, 0.52); backdrop-filter: blur(8px); pointer-events: none; }
 
 .now-showing-section { overflow: visible; }
@@ -1092,6 +1096,8 @@ button { font: inherit; }
 .modal-close:active { transform: scale(0.96); }
 .modal-visual { padding: 22px; min-height: 0; }
 .modal-image { position: relative; width: 100%; height: 100%; min-height: 420px; overflow: hidden; border-radius: 12px; background: white; outline: 1px solid rgba(0, 0, 0, 0.1); outline-offset: -1px; }
+.modal-image[data-project-slug="veda-ai"] img,
+.modal-image[data-project-slug="savekaro"] img { object-fit: contain; object-position: center; }
 .modal-panel { min-width: 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
 .modal-tabs {
   flex: 0 0 58px;

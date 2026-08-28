@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    // Keep the higher-fidelity variant used by the project previews available
+    // in Next 16 (which otherwise coerces every request back to quality 75).
+    qualities: [75, 92, 100],
     remotePatterns: [
       {
         protocol: "https",

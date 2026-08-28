@@ -7,6 +7,8 @@ export type Project = {
   description: string;
   image: string;
   imageAlt: string;
+  detailImage?: string;
+  detailImageAlt?: string;
   color: string;
   textColor: string;
   stack: string[];
@@ -26,6 +28,8 @@ export const projects: Project[] = [
       "A full-stack deal aggregation platform built for shoppers in India. The system collects and classifies deals, supports community voting and threaded discussion, and adds price tracking, alerts, and gamification around the discovery loop.",
     image: "/projects/savekaro.webp",
     imageAlt: "SaveKaro deal aggregation product interface",
+    detailImage: "/projects/savekaro-detail-hq.png",
+    detailImageAlt: "SaveKaro mobile deals home screen with search, featured deals, and cart",
     color: "#f2c84b",
     textColor: "#211b08",
     stack: ["Bun", "Hono", "PostgreSQL", "Redis", "Prisma", "React"],
@@ -90,8 +94,10 @@ export const projects: Project[] = [
     summary: "Asynchronous question-paper generation and structured PDF export.",
     description:
       "An assessment creation platform for teachers. A guided form captures the exam structure, queues generation work outside the request cycle, and turns the model response into a structured paper that can be reviewed and exported.",
-    image: "/projects/vedaai.png",
-    imageAlt: "Assessment creator with question controls and exam paper preview",
+    image: "/projects/vedaai-workspace-hq-clean.png",
+    imageAlt: "VedaAI assignment workspace with generated question-paper cards",
+    detailImage: "/projects/vedaai-detail-hq.png",
+    detailImageAlt: "VedaAI generated question paper with exam details and student instructions",
     color: "#c9ff73",
     textColor: "#17220b",
     stack: ["Next.js", "Express", "BullMQ", "Redis", "PostgreSQL", "Gemini"],
@@ -109,11 +115,13 @@ export const projects: Project[] = [
     title: "Litmus AI",
     year: "2025",
     category: "AI fact-checking pipeline",
-    summary: "Queued fact-checking with multi-source retrieval and credibility scoring.",
+    summary: "Fact-checking assistant with multi-source retrieval and credibility scoring.",
     description:
       "A fact-checking assistant that turns submitted claims and URLs into evidence-backed credibility analysis. A Next.js workspace sends long-running work to an Express and BullMQ pipeline, where retrieval, scraping, and Gemini analysis run outside the request cycle before results are persisted for review.",
-    image: "/projects/litmus-ai.png",
-    imageAlt: "GitHub repository preview for the Litmus AI fact-checking assistant",
+    image: "/projects/litmus-ai-workspace-hq.png",
+    imageAlt: "Litmus AI fact-checking workspace with a claim analysis input",
+    detailImage: "/projects/litmus-ai-detail-hq.png",
+    detailImageAlt: "Litmus AI completed credibility analysis with score, summary, and sources",
     color: "#63d8c9",
     textColor: "#102522",
     stack: ["Next.js", "Express", "BullMQ", "Redis", "PostgreSQL", "Gemini"],

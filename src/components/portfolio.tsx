@@ -439,10 +439,17 @@ function ProjectCard({
       </div>
       <motion.div
         className="project-image-wrap"
+        data-project-slug={project.slug}
         layoutId={preview ? undefined : `image-${project.slug}`}
         transition={{ layout: { duration: 0.28, ease: [0.77, 0, 0.175, 1] } }}
       >
-        <Image src={project.image} alt={project.imageAlt} fill sizes="(max-width: 760px) 92vw, 680px" />
+        <Image
+          src={project.image}
+          alt={project.imageAlt}
+          fill
+          sizes="(max-width: 760px) 92vw, 1200px"
+          quality={100}
+        />
       </motion.div>
       <span className="project-open" aria-hidden="true">
         <HugeiconsIcon icon={ArrowUpRight01Icon} size={20} strokeWidth={2} />
@@ -602,10 +609,17 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
         <div className="modal-visual" style={{ backgroundColor: project.color }}>
           <motion.div
             className="modal-image"
+            data-project-slug={project.slug}
             layoutId={`image-${project.slug}`}
             transition={{ layout: { duration: 0.28, ease: [0.77, 0, 0.175, 1] } }}
           >
-            <Image src={project.image} alt={project.imageAlt} fill sizes="(max-width: 800px) 92vw, 45vw" />
+            <Image
+              src={project.detailImage ?? project.image}
+              alt={project.detailImageAlt ?? project.imageAlt}
+              fill
+              sizes="(max-width: 800px) 92vw, 45vw"
+              quality={100}
+            />
           </motion.div>
         </div>
         <div className="modal-panel">
