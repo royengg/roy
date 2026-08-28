@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 
 const GITHUB_USERNAME = "royengg";
+const CONTRIBUTIONS_API_URL = "https://github-contributions-api.jogruber.de/v4";
 const CACHE_SECONDS = 15 * 60;
+const UPSTREAM_TIMEOUT_MS = 8_000;
 
 type ContributionDay = {
   date: string;
@@ -12,156 +14,103 @@ type ContributionDay = {
 type ContributionPayload = {
   total: number;
   days: ContributionDay[];
-  source: "github-calendar" | "github-graphql";
+  source: "github-contributions-api";
   updatedAt: string;
 };
 
-type GraphQLPayload = {
-  data?: {
-    user?: {
-      contributionsCollection?: {
-        contributionCalendar?: {
-          totalContributions: number;
-          weeks: Array<{
-            contributionDays: Array<{
-              contributionCount: number;
-              date: string;
-              weekday: number;
-            }>;
-          }>;
-        };
-      };
-    };
-  };
-  errors?: Array<{ message?: string }>;
+type ContributionsApiPayload = {
+  total?: Record<string, unknown>;
+  contributions?: unknown;
 };
 
-function sortDays(days: ContributionDay[]) {
-  return [...days].sort((a, b) => a.date.localeCompare(b.date));
+function isCalendarDate(value: unknown): value is string {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+
+  const date = new Date(`${value}T00:00:00Z`);
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
+}
+
+function parseContributionDay(value: unknown): ContributionDay {
+  if (!value || typeof value !== "object") {
+    throw new Error("Contribution API returned an invalid calendar day");
+  }
+
+  const day = value as { date?: unknown; count?: unknown };
+  if (
+    !isCalendarDate(day.date) ||
+    typeof day.count !== "number" ||
+    !Number.isInteger(day.count) ||
+    day.count < 0
+  ) {
+    throw new Error("Contribution API returned an invalid calendar day");
+  }
+
+  return {
+    date: day.date,
+    count: day.count,
+    weekday: new Date(`${day.date}T00:00:00Z`).getUTCDay(),
+  };
+}
+
+function getUpstreamUpdatedAt(response: Response) {
+  const age = Number(response.headers.get("age"));
+  const ageInMilliseconds = Number.isFinite(age) && age >= 0 ? age * 1_000 : 0;
+  return new Date(Date.now() - ageInMilliseconds).toISOString();
 }
 
 function createPayload(
-  days: ContributionDay[],
-  total: number,
-  source: ContributionPayload["source"],
+  apiPayload: ContributionsApiPayload,
+  response: Response,
 ): ContributionPayload {
-  const sortedDays = sortDays(days);
-  if (sortedDays.length < 300) {
-    throw new Error("GitHub returned an incomplete contribution calendar");
+  if (!Array.isArray(apiPayload.contributions)) {
+    throw new Error("Contribution API returned no calendar");
+  }
+
+  const days = apiPayload.contributions.map(parseContributionDay).sort((a, b) =>
+    a.date.localeCompare(b.date),
+  );
+  const total = apiPayload.total?.lastYear;
+
+  if (days.length < 300 || new Set(days.map((day) => day.date)).size !== days.length) {
+    throw new Error("Contribution API returned an incomplete calendar");
+  }
+
+  if (typeof total !== "number" || !Number.isInteger(total) || total < 0) {
+    throw new Error("Contribution API returned an invalid total");
   }
 
   return {
     total,
-    days: sortedDays,
-    source,
-    updatedAt: new Date().toISOString(),
+    days,
+    source: "github-contributions-api",
+    updatedAt: getUpstreamUpdatedAt(response),
   };
 }
 
-async function fetchWithToken(token: string): Promise<ContributionPayload> {
-  const to = new Date();
-  const from = new Date(to);
-  from.setUTCFullYear(from.getUTCFullYear() - 1);
-
-  const response = await fetch("https://api.github.com/graphql", {
-    method: "POST",
-    headers: {
-      Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-      "X-GitHub-Api-Version": "2022-11-28",
-    },
-    body: JSON.stringify({
-      query: `
-        query ContributionCalendar($login: String!, $from: DateTime!, $to: DateTime!) {
-          user(login: $login) {
-            contributionsCollection(from: $from, to: $to) {
-              contributionCalendar {
-                totalContributions
-                weeks {
-                  contributionDays {
-                    contributionCount
-                    date
-                    weekday
-                  }
-                }
-              }
-            }
-          }
-        }
-      `,
-      variables: {
-        login: GITHUB_USERNAME,
-        from: from.toISOString(),
-        to: to.toISOString(),
+async function fetchContributionCalendar(): Promise<ContributionPayload> {
+  const response = await fetch(
+    `${CONTRIBUTIONS_API_URL}/${GITHUB_USERNAME}?y=last`,
+    {
+      headers: {
+        Accept: "application/json",
+        "User-Agent": "roy-portfolio-contribution-graph",
       },
-    }),
-    next: { revalidate: CACHE_SECONDS },
-  });
-
-  if (!response.ok) {
-    throw new Error(`GitHub GraphQL request failed (${response.status})`);
-  }
-
-  const payload = (await response.json()) as GraphQLPayload;
-  const calendar = payload.data?.user?.contributionsCollection?.contributionCalendar;
-  if (payload.errors?.length || !calendar) {
-    throw new Error(payload.errors?.[0]?.message || "GitHub returned no contribution calendar");
-  }
-
-  return createPayload(
-    calendar.weeks.flatMap((week) =>
-      week.contributionDays.map((day) => ({
-        date: day.date,
-        count: day.contributionCount,
-        weekday: day.weekday,
-      })),
-    ),
-    calendar.totalContributions,
-    "github-graphql",
-  );
-}
-
-async function fetchPublicCalendar(): Promise<ContributionPayload> {
-  const response = await fetch(`https://github.com/users/${GITHUB_USERNAME}/contributions`, {
-    headers: {
-      Accept: "text/html",
-      "User-Agent": "roy-portfolio-contribution-graph",
+      cache: "no-store",
+      signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
     },
-    next: { revalidate: CACHE_SECONDS },
-  });
+  );
 
   if (!response.ok) {
-    throw new Error(`GitHub contribution calendar failed (${response.status})`);
+    throw new Error(`Contribution API request failed (${response.status})`);
   }
 
-  const html = await response.text();
-  const dayPattern = /<td\b(?=[^>]*\bdata-date="([^"]+)")(?=[^>]*\bdata-level="(\d+)")[^>]*><\/td>\s*<tool-tip\b[^>]*>([\s\S]*?)<\/tool-tip>/g;
-  const days: ContributionDay[] = [];
-  let match: RegExpExecArray | null;
-
-  while ((match = dayPattern.exec(html)) !== null) {
-    const countMatch = match[3].match(/([\d,]+)\s+contribution/i);
-    days.push({
-      date: match[1],
-      count: countMatch ? Number(countMatch[1].replaceAll(",", "")) : 0,
-      weekday: new Date(`${match[1]}T00:00:00Z`).getUTCDay(),
-    });
-  }
-
-  return createPayload(
-    days,
-    days.reduce((total, day) => total + day.count, 0),
-    "github-calendar",
-  );
+  const apiPayload = (await response.json()) as ContributionsApiPayload;
+  return createPayload(apiPayload, response);
 }
 
 export async function GET() {
   try {
-    const token = process.env.GITHUB_TOKEN?.trim();
-    const payload = token
-      ? await fetchWithToken(token).catch(() => fetchPublicCalendar())
-      : await fetchPublicCalendar();
+    const payload = await fetchContributionCalendar();
 
     return NextResponse.json(payload, {
       headers: {

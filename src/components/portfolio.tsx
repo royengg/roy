@@ -187,9 +187,17 @@ type ContributionDay = {
 type ContributionData = {
   total: number;
   days: ContributionDay[];
-  source?: "github-calendar" | "github-graphql";
+  source?: "github-contributions-api";
   updatedAt?: string;
 };
+
+const contributionLegendColors = [
+  "var(--color-graph-empty)",
+  "var(--color-graph-low)",
+  "var(--color-graph-medium)",
+  "var(--color-graph-high)",
+  "var(--color-graph-peak)",
+] as const;
 
 function isContributionData(value: unknown): value is ContributionData {
   if (!value || typeof value !== "object") return false;
@@ -301,9 +309,28 @@ function ContributionGraph() {
       </div>
       <div className="contribution-meta">
         <span>{data.total.toLocaleString()} contributions in the last year</span>
-        <a href="https://github.com/royengg" target="_blank" rel="noreferrer">
-          View profile <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} strokeWidth={2} />
-        </a>
+        <div className="contribution-meta-trailing">
+          <a href="https://github.com/royengg" target="_blank" rel="noreferrer">
+            View profile <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} strokeWidth={2} />
+          </a>
+          <div
+            className="contribution-legend"
+            role="img"
+            aria-label="Contribution intensity from less to more"
+          >
+            <span aria-hidden="true">Less</span>
+            <span className="contribution-legend-scale" aria-hidden="true">
+              {contributionLegendColors.map((color) => (
+                <span
+                  className="contribution-legend-cell"
+                  key={color}
+                  style={{ backgroundColor: color }}
+                />
+              ))}
+            </span>
+            <span aria-hidden="true">More</span>
+          </div>
+        </div>
       </div>
     </div>
   );
