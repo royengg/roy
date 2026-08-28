@@ -618,13 +618,18 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
             layoutId={`image-${project.slug}`}
             transition={{ layout: { duration: 0.28, ease: [0.77, 0, 0.175, 1] } }}
           >
-            <Image
-              src={project.detailImage ?? project.image}
-              alt={project.detailImageAlt ?? project.imageAlt}
-              fill
-              sizes="(max-width: 800px) 92vw, 45vw"
-              quality={100}
-            />
+            <picture>
+              {project.mobileDetailImage ? (
+                <source media="(max-width: 720px)" srcSet={project.mobileDetailImage} />
+              ) : null}
+              <Image
+                src={project.detailImage ?? project.image}
+                alt={project.mobileDetailImageAlt ?? project.detailImageAlt ?? project.imageAlt}
+                fill
+                sizes="(max-width: 800px) 92vw, 45vw"
+                quality={100}
+              />
+            </picture>
           </motion.div>
         </div>
         <div className="modal-panel">

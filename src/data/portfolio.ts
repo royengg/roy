@@ -9,7 +9,9 @@ export type Project = {
   imageAlt: string;
   mobileImage?: string;
   detailImage?: string;
+  mobileDetailImage?: string;
   detailImageAlt?: string;
+  mobileDetailImageAlt?: string;
   color: string;
   textColor: string;
   stack: string[];
@@ -30,6 +32,7 @@ export const projects: Project[] = [
     image: "/projects/savekaro.webp",
     imageAlt: "SaveKaro deal aggregation product interface",
     detailImage: "/projects/savekaro-detail-hq.png",
+    mobileDetailImage: "/projects/savekaro-detail-mobile-hq.png",
     detailImageAlt: "SaveKaro mobile deals home screen with search, featured deals, and cart",
     color: "#f2c84b",
     textColor: "#211b08",
@@ -99,7 +102,9 @@ export const projects: Project[] = [
     imageAlt: "VedaAI assignment workspace with generated question-paper cards",
     mobileImage: "/projects/vedaai-workspace-mobile-hq.png",
     detailImage: "/projects/vedaai-detail-hq.png",
+    mobileDetailImage: "/projects/vedaai-workspace-mobile-hq.png",
     detailImageAlt: "VedaAI generated question paper with exam details and student instructions",
+    mobileDetailImageAlt: "VedaAI assignment workspace with sidebar navigation and assignment cards",
     color: "#c9ff73",
     textColor: "#17220b",
     stack: ["Next.js", "Express", "BullMQ", "Redis", "PostgreSQL", "Gemini"],
@@ -145,6 +150,8 @@ export const projects: Project[] = [
       "A full-stack lead intelligence product that continuously monitors Reddit for high-intent conversations. Scheduled workers collect posts, Gemini scores them against an ideal customer profile, and the product turns qualified signals into enriched leads and personalized outreach.",
     image: "/projects/leadly.png",
     imageAlt: "Leadly workspace overview with monitoring and lead intelligence metrics",
+    detailImage: "/projects/leadly-detail-hq.png",
+    detailImageAlt: "Leadly workspace overview dashboard with sidebar navigation and lead metrics",
     color: "#d7a5aa",
     textColor: "#2f1419",
     stack: ["Next.js", "Express", "BullMQ", "Redis", "PostgreSQL", "Gemini"],
