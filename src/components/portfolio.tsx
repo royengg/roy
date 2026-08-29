@@ -19,6 +19,7 @@ import Queue01Icon from "@hugeicons/core-free-icons/Queue01Icon";
 import {
   SiBetterauth,
   SiBun,
+  SiDiscord,
   SiDocker,
   SiElevenlabs,
   SiExpress,
@@ -28,6 +29,7 @@ import {
   SiLivekit,
   SiNextdotjs,
   SiNodedotjs,
+  SiPaypal,
   SiPostgresql,
   SiPrisma,
   SiReact,
@@ -36,6 +38,7 @@ import {
   SiSupabase,
   SiTailwindcss,
   SiTypescript,
+  SiZod,
 } from "react-icons/si";
 import type { IconType } from "react-icons";
 import { CalBookingButton } from "@/components/cal-booking-button";
@@ -125,6 +128,7 @@ const techIcons: Record<string, TechIconDefinition> = {
   "Better Auth": { type: "brand", icon: SiBetterauth, color: "#f5f5f2" },
   BullMQ: { type: "interface", icon: Queue01Icon, color: "#c8ff58" },
   Bun: { type: "brand", icon: SiBun, color: "#f3dfc4" },
+  "Discord.js": { type: "brand", icon: SiDiscord, color: "#7c85ff" },
   ElevenLabs: { type: "brand", icon: SiElevenlabs, color: "#f5f5f2" },
   "ElevenLabs / AI": { type: "brand", icon: SiElevenlabs, color: "#f5f5f2" },
   Express: { type: "brand", icon: SiExpress, color: "#f5f5f2" },
@@ -133,6 +137,7 @@ const techIcons: Record<string, TechIconDefinition> = {
   Hono: { type: "brand", icon: SiHono, color: "#ff6d1f" },
   "LiveKit / WebRTC": { type: "brand", icon: SiLivekit, color: "#f5f5f2" },
   "Next.js": { type: "brand", icon: SiNextdotjs, color: "#f5f5f2" },
+  "PayPal API": { type: "brand", icon: SiPaypal, color: "#5e9eff" },
   PostgreSQL: { type: "brand", icon: SiPostgresql, color: "#6f9cff" },
   Prisma: { type: "brand", icon: SiPrisma, color: "#dce8f4" },
   React: { type: "brand", icon: SiReact, color: "#61dafb" },
@@ -142,6 +147,7 @@ const techIcons: Record<string, TechIconDefinition> = {
   Supabase: { type: "brand", icon: SiSupabase, color: "#3ecf8e" },
   "Tailwind CSS": { type: "brand", icon: SiTailwindcss, color: "#38bdf8" },
   TypeScript: { type: "brand", icon: SiTypescript, color: "#5e9eff" },
+  Zod: { type: "brand", icon: SiZod, color: "#5e9eff" },
 };
 
 function TechIcon({ name }: { name: string }) {

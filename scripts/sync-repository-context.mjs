@@ -41,6 +41,16 @@ const repositories = [
     folder: "leadly-live",
     url: "https://github.com/royengg/leadly-live",
   },
+  {
+    slug: "yunami-bot",
+    folder: "yunami-bot",
+    url: "https://github.com/royengg/yunami-bot",
+  },
+  {
+    slug: "payme-app",
+    folder: "payme-app",
+    url: "https://github.com/royengg/PayMe-app",
+  },
 ];
 
 const ignoredSegments = new Set([
