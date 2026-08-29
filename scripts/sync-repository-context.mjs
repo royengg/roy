@@ -3,6 +3,12 @@ import { readFile, readdir, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const sourceRoot = process.env.REPOSITORY_SOURCE_DIR;
+const requestedSlugs = new Set(
+  (process.env.REPOSITORY_SLUGS ?? "")
+    .split(",")
+    .map((slug) => slug.trim())
+    .filter(Boolean),
+);
 
 if (!sourceRoot) {
   throw new Error(
@@ -15,6 +21,11 @@ const repositories = [
     slug: "savekaro",
     folder: "SaveKaro",
     url: "https://github.com/royengg/SaveKaro",
+  },
+  {
+    slug: "directors-cut",
+    folder: "directorscut",
+    url: "https://github.com/royengg/directorscut",
   },
   {
     slug: "one-auction",
@@ -35,6 +46,11 @@ const repositories = [
     slug: "litmus-ai",
     folder: "Litmus-AI",
     url: "https://github.com/royengg/Litmus-AI",
+  },
+  {
+    slug: "noteformula",
+    folder: "noteformula",
+    url: "https://github.com/royengg/noteformula",
   },
   {
     slug: "leadly-live",
@@ -201,16 +217,32 @@ async function buildSnapshot(repository) {
   };
 }
 
+const selectedRepositories = requestedSlugs.size
+  ? repositories.filter((repository) => requestedSlugs.has(repository.slug))
+  : repositories;
+
+if (requestedSlugs.size && selectedRepositories.length !== requestedSlugs.size) {
+  const knownSlugs = new Set(repositories.map((repository) => repository.slug));
+  const unknownSlugs = [...requestedSlugs].filter((slug) => !knownSlugs.has(slug));
+  throw new Error(`Unknown repository slug(s): ${unknownSlugs.join(", ")}`);
+}
+
 const snapshots = {};
-for (const repository of repositories) {
+for (const repository of selectedRepositories) {
   snapshots[repository.slug] = await buildSnapshot(repository);
 }
 
 const outputPath = path.join(process.cwd(), "src/data/repository-context.json");
+const existingContext = requestedSlugs.size
+  ? JSON.parse(await readFile(outputPath, "utf8"))
+  : { projects: {} };
+const projects = requestedSlugs.size
+  ? { ...existingContext.projects, ...snapshots }
+  : snapshots;
 await writeFile(
   outputPath,
-  `${JSON.stringify({ generatedAt: new Date().toISOString(), projects: snapshots }, null, 2)}\n`,
+  `${JSON.stringify({ generatedAt: new Date().toISOString(), projects }, null, 2)}\n`,
   "utf8",
 );
 
-console.log(`Wrote repository context for ${repositories.length} projects to ${outputPath}`);
+console.log(`Wrote repository context for ${selectedRepositories.length} project(s) to ${outputPath}`);
