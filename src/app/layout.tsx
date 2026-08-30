@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://roydev.in"),
   title: "Rudraksh Roy",
   description:
-    "Backend and full-stack engineer building realtime systems, AI workflows, and dependable product infrastructure.",
+    "product engineer.",
   openGraph: {
     type: "website",
     url: "https://roydev.in",
