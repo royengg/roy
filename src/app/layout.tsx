@@ -21,9 +21,31 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://roydev.in"),
   title: "Rudraksh Roy",
   description:
     "Backend and full-stack engineer building realtime systems, AI workflows, and dependable product infrastructure.",
+  openGraph: {
+    type: "website",
+    url: "https://roydev.in",
+    siteName: "Rudraksh Roy",
+    title: "Rudraksh Roy",
+    description: "product engineer.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 2411,
+        height: 1271,
+        alt: "Hey, I'm Rudraksh Roy — Product Engineer",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rudraksh Roy",
+    description: "product engineer.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
