@@ -33,9 +33,10 @@ export const metadata: Metadata = {
     description: "product engineer.",
     images: [
       {
-        url: "/og-image.png",
-        width: 2411,
-        height: 1271,
+        url: "/og-image-v2.png",
+        width: 1200,
+        height: 630,
+        type: "image/png",
         alt: "Hey, I'm Rudraksh Roy — Product Engineer",
       },
     ],
@@ -44,7 +45,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Rudraksh Roy",
     description: "product engineer.",
-    images: ["/og-image.png"],
+    images: ["/og-image-v2.png"],
   },
 };
 
