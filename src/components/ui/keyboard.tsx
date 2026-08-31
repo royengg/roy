@@ -473,19 +473,26 @@ const KeyboardProvider = ({
         !e.ctrlKey &&
         !e.altKey &&
         (!isEditableTarget || isKeyboardEditor);
+      const inputAction = shouldType
+        ? getKeyboardInputAction(keyCode, e.key)
+        : null;
 
       if (e.repeat) {
-        if (shouldType) typeKey(keyCode, e.key);
+        if (inputAction) {
+          e.preventDefault();
+          typeKey(keyCode, e.key);
+        }
         return;
       }
 
       playSoundDown(keyCode);
       setPressed(keyCode);
 
-      if (shouldType) {
-        if (!isEditableTarget && (keyCode === "Space" || keyCode === "Backspace")) {
-          e.preventDefault();
-        }
+      if (inputAction) {
+        // The state update focuses the editor before this same keystroke's
+        // default action finishes. Cancel that native action so the character
+        // is inserted exactly once by the keyboard's controlled input path.
+        e.preventDefault();
         typeKey(keyCode, e.key);
       }
     };
