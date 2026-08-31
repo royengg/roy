@@ -46,6 +46,8 @@ import KeyboardDemo from "@/components/keyboard-demo";
 import { ThreeDMarquee, type ThreeDMarqueeItem } from "@/components/ui/3d-marquee";
 import { FloatingDock, type FloatingDockItem } from "@/components/ui/floating-dock";
 import { MagneticButton } from "@/components/ui/magnetic-button";
+import { ShootingStars } from "@/components/ui/shooting-stars";
+import { StarsBackground } from "@/components/ui/stars-background";
 import { PullCord } from "@/components/pull-cord";
 import { NowShowing } from "@/components/now-showing";
 import { SpotifyPlayer } from "@/components/spotify-player";
@@ -748,6 +750,12 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
       >
         {isWaveformPreview ? null : <WaveformScrollScrubber lenis={lenisInstance} />}
         <section id="intro" className="hero">
+          {isWaveformPreview ? null : (
+            <div className="hero-starfield" aria-hidden="true">
+              <StarsBackground />
+              <ShootingStars />
+            </div>
+          )}
           <div className="availability"><span /> Available for backend &amp; full-stack work</div>
           <p className="hero-kicker"><VisitorGreeting /></p>
           <h1>Rudraksh Roy<span className="accent-dot"></span></h1>
