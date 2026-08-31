@@ -56,7 +56,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased dark`}
     >
-      <body>
+      <body suppressHydrationWarning>
         <ThemeProvider>
           {children}
           {process.env.NODE_ENV === "development" && <DevelopmentTools />}
