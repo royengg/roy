@@ -48,6 +48,7 @@ import { FloatingDock, type FloatingDockItem } from "@/components/ui/floating-do
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { ShootingStars } from "@/components/ui/shooting-stars";
 import { StarsBackground } from "@/components/ui/stars-background";
+import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import { PullCord } from "@/components/pull-cord";
 import { NowShowing } from "@/components/now-showing";
 import { SpotifyPlayer } from "@/components/spotify-player";
@@ -758,7 +759,7 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
           )}
           <div className="availability"><span /> Available for backend &amp; full-stack work</div>
           <p className="hero-kicker"><VisitorGreeting /></p>
-          <h1>Rudraksh Roy<span className="accent-dot"></span></h1>
+          <h1 aria-label="Rudraksh Roy"><TextHoverEffect text="Rudraksh Roy" /></h1>
           <p className="hero-role">Product engineer with a full-stack habit.</p>
           <p className="hero-intro">
             I am a product-focused engineer from India who likes to ship fast and work with a business oriented mindset that can handle more than the fullstack work. Always keep it real with no bs and set expectations which i always keep.
