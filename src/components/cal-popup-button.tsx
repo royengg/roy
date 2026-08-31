@@ -11,9 +11,6 @@ const CAL_LINK = "rudraksh/30min";
 const CAL_MODAL_CONFIG = {
   layout: "month_view",
   theme: "dark",
-  iframeAttrs: {
-    style: "display:block;width:100%;max-width:100%;min-width:0;border:0;overflow:hidden;",
-  },
 } as const;
 
 type CalPopupButtonProps = Omit<
@@ -82,7 +79,8 @@ export function CalPopupButton({ children, onClick, ...buttonProps }: CalPopupBu
           calLink={CAL_LINK}
           calOrigin="https://app.cal.com"
           config={CAL_MODAL_CONFIG}
-          style={{ height: "100%", maxWidth: "100%", overflow: "hidden", width: "100%" }}
+          className="cal-popup-cal"
+          style={{ height: "100%", maxWidth: "100%", width: "100%" }}
         />
       </div>
     </div>

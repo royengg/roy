@@ -543,10 +543,11 @@ button { font: inherit; }
 .cal-popup-backdrop { position: absolute; inset: 0; border: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px); cursor: default; }
 .cal-popup-close { position: fixed; z-index: 2147483647; inset-block-start: 24px; inset-inline-end: 24px; width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 999px; background: rgba(16, 16, 15, 0.34); color: white; cursor: pointer; filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.7)); transition: transform 75ms var(--ease-out), background-color 150ms var(--ease-out); }
 .cal-popup-close:active { transform: scale(0.95); }
-.cal-popup-embed { position: relative; z-index: 1; width: min(1024px, calc(100dvw - 48px)); max-width: min(1024px, calc(100dvw - 48px)); min-width: 0; height: min(760px, calc(100dvh - 48px)); overflow: hidden; }
+.cal-popup-embed { position: relative; z-index: 1; width: min(1024px, calc(100dvw - 48px)); max-width: min(1024px, calc(100dvw - 48px)); min-width: 0; height: min(760px, calc(100dvh - 48px)); overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 .cal-popup-embed,
 .cal-popup-embed > div,
 .cal-popup-embed iframe { width: 100% !important; max-width: 100% !important; min-width: 0 !important; overflow-x: hidden !important; }
+.cal-popup-embed > div { overflow-y: auto !important; }
 
 .hero-links a:active,
 .hero-links button:active,
