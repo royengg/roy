@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 
 import { cn } from "@/lib/utils";
+
+const ORIGIN = { x: 0, y: 0 };
 
 type MagneticButtonProps = {
   children: React.ReactNode;
@@ -24,10 +26,62 @@ export function MagneticButton({
 }: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [canUseMagnet, setCanUseMagnet] = useState(false);
+  const [position, setPosition] = useState(ORIGIN);
+  const [resetGeneration, setResetGeneration] = useState(0);
 
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current || shouldReduceMotion) return;
+  const resetPosition = useCallback(() => {
+    setPosition((current) =>
+      current.x === ORIGIN.x && current.y === ORIGIN.y ? current : ORIGIN,
+    );
+  }, []);
+
+  const clearPositionImmediately = useCallback(() => {
+    if (ref.current) ref.current.style.transform = "none";
+    setPosition((current) =>
+      current.x === ORIGIN.x && current.y === ORIGIN.y ? current : ORIGIN,
+    );
+    setResetGeneration((generation) => generation + 1);
+  }, []);
+
+  useEffect(() => {
+    const pointerQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+    const syncPointerCapability = () => {
+      setCanUseMagnet(pointerQuery.matches);
+      if (!pointerQuery.matches) clearPositionImmediately();
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState !== "visible") clearPositionImmediately();
+    };
+
+    syncPointerCapability();
+    pointerQuery.addEventListener("change", syncPointerCapability);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("blur", clearPositionImmediately);
+    window.addEventListener("pagehide", clearPositionImmediately);
+    window.addEventListener("pageshow", clearPositionImmediately);
+
+    return () => {
+      pointerQuery.removeEventListener("change", syncPointerCapability);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("blur", clearPositionImmediately);
+      window.removeEventListener("pagehide", clearPositionImmediately);
+      window.removeEventListener("pageshow", clearPositionImmediately);
+    };
+  }, [clearPositionImmediately]);
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (
+      !ref.current ||
+      !canUseMagnet ||
+      shouldReduceMotion ||
+      event.pointerType !== "mouse"
+    ) {
+      clearPositionImmediately();
+      return;
+    }
 
     const { width, height, left, top } = ref.current.getBoundingClientRect();
     const { clientX, clientY } = event;
@@ -45,14 +99,16 @@ export function MagneticButton({
     setPosition({ x, y });
   };
 
-  const handleMouseLeave = () => setPosition({ x: 0, y: 0 });
+  const magneticEnabled = canUseMagnet && !shouldReduceMotion;
   const hasMoved =
-    !shouldReduceMotion && (position.x !== 0 || position.y !== 0);
+    magneticEnabled && (position.x !== 0 || position.y !== 0);
 
   return (
     <div
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      onClickCapture={resetPosition}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={resetPosition}
+      onPointerCancel={clearPositionImmediately}
       className={cn(
         "inline-flex w-fit cursor-pointer transition-[background-color,outline-color] duration-150",
         className,
@@ -68,9 +124,10 @@ export function MagneticButton({
       }}
     >
       <motion.div
+        key={resetGeneration}
         ref={ref}
         className="inline-flex"
-        animate={shouldReduceMotion ? { x: 0, y: 0 } : position}
+        animate={magneticEnabled ? position : ORIGIN}
         transition={{ type: "spring", stiffness: 150, damping: 25, mass: 0.1 }}
       >
         {children}
