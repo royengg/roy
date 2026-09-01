@@ -54,6 +54,7 @@ import { NowShowing } from "@/components/now-showing";
 import { SpotifyPlayer } from "@/components/spotify-player";
 import { VisitorGreeting } from "@/components/visitor-greeting";
 import { WaveformScrollScrubber } from "@/components/waveform-scroll-scrubber";
+import { ProjectSystemDesign } from "@/components/project-system-design";
 import contributions from "@/data/contributions.json";
 import { experiences, projects, type Project } from "@/data/portfolio";
 
@@ -552,20 +553,32 @@ function ProjectList({
   );
 }
 
+type ProjectModalTab = "details" | "system-design" | "chat";
+
+const projectModalTabs: ProjectModalTab[] = ["details", "system-design", "chat"];
+
+const projectModalTabLabels: Record<ProjectModalTab, string> = {
+  details: "Details",
+  "system-design": "System design",
+  chat: "Chat",
+};
+
 function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
-  const [activeTab, setActiveTab] = useState<"details" | "chat">("details");
+  const [activeTab, setActiveTab] = useState<ProjectModalTab>("details");
   const [hasOpenedChat, setHasOpenedChat] = useState(false);
   const closeRef = useRef<HTMLButtonElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
 
-  const selectTab = (tab: "details" | "chat") => {
+  const selectTab = (tab: ProjectModalTab) => {
     setActiveTab(tab);
     if (tab === "chat") setHasOpenedChat(true);
   };
 
   useEffect(() => {
     previousFocus.current = document.activeElement as HTMLElement;
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
     const background = document.querySelectorAll<HTMLElement>(".site-shell, .site-footer");
     background.forEach((element) => element.setAttribute("inert", ""));
     const onKey = (event: KeyboardEvent) => {
@@ -587,10 +600,12 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
       }
     };
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
     window.addEventListener("keydown", onKey);
     closeRef.current?.focus();
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
       window.removeEventListener("keydown", onKey);
       background.forEach((element) => element.removeAttribute("inert"));
       previousFocus.current?.focus();
@@ -600,6 +615,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   return (
     <motion.div
       className="modal-backdrop"
+      data-lenis-prevent
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -609,15 +625,16 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
       <motion.div
         ref={modalRef}
         className="project-modal"
+        data-active-tab={activeTab}
         role="dialog"
         aria-modal="true"
-        aria-label={`${project.title} project details and repository chat`}
+        aria-label={`${project.title} project views`}
         initial={{ opacity: 0, transform: "translateY(18px) scale(0.96)" }}
         animate={{ opacity: 1, transform: "translateY(0) scale(1)" }}
         exit={{ opacity: 0, transform: "translateY(8px) scale(0.98)" }}
         transition={{ duration: 0.24, ease: [0.23, 1, 0.32, 1] }}
       >
-        <button ref={closeRef} className="modal-close" onClick={onClose} aria-label="Close project details and chat">
+        <button ref={closeRef} className="modal-close" onClick={onClose} aria-label="Close project views">
           <HugeiconsIcon icon={Cancel01Icon} size={18} strokeWidth={1.5} />
         </button>
         <div className="modal-visual" style={{ backgroundColor: project.color }}>
@@ -643,7 +660,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
         </div>
         <div className="modal-panel">
           <div className="modal-tabs" role="tablist" aria-label="Project view">
-            {(["details", "chat"] as const).map((tab) => (
+            {projectModalTabs.map((tab) => (
               <button
                 key={tab}
                 id={`${project.slug}-${tab}-tab`}
@@ -656,14 +673,18 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                 onKeyDown={(event) => {
                   if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
                   event.preventDefault();
-                  const nextTab = tab === "details" ? "chat" : "details";
+                  const currentIndex = projectModalTabs.indexOf(tab);
+                  const offset = event.key === "ArrowRight" ? 1 : -1;
+                  const nextTab = projectModalTabs[
+                    (currentIndex + offset + projectModalTabs.length) % projectModalTabs.length
+                  ];
                   selectTab(nextTab);
                   modalRef.current
                     ?.querySelector<HTMLButtonElement>(`#${project.slug}-${nextTab}-tab`)
                     ?.focus();
                 }}
               >
-                {tab === "details" ? "Details" : "Chat"}
+                {projectModalTabLabels[tab]}
               </button>
             ))}
           </div>
@@ -689,6 +710,16 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
               <a href={project.github} target="_blank" rel="noreferrer"><HugeiconsIcon icon={Github01Icon} size={18} strokeWidth={1.5} /> Repository</a>
               {project.live && <a href={project.live} target="_blank" rel="noreferrer"><HugeiconsIcon icon={Globe02Icon} size={18} strokeWidth={1.5} /> Live project</a>}
             </div>
+          </div>
+
+          <div
+            className="project-system-design-panel"
+            id={`${project.slug}-system-design-panel`}
+            role="tabpanel"
+            aria-labelledby={`${project.slug}-system-design-tab`}
+            hidden={activeTab !== "system-design"}
+          >
+            <ProjectSystemDesign project={project} tabId={`${project.slug}-system-design`} />
           </div>
 
           <div
