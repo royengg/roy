@@ -670,35 +670,42 @@ button { font: inherit; }
 }
 
 .contribution-shell {
-  --contribution-gap: 4px;
+  --contribution-gap: clamp(1px, 0.35vw, 4px);
   padding: 0;
   border: 0;
   border-radius: 0;
   background: transparent;
 }
-.contribution-scroller { overflow-x: auto; padding-block-end: 10px; scrollbar-width: thin; }
+.contribution-scroller {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
 .month-row {
-  width: max(100%, 738px);
+  width: 100%;
+  min-width: 0;
   height: 26px;
   display: grid;
-  grid-template-columns: repeat(53, minmax(10px, 1fr));
+  grid-template-columns: repeat(53, minmax(0, 1fr));
   gap: var(--contribution-gap);
   font-family: var(--font-geist-mono), monospace;
   color: var(--color-text-secondary);
-  font-size: 12px;
+  font-size: clamp(8px, 1.2vw, 12px);
   font-weight: 500;
   line-height: 1.3;
 }
 .month-row span { white-space: nowrap; }
+.month-row .month-label-trailing { justify-self: end; }
 .contribution-grid {
-  width: max(100%, 738px);
+  width: 100%;
+  min-width: 0;
   display: grid;
-  grid-template-columns: repeat(53, minmax(10px, 1fr));
-  grid-template-rows: repeat(7, 14px);
+  grid-template-columns: repeat(53, minmax(0, 1fr));
+  grid-template-rows: repeat(7, clamp(7px, 1.3vw, 14px));
   grid-auto-flow: column;
   gap: var(--contribution-gap);
 }
-.contribution-cell { width: 100%; height: 14px; border-radius: 2px; transition: transform 150ms var(--ease-out); }
+.contribution-cell { width: 100%; height: 100%; border-radius: 2px; transition: transform 150ms var(--ease-out); }
 .contribution-meta { display: flex; justify-content: space-between; gap: 20px; margin-block-start: 18px; color: var(--color-text-secondary); font-size: 13px; line-height: 1.4; font-variant-numeric: tabular-nums; }
 .contribution-meta a { min-height: 24px; display: inline-flex; align-items: center; gap: 4px; color: var(--color-text-primary); }
 .contribution-meta-trailing { display: flex; align-items: center; gap: 24px; }
@@ -1711,10 +1718,22 @@ button { font: inherit; }
   .hero-intro { font-size: 17px; }
   .stack-marquee-frame { padding: 6px; border-radius: 16px; }
   .stack-marquee { height: 380px; border-radius: 10px; }
+  .contribution-scroller {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .contribution-scroller::-webkit-scrollbar { display: none; }
+  .month-row,
+  .contribution-grid {
+    width: max(100%, 738px);
+    grid-template-columns: repeat(53, minmax(10px, 1fr));
+    gap: 4px;
+  }
+  .month-row { font-size: 12px; }
+  .contribution-grid { grid-template-rows: repeat(7, 10px); }
   .contribution-meta { flex-direction: column; gap: 8px; }
   .contribution-meta-trailing { width: 100%; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-  .contribution-grid { grid-template-rows: repeat(7, 10px); }
-  .contribution-cell { height: 10px; }
   .project-card { min-height: 410px; }
   .project-card h3 { font-size: 38px; }
   .project-image-wrap { height: 245px; bottom: -18px; }

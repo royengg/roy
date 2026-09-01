@@ -309,7 +309,11 @@ function ContributionGraph() {
       <div className="contribution-scroller">
         <div className="month-row" aria-hidden="true">
           {monthLabels.map((label) => (
-            <span key={`${label.name}-${label.column}`} style={{ gridColumn: label.column }}>
+            <span
+              className={label.column > 50 ? "month-label-trailing" : undefined}
+              key={`${label.name}-${label.column}`}
+              style={{ gridColumn: label.column }}
+            >
               {label.name}
             </span>
           ))}
