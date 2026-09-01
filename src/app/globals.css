@@ -1682,6 +1682,7 @@ button { font: inherit; }
   .modal-backdrop { padding: 12px; align-items: end; }
   .project-modal { width: 100%; height: calc(100dvh - 24px); min-height: calc(100dvh - 24px); max-height: calc(100dvh - 24px); grid-template-columns: 1fr; grid-template-rows: 38% 62%; border-radius: 18px; }
   .modal-close { inset-block-start: 12px; inset-inline-end: 12px; }
+  .project-modal[data-active-tab="system-design"] .modal-close { inset-block-start: 4px; }
   .modal-visual { padding: 12px; }
   .modal-image { min-height: 0; }
   /* Let the mobile VedaAI preview fill its frame without contain letterboxing. */
