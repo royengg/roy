@@ -380,9 +380,8 @@ function ExperienceRows() {
       };
 
   return (
-    <motion.div
+    <div
       className="experience-list"
-      layout
       onPointerLeave={(event) => {
         if (event.pointerType !== "touch") setHovered(null);
       }}
@@ -395,7 +394,7 @@ function ExperienceRows() {
           <motion.div
             className="experience-item"
             key={item.name}
-            layout
+            layout="position"
             onPointerEnter={(event) => {
               if (event.pointerType !== "touch") setHovered(index);
             }}
@@ -454,7 +453,7 @@ function ExperienceRows() {
           </motion.div>
         );
       })}
-    </motion.div>
+    </div>
   );
 }
 

@@ -730,7 +730,9 @@ button { font: inherit; }
   cursor: pointer;
 }
 
-.experience-trigger:active { transform: scale(0.99); }
+@media (hover: hover) and (pointer: fine) {
+  .experience-trigger:active { transform: scale(0.99); }
+}
 .experience-number { font-family: var(--font-geist-mono), monospace; font-size: 21px; color: var(--color-text-secondary); font-variant-numeric: tabular-nums; }
 .experience-name { font-size: 21px; font-weight: 580; letter-spacing: -0.03em; }
 .experience-type { padding: 4px 8px; border: 1px solid var(--color-border-subtle); border-radius: 999px; font-size: 9px; color: var(--color-text-secondary); white-space: nowrap; }
