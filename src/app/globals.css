@@ -293,11 +293,11 @@ button { font: inherit; }
   inset-inline-end: calc(100% + 12px);
   width: 304px;
   padding: 7px;
-  border: 1px solid color-mix(in srgb, var(--color-border-default) 78%, transparent);
+  border: 0;
   border-radius: 18px;
   display: grid;
   gap: 7px;
-  background: var(--color-bg-elevated);
+  background: var(--color-bg-surface);
   box-shadow: none;
   opacity: 0;
   pointer-events: none;
@@ -1808,6 +1808,6 @@ button { font: inherit; }
   .waveform-scrollbar-shell { background: transparent; box-shadow: none; }
   .waveform-scrollbar-bar { background: GrayText; }
   .waveform-scrollbar-bar-active { background: Highlight; }
-  .waveform-scrollbar-preview { border-color: CanvasText; background: Canvas; box-shadow: none; }
+  .waveform-scrollbar-preview { border: 1px solid CanvasText; background: Canvas; box-shadow: none; }
   .waveform-scrollbar-range:focus-visible ~ .waveform-scrollbar-shell { outline-color: Highlight; }
 }
