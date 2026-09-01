@@ -54,8 +54,8 @@ import { NowShowing } from "@/components/now-showing";
 import { SpotifyPlayer } from "@/components/spotify-player";
 import { VisitorGreeting } from "@/components/visitor-greeting";
 import { WaveformScrollScrubber } from "@/components/waveform-scroll-scrubber";
-import { ProjectSystemDesign } from "@/components/project-system-design";
 import contributions from "@/data/contributions.json";
+import { getProjectCaseStudy } from "@/data/project-case-studies";
 import { experiences, projects, type Project } from "@/data/portfolio";
 
 const INITIAL_VISIBLE_PROJECTS = 4;
@@ -63,6 +63,14 @@ const INITIAL_VISIBLE_PROJECTS = 4;
 const ProjectChat = dynamic(
   () => import("@/components/project-chat").then((module) => module.ProjectChat),
   { ssr: false },
+);
+
+const ProjectSystemDesign = dynamic(
+  () => import("@/components/project-system-design").then((module) => module.ProjectSystemDesign),
+  {
+    ssr: false,
+    loading: () => <div className="project-system-design-loading" role="status" aria-label="Loading system design" />,
+  },
 );
 
 const stack = [
@@ -566,6 +574,7 @@ const projectModalTabLabels: Record<ProjectModalTab, string> = {
 function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
   const [activeTab, setActiveTab] = useState<ProjectModalTab>("details");
   const [hasOpenedChat, setHasOpenedChat] = useState(false);
+  const caseStudy = getProjectCaseStudy(project.slug);
   const closeRef = useRef<HTMLButtonElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
@@ -698,13 +707,38 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           >
             <h2>{project.title}</h2>
             <p className="modal-lede">{project.description}</p>
-            <div className="modal-block">
-              <h3>Architecture &amp; build</h3>
+
+            <section className="modal-block modal-copy-block">
+              <h3>Problem &amp; constraints</h3>
+              <p>{caseStudy.problem}</p>
+              <ul className="modal-constraint-list">
+                {caseStudy.constraints.map((constraint) => (
+                  <li key={constraint}>{constraint}</li>
+                ))}
+              </ul>
+            </section>
+
+            <section className="modal-block modal-copy-block">
+              <h3>What I owned</h3>
+              <p>{caseStudy.ownership}</p>
+            </section>
+
+            <section className="modal-block">
+              <h3>What I built</h3>
               <ul>{project.highlights.map((item) => <li key={item}>{item}</li>)}</ul>
-            </div>
-            <div className="tech-icon-row modal-stack" aria-label="Technology stack">
-              {project.stack.map((item) => <TechIcon key={item} name={item} />)}
-            </div>
+            </section>
+
+            <section className="modal-block modal-copy-block">
+              <h3>Outcome</h3>
+              <p>{caseStudy.outcome}</p>
+            </section>
+
+            <section className="modal-block modal-stack-block">
+              <h3>Tech stack</h3>
+              <div className="tech-icon-row modal-stack" aria-label="Technology stack">
+                {project.stack.map((item) => <TechIcon key={item} name={item} />)}
+              </div>
+            </section>
             <div className="modal-links">
               <a href={project.github} target="_blank" rel="noreferrer"><HugeiconsIcon icon={Github01Icon} size={18} strokeWidth={1.5} /> Repository</a>
               {project.live && <a href={project.live} target="_blank" rel="noreferrer"><HugeiconsIcon icon={Globe02Icon} size={18} strokeWidth={1.5} /> Live project</a>}

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "@xyflow/react/dist/style.css";
 
 :root {
   color-scheme: light;
@@ -292,11 +293,11 @@ button { font: inherit; }
   inset-inline-end: calc(100% + 12px);
   width: 304px;
   padding: 7px;
-  border: 1px solid color-mix(in srgb, var(--color-border-default) 78%, transparent);
+  border: 0;
   border-radius: 18px;
   display: grid;
   gap: 7px;
-  background: var(--color-bg-elevated);
+  background: var(--color-bg-surface);
   box-shadow: none;
   opacity: 0;
   pointer-events: none;
@@ -1153,8 +1154,11 @@ button { font: inherit; }
 .modal-block ul { margin: 0; padding: 0; list-style: none; color: var(--color-text-body); font-size: 13px; line-height: 1.6; }
 .modal-block li { position: relative; padding-inline-start: 17px; margin-block: 8px; }
 .modal-block li::before { content: ""; position: absolute; inset-inline-start: 0; top: 0.72em; width: 5px; height: 5px; border-radius: 50%; background: var(--color-accent-solid); }
+.modal-copy-block p { max-width: 66ch; margin: 0; color: var(--color-text-body); font-size: 13px; line-height: 1.68; text-wrap: pretty; }
+.modal-copy-block .modal-constraint-list { margin-block-start: 14px; }
 .tech-icon-row { display: flex; flex-wrap: wrap; gap: 8px; }
 .modal-stack { margin-block-start: 32px; }
+.modal-stack-block .modal-stack { margin-block-start: 14px; }
 .modal-tech-icon { width: max-content; min-width: 42px; height: 42px; padding: 10px; display: inline-flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 999px; background: var(--color-bg-tech-chip); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.035); transition: padding 300ms ease; }
 .modal-tech-mark { width: 22px; height: 22px; flex: 0 0 22px; display: grid; place-items: center; }
 .modal-tech-label { max-width: 0; margin-left: 0; overflow: hidden; color: var(--color-text-tech-chip); font-size: 13px; font-weight: 620; line-height: 1; letter-spacing: -0.01em; white-space: nowrap; opacity: 0; transition: max-width 300ms ease, margin-left 300ms ease, opacity 300ms ease; }
@@ -1194,6 +1198,10 @@ button { font: inherit; }
   padding: 26px 28px 34px;
   background: var(--color-bg-page);
 }
+.project-system-design-loading {
+  min-height: 100%;
+  background: var(--color-bg-page);
+}
 .system-design-intro { display: block; }
 .system-design-intro h2 {
   margin: 0;
@@ -1203,29 +1211,174 @@ button { font: inherit; }
   letter-spacing: -0.045em;
   text-wrap: balance;
 }
-.architecture-board-scroll {
+.architecture-flow-frame {
+  position: relative;
   margin-block-start: 22px;
   overflow-x: auto;
   overflow-y: hidden;
-  border-radius: 14px;
   background: var(--color-bg-page);
+  color: var(--color-text-secondary);
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-inline: contain;
   scrollbar-color: var(--color-border-default) transparent;
   scrollbar-width: thin;
 }
-.architecture-board-scroll:focus-visible {
+.architecture-flow-frame:focus-visible {
   outline: 2px solid var(--color-text-secondary);
   outline-offset: 3px;
 }
-.architecture-board {
-  width: 100%;
-  min-width: 900px;
-  height: auto;
-  display: block;
+.architecture-flow-canvas {
+  position: relative;
+  min-width: 100%;
+  overflow: hidden;
+}
+.architecture-flow-canvas .react-flow {
+  pointer-events: none;
+  font-family: var(--font-geist-mono), monospace;
+}
+.architecture-flow-canvas .react-flow__pane { cursor: default; }
+.architecture-flow-canvas .react-flow__node { cursor: default; }
+.architecture-flow-canvas .react-flow__background { opacity: 0.22; }
+.architecture-flow-canvas .react-flow__edge-path {
+  stroke: var(--color-border-default);
+  stroke-width: 1.15;
+}
+.architecture-flow-canvas .react-flow__arrowhead polyline {
+  stroke: var(--color-text-secondary);
+  fill: var(--color-text-secondary);
+}
+.flow-edge-path-quiet { stroke-dasharray: 4 7; opacity: 0.66; }
+.flow-edge-label {
+  position: absolute;
+  z-index: 2;
+  width: max-content;
+  max-width: 150px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: var(--color-bg-page);
   color: var(--color-text-secondary);
   font-family: var(--font-geist-mono), monospace;
-  shape-rendering: geometricPrecision;
+  font-size: 8px;
+  line-height: 1.3;
+  letter-spacing: 0.045em;
+  text-align: center;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.flow-architecture-node {
+  width: 216px;
+  height: 112px;
+  padding: 15px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--color-border-default);
+  border-radius: 10px;
+  background: var(--color-bg-page);
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--color-border-subtle) 62%, transparent);
+}
+.flow-architecture-kicker {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--color-text-secondary);
+  font-size: 9px;
+  line-height: 1;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.flow-architecture-kicker span {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: #9d9890;
+}
+.flow-architecture-node[data-role="client"] .flow-architecture-kicker span { background: #8ab4f8; }
+.flow-architecture-node[data-role="service"] .flow-architecture-kicker span { background: #f0b6aa; }
+.flow-architecture-node[data-role="worker"] .flow-architecture-kicker span { background: #c8ff58; }
+.flow-architecture-node[data-role="data"] .flow-architecture-kicker span { background: #7ad8c9; }
+.flow-architecture-node[data-role="external"] .flow-architecture-kicker span { background: #c3a8ff; }
+.flow-architecture-node strong {
+  margin-block-start: 15px;
+  overflow: hidden;
+  color: var(--color-text-primary);
+  font-size: 15px;
+  font-weight: 620;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.flow-architecture-node small {
+  margin-block-start: 7px;
+  overflow: hidden;
+  color: var(--color-text-secondary);
+  font-size: 9px;
+  line-height: 1.3;
+  letter-spacing: 0.025em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.flow-decision-node {
+  width: 228px;
+  height: 104px;
+  padding: 14px 15px;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 9px;
+  align-items: start;
+  border: 1px dashed var(--color-border-subtle);
+  border-radius: 9px;
+  background: var(--color-bg-page);
+}
+.flow-decision-node > span {
+  color: var(--color-text-secondary);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+.flow-decision-node div { min-width: 0; }
+.flow-decision-node strong {
+  display: block;
+  color: var(--color-text-primary);
+  font-size: 11px;
+  font-weight: 610;
+  line-height: 1.25;
+}
+.flow-decision-node small {
+  display: -webkit-box;
+  margin-block-start: 8px;
+  overflow: hidden;
+  color: var(--color-text-secondary);
+  font-size: 8px;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+.flow-node-handle {
+  width: 1px !important;
+  height: 1px !important;
+  min-width: 1px !important;
+  min-height: 1px !important;
+  border: 0 !important;
+  background: transparent !important;
+  opacity: 0 !important;
+}
+.architecture-flow-loading {
+  min-width: 100%;
+  padding-inline: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 68px;
+}
+.architecture-flow-loading span {
+  width: 196px;
+  height: 106px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 10px;
+  background: var(--color-bg-control);
+  opacity: 0.52;
 }
 .system-design-walkthrough { margin-block-start: 48px; }
 .system-design-overview {
@@ -1249,22 +1402,7 @@ button { font: inherit; }
   line-height: 1.15;
   letter-spacing: -0.035em;
 }
-.architecture-focused-scroll {
-  margin-block-start: 18px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  background: var(--color-bg-page);
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-inline: contain;
-  scrollbar-color: var(--color-border-default) transparent;
-  scrollbar-width: thin;
-}
-.architecture-focused-scroll:focus-visible {
-  outline: 2px solid var(--color-text-secondary);
-  outline-offset: 3px;
-}
-.architecture-board-focused { min-width: 640px; }
-.architecture-board-focused[data-section="backend"] { min-width: 900px; }
+.system-design-section .architecture-flow-frame { margin-block-start: 18px; }
 .system-design-section > p {
   width: 100%;
   margin: 18px 0 0;
@@ -1273,103 +1411,106 @@ button { font: inherit; }
   line-height: 1.72;
   text-wrap: pretty;
 }
-.architecture-board-dots { fill: var(--color-border-subtle); opacity: 0.24; }
-.architecture-board marker path { fill: var(--color-text-secondary); }
-.architecture-section-title {
-  fill: var(--color-text-body);
-  font-size: 12px;
-  font-weight: 540;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
+.system-design-decision-section,
+.system-design-operations-section { margin-block-start: 64px; }
+.system-design-decision-section > h3,
+.system-design-operations-section > h3 {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 22px;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
 }
-.architecture-section-title-large { font-size: 16px; letter-spacing: 0.08em; }
-.architecture-node-box {
-  fill: var(--color-bg-page);
-  stroke: var(--color-border-default);
-  stroke-width: 1.15;
+.system-design-decision-grid {
+  margin-block-start: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
 }
-.architecture-node-echo {
-  fill: none;
-  stroke: var(--color-border-subtle);
-  stroke-width: 0.8;
-  stroke-dasharray: 2 5;
+.system-design-decision-card {
+  min-width: 0;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--color-bg-control);
 }
-.architecture-node-dot { fill: #9d9890; }
-.architecture-node[data-role="client"] .architecture-node-dot { fill: #8ab4f8; }
-.architecture-node[data-role="service"] .architecture-node-dot { fill: #f0b6aa; }
-.architecture-node[data-role="worker"] .architecture-node-dot { fill: #c8ff58; }
-.architecture-node[data-role="data"] .architecture-node-dot { fill: #7ad8c9; }
-.architecture-node[data-role="external"] .architecture-node-dot { fill: #c3a8ff; }
-.architecture-node-label {
-  fill: var(--color-text-secondary);
-  font-size: 8px;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-}
-.architecture-node-title { fill: var(--color-text-primary); font-size: 13px; font-weight: 620; letter-spacing: -0.02em; }
-.architecture-node-tech { fill: var(--color-text-secondary); font-size: 8px; letter-spacing: 0.025em; }
-.architecture-connector path,
-.architecture-swoop {
-  fill: none;
-  stroke: var(--color-border-default);
-  stroke-width: 1.15;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.architecture-connector text {
-  fill: var(--color-text-secondary);
-  font-size: 7px;
-  letter-spacing: 0.045em;
-  text-transform: uppercase;
-}
-.architecture-swoop { stroke-width: 1.25; }
-.architecture-swoop-secondary { stroke-dasharray: 3 7; opacity: 0.55; }
-.architecture-boundary rect {
-  fill: var(--color-bg-control);
-  stroke: var(--color-border-subtle);
-  stroke-width: 1;
-  stroke-dasharray: 5 6;
-}
-.architecture-boundary text {
-  fill: var(--color-text-secondary);
-  font-size: 8px;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-}
-.architecture-note-node rect {
-  fill: var(--color-bg-page);
-  stroke: var(--color-border-subtle);
-  stroke-width: 1;
-}
-.architecture-note-index { fill: var(--color-text-secondary); font-size: 8px; letter-spacing: 0.08em; }
-.architecture-note-title { fill: var(--color-text-primary); font-size: 10px; font-weight: 600; }
-.architecture-note-copy { fill: var(--color-text-secondary); font-size: 7px; letter-spacing: 0.015em; }
-.architecture-database ellipse,
-.architecture-database path {
-  fill: var(--color-bg-page);
-  stroke: var(--color-border-default);
-  stroke-width: 1.15;
-}
-.architecture-database-mark {
-  fill: var(--color-text-primary);
+.system-design-decision-card > span,
+.system-design-operations-list dt span {
+  display: block;
+  color: var(--color-text-secondary);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 30px;
-  font-weight: 520;
+  font-size: 9px;
+  line-height: 1.35;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
-.architecture-database-title { fill: var(--color-text-body); font-size: 11px; font-weight: 600; }
-.architecture-database-tech { fill: var(--color-text-secondary); font-size: 8px; }
+.system-design-decision-card h4 {
+  margin: 10px 0 0;
+  color: var(--color-text-primary);
+  font-size: 15px;
+  font-weight: 620;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+.system-design-decision-card p,
+.system-design-operations-list dd {
+  margin: 9px 0 0;
+  color: var(--color-text-body);
+  font-size: 13px;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+.system-design-decision-card .system-design-tradeoff {
+  margin-block-start: 16px;
+  padding-block-start: 15px;
+  border-top: 1px solid var(--color-border-subtle);
+}
+.system-design-tradeoff strong {
+  display: block;
+  margin-block-end: 6px;
+  color: var(--color-text-primary);
+  font-size: 11px;
+  font-weight: 620;
+}
+.system-design-operations-list { margin: 18px 0 0; }
+.system-design-operations-list > div {
+  padding-block: 20px;
+  display: grid;
+  grid-template-columns: minmax(180px, 0.68fr) minmax(0, 1.32fr);
+  gap: 28px;
+  border-top: 1px solid var(--color-border-subtle);
+}
+.system-design-operations-list dt { min-width: 0; }
+.system-design-operations-list dt strong {
+  display: block;
+  margin-block-start: 8px;
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-weight: 620;
+  line-height: 1.4;
+  letter-spacing: -0.015em;
+}
+.system-design-operations-list dd { margin: 0; }
 @media (max-width: 720px) {
   .project-system-design { padding: 24px 18px 34px; }
   .system-design-intro h2 { font-size: 28px; }
-  .architecture-board-scroll { margin-block-start: 20px; }
-  .architecture-board { min-width: 860px; }
+  .architecture-flow-frame { margin-block-start: 20px; }
   .system-design-walkthrough { margin-block-start: 38px; }
   .system-design-overview { font-size: 14px; line-height: 1.72; }
   .system-design-section-list { margin-block-start: 46px; gap: 52px; }
   .system-design-section h3 { font-size: 19px; }
-  .architecture-board-focused { min-width: 620px; }
-  .architecture-board-focused[data-section="backend"] { min-width: 840px; }
   .system-design-section > p { font-size: 13px; line-height: 1.7; }
+  .system-design-decision-section,
+  .system-design-operations-section { margin-block-start: 52px; }
+  .system-design-decision-section > h3,
+  .system-design-operations-section > h3 { font-size: 19px; }
+  .system-design-decision-grid { grid-template-columns: 1fr; }
+  .system-design-decision-card { padding: 18px; }
+  .system-design-operations-list > div { grid-template-columns: 1fr; gap: 10px; }
+  .system-design-operations-list dd { font-size: 13px; line-height: 1.7; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .architecture-flow-canvas .react-flow__viewport { transition: none !important; }
 }
 
 .project-chat-panel { min-height: 0; flex: 1; overflow: hidden; }
@@ -1667,6 +1808,6 @@ button { font: inherit; }
   .waveform-scrollbar-shell { background: transparent; box-shadow: none; }
   .waveform-scrollbar-bar { background: GrayText; }
   .waveform-scrollbar-bar-active { background: Highlight; }
-  .waveform-scrollbar-preview { border-color: CanvasText; background: Canvas; box-shadow: none; }
+  .waveform-scrollbar-preview { border: 1px solid CanvasText; background: Canvas; box-shadow: none; }
   .waveform-scrollbar-range:focus-visible ~ .waveform-scrollbar-shell { outline-color: Highlight; }
 }
