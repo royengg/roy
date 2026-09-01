@@ -1146,8 +1146,7 @@ button { font: inherit; }
 .modal-content { min-height: 0; flex: 1; padding: 58px 48px 46px; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 .modal-content[hidden],
 .project-chat-panel[hidden] { display: none; }
-.modal-eyebrow { font-family: var(--font-geist-mono), monospace; color: #aaa59c; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; }
-.modal-content h2 { margin: 16px 0 22px; font-size: 48px; line-height: 1; letter-spacing: -0.055em; text-wrap: balance; }
+.modal-content h2 { margin: 0 0 22px; font-size: 48px; line-height: 1; letter-spacing: -0.055em; text-wrap: balance; }
 .modal-lede { max-width: 64ch; margin: 0; color: var(--color-text-body); font-size: 15px; line-height: 1.6; text-wrap: pretty; }
 .modal-block { margin-block-start: 36px; }
 .modal-block h3 { font-size: 13px; margin: 0 0 14px; }

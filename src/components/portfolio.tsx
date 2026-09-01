@@ -696,7 +696,6 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
             aria-labelledby={`${project.slug}-details-tab`}
             hidden={activeTab !== "details"}
           >
-            <span className="modal-eyebrow">{project.category} · {project.year}</span>
             <h2>{project.title}</h2>
             <p className="modal-lede">{project.description}</p>
             <div className="modal-block">
