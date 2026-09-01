@@ -382,7 +382,7 @@ button { font: inherit; }
 .hero-starfield {
   position: absolute;
   z-index: 0;
-  inset: 24px -8% 18px;
+  inset: 24px 0 18px;
   overflow: hidden;
   opacity: 0;
   pointer-events: none;
