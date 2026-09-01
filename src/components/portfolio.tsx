@@ -361,10 +361,28 @@ function ContributionGraph() {
 function ExperienceRows() {
   const [open, setOpen] = useState(0);
   const [hovered, setHovered] = useState<number | null>(null);
+  const reduceMotion = useReducedMotion();
+
+  const hiddenDetailState = reduceMotion
+    ? { opacity: 0 }
+    : {
+        opacity: 0,
+        clipPath: "inset(0 0 100% 0)",
+        transform: "translateY(-8px)",
+      };
+
+  const visibleDetailState = reduceMotion
+    ? { opacity: 1 }
+    : {
+        opacity: 1,
+        clipPath: "inset(0 0 0% 0)",
+        transform: "translateY(0px)",
+      };
 
   return (
-    <div
+    <motion.div
       className="experience-list"
+      layout
       onPointerLeave={(event) => {
         if (event.pointerType !== "touch") setHovered(null);
       }}
@@ -377,11 +395,15 @@ function ExperienceRows() {
           <motion.div
             className="experience-item"
             key={item.name}
+            layout
             onPointerEnter={(event) => {
               if (event.pointerType !== "touch") setHovered(index);
             }}
             animate={{ opacity: isDimmed ? 0.4 : 1 }}
-            transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
+            transition={{
+              opacity: { duration: 0.15, ease: [0.23, 1, 0.32, 1] },
+              layout: { duration: reduceMotion ? 0 : 0.24, ease: [0.23, 1, 0.32, 1] },
+            }}
           >
             <button
               className="experience-trigger"
@@ -402,29 +424,37 @@ function ExperienceRows() {
                 <HugeiconsIcon icon={Add01Icon} size={24} strokeWidth={1.5} />
               </motion.span>
             </button>
-            {isOpen && (
-              <div className="experience-detail">
-                <div className="experience-detail-meta">
-                  <strong>{item.role}</strong>
-                  <span>{item.location}</span>
-                </div>
-                <p>{item.detail}</p>
-                {item.stack?.length ? (
-                  <div
-                    className="tech-icon-row experience-stack"
-                    aria-label={`${item.name} technology stack`}
-                  >
-                    {item.stack.map((technology) => (
-                      <TechIcon key={technology} name={technology} />
-                    ))}
+            <AnimatePresence initial={false} mode="popLayout">
+              {isOpen && (
+                <motion.div
+                  className="experience-detail"
+                  initial={hiddenDetailState}
+                  animate={visibleDetailState}
+                  exit={hiddenDetailState}
+                  transition={{ duration: reduceMotion ? 0.14 : 0.22, ease: [0.23, 1, 0.32, 1] }}
+                >
+                  <div className="experience-detail-meta">
+                    <strong>{item.role}</strong>
+                    <span>{item.location}</span>
                   </div>
-                ) : null}
-              </div>
-            )}
+                  <p>{item.detail}</p>
+                  {item.stack?.length ? (
+                    <div
+                      className="tech-icon-row experience-stack"
+                      aria-label={`${item.name} technology stack`}
+                    >
+                      {item.stack.map((technology) => (
+                        <TechIcon key={technology} name={technology} />
+                      ))}
+                    </div>
+                  ) : null}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         );
       })}
-    </div>
+    </motion.div>
   );
 }
 
