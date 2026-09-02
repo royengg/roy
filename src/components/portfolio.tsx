@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import Lenis from "lenis";
 import { AnimatePresence, MotionConfig, motion, useReducedMotion } from "motion/react";
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
@@ -381,10 +381,32 @@ function ContributionGraph() {
   );
 }
 
+const experienceMobileQuery = "(max-width: 720px)";
+
+function subscribeToExperienceLayout(onStoreChange: () => void) {
+  const mediaQuery = window.matchMedia(experienceMobileQuery);
+  mediaQuery.addEventListener("change", onStoreChange);
+
+  return () => mediaQuery.removeEventListener("change", onStoreChange);
+}
+
+function getExperienceLayoutSnapshot() {
+  return window.matchMedia(experienceMobileQuery).matches;
+}
+
+function getExperienceLayoutServerSnapshot() {
+  return false;
+}
+
 function ExperienceRows() {
   const [open, setOpen] = useState(0);
   const [hovered, setHovered] = useState<number | null>(null);
   const reduceMotion = useReducedMotion();
+  const isMobileLayout = useSyncExternalStore(
+    subscribeToExperienceLayout,
+    getExperienceLayoutSnapshot,
+    getExperienceLayoutServerSnapshot,
+  );
 
   const hiddenDetailState = reduceMotion
     ? { opacity: 0 }
@@ -403,8 +425,9 @@ function ExperienceRows() {
       };
 
   return (
-    <div
+    <motion.div
       className="experience-list"
+      layout={!isMobileLayout}
       onPointerLeave={(event) => {
         if (event.pointerType !== "touch") setHovered(null);
       }}
@@ -417,7 +440,7 @@ function ExperienceRows() {
           <motion.div
             className="experience-item"
             key={item.name}
-            layout="position"
+            layout={isMobileLayout ? "position" : true}
             onPointerEnter={(event) => {
               if (event.pointerType !== "touch") setHovered(index);
             }}
@@ -476,7 +499,7 @@ function ExperienceRows() {
           </motion.div>
         );
       })}
-    </div>
+    </motion.div>
   );
 }
 
