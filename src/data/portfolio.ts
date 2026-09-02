@@ -84,7 +84,7 @@ export const projects: Project[] = [
     detailImageAlt: "Director’s Cut show overview with story bible, cast, and episodic production pipeline",
     color: "#e0aa43",
     textColor: "#1b1205",
-    stack: ["TypeScript", "Bun", "Next.js", "Express", "PostgreSQL", "Prisma", "Gemini"],
+    stack: ["TypeScript", "Bun", "Next.js", "Express", "PostgreSQL", "Prisma", "Gemini", "FFmpeg"],
     highlights: [
       "Seven-stage generation pipeline with dependency-aware next actions",
       "Canonical cast and story state keep faces, motives, and continuity stable",
@@ -159,7 +159,7 @@ export const projects: Project[] = [
     detailImageAlt: "Litmus AI completed credibility analysis with score, summary, and sources",
     color: "#63d8c9",
     textColor: "#102522",
-    stack: ["Next.js", "Express", "BullMQ", "Redis", "PostgreSQL", "Gemini"],
+    stack: ["Next.js", "Express", "Clerk", "LangChain", "Pinecone", "BullMQ", "Redis", "PostgreSQL", "Gemini"],
     highlights: [
       "BullMQ workers isolate scraping, retrieval, and model analysis from API requests",
       "Exa search and Pinecone retrieval ground credibility assessments in external context",

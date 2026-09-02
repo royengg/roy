@@ -19,13 +19,16 @@ import Queue01Icon from "@hugeicons/core-free-icons/Queue01Icon";
 import {
   SiBetterauth,
   SiBun,
+  SiClerk,
   SiDiscord,
   SiDocker,
   SiElevenlabs,
   SiExpress,
   SiExpo,
+  SiFfmpeg,
   SiGooglegemini,
   SiHono,
+  SiLangchain,
   SiLivekit,
   SiNextdotjs,
   SiNodedotjs,
@@ -135,21 +138,41 @@ type TechIconDefinition =
   | { type: "brand"; icon: IconType; color: string }
   | { type: "interface"; icon: IconSvgElement; color: string };
 
+const PineconeIcon: IconType = ({ size = 20, color = "currentColor", ...props }) => (
+  <svg
+    {...props}
+    width={size}
+    height={size}
+    viewBox="0 0 205 220"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill={color}
+      d="M127 6.4c-2.1-2.5-5.6-3.1-8.4-1.5l-2.6 1.4-28.3 16.1 6.6 11.6 18.4-10.5-4.5 24.6 13.1 2.4 4.6-24.7 13.6 16.2 10.2-8.6-20.6-24.6h-.1zm-39.7 207.5c6.8 0 12.3-5.4 12.3-12s-5.5-12-12.3-12-12.3 5.4-12.3 12c-.1 6.6 5.5 12 12.3 12zm16.5-65.9-4.4 24.7-13.2-2.4 4.4-24.6-18.4 10.6-6.7-11.6 28.1-16.1 2.6-1.5c2.8-1.6 6.3-1 8.4 1.5l2 2.4 20.9 24.5-10.2 8.7zm10.7-59-4.4 24.7-13.2-2.4 4.4-24.5-18.3 10.5-6.6-11.6 28-16v-.2h.2l2.6-1.5c2.8-1.6 6.3-1 8.4 1.5l2 2.3 20.8 24.6-10.2 8.7zm-86.3 97.6h-.1l-2.7-.8c-2.9-.8-4.8-3.6-4.6-6.6l2.4-33.4 12.7.9-1.5 20.3 19.7-13.4 7.1 10.5-19.3 13.1 19.7 5.7-3.5 12.2zm130.7 13.8-.9 2.9c-.9 2.8-3.5 4.7-6.5 4.5l-2.8-.2-.2.1-.1-.1-31-2.1.8-12.7 20.6 1.4-13.5-18.9 10.3-7.4 13.8 19.4 6-19.6 12.1 3.7zm36.4-68.8 1.5 2.7c1.5 2.7.9 6.1-1.5 8.1l-2.2 1.9v.1h-.1l-24.1 20.4-8.4-9.9 15.8-13.4-23.7-4.2 2.3-12.8 23.9 4.2-10-18 11.3-6.3zm-24.5-55.8-21.4 11.5-6.2-11.4 21.1-11.3-19.3-7.9 4.9-12 29.4 11.9.1-.1.1.2 2.7 1.1c2.9 1.2 4.5 4.2 4 7.2l-.5 3-5.5 30.5-12.8-2.3zm-143.6 26.8 23.8 4-2.2 12.8-24-4.1 10.2 18-11.3 6.4-15.4-27.1-1.5-2.6c-1.5-2.7-.9-6.1 1.4-8.1l2.2-1.9v-.1h.1l23.8-20.5 8.5 9.9zm35.9-55.4 15.8 17.6-9.7 8.7-16.2-18-3.7 20.5-12.8-2.3 5.6-30.4.6-3.1c.5-3 3.1-5.2 6.1-5.3l2.8-.1.1-.1.1.1 31.8-1.3.5 13z"
+    />
+  </svg>
+);
+
 const techIcons: Record<string, TechIconDefinition> = {
   "Amazon S3": { type: "interface", icon: CloudIcon, color: "#ff6b35" },
   "Better Auth": { type: "brand", icon: SiBetterauth, color: "#f5f5f2" },
   BullMQ: { type: "interface", icon: Queue01Icon, color: "#c8ff58" },
   Bun: { type: "brand", icon: SiBun, color: "#f3dfc4" },
+  Clerk: { type: "brand", icon: SiClerk, color: "#8b5cf6" },
   "Discord.js": { type: "brand", icon: SiDiscord, color: "#7c85ff" },
   ElevenLabs: { type: "brand", icon: SiElevenlabs, color: "#f5f5f2" },
   "ElevenLabs / AI": { type: "brand", icon: SiElevenlabs, color: "#f5f5f2" },
   Express: { type: "brand", icon: SiExpress, color: "#f5f5f2" },
   Expo: { type: "brand", icon: SiExpo, color: "#f5f5f2" },
+  FFmpeg: { type: "brand", icon: SiFfmpeg, color: "#59c878" },
   Gemini: { type: "brand", icon: SiGooglegemini, color: "#8ab4f8" },
   Hono: { type: "brand", icon: SiHono, color: "#ff6d1f" },
+  LangChain: { type: "brand", icon: SiLangchain, color: "#f5f5f2" },
   "LiveKit / WebRTC": { type: "brand", icon: SiLivekit, color: "#f5f5f2" },
   "Next.js": { type: "brand", icon: SiNextdotjs, color: "#f5f5f2" },
   "PayPal API": { type: "brand", icon: SiPaypal, color: "#5e9eff" },
+  Pinecone: { type: "brand", icon: PineconeIcon, color: "#f5f5f2" },
   PostgreSQL: { type: "brand", icon: SiPostgresql, color: "#6f9cff" },
   Prisma: { type: "brand", icon: SiPrisma, color: "#dce8f4" },
   React: { type: "brand", icon: SiReact, color: "#61dafb" },
