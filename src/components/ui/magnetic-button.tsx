@@ -28,7 +28,6 @@ export function MagneticButton({
   const shouldReduceMotion = useReducedMotion();
   const [canUseMagnet, setCanUseMagnet] = useState(false);
   const [position, setPosition] = useState(ORIGIN);
-  const [resetGeneration, setResetGeneration] = useState(0);
 
   const resetPosition = useCallback(() => {
     setPosition((current) =>
@@ -41,7 +40,6 @@ export function MagneticButton({
     setPosition((current) =>
       current.x === ORIGIN.x && current.y === ORIGIN.y ? current : ORIGIN,
     );
-    setResetGeneration((generation) => generation + 1);
   }, []);
 
   useEffect(() => {
@@ -128,7 +126,6 @@ export function MagneticButton({
       }}
     >
       <motion.div
-        key={resetGeneration}
         ref={ref}
         className="inline-flex"
         animate={magneticEnabled ? position : ORIGIN}
