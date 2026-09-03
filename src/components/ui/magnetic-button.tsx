@@ -47,6 +47,10 @@ export function MagneticButton({
   useEffect(() => {
     const pointerQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
 
+    const clearDesktopPosition = () => {
+      if (pointerQuery.matches) clearPositionImmediately();
+    };
+
     const syncPointerCapability = () => {
       setCanUseMagnet(pointerQuery.matches);
       if (!pointerQuery.matches) clearPositionImmediately();
@@ -59,16 +63,16 @@ export function MagneticButton({
     syncPointerCapability();
     pointerQuery.addEventListener("change", syncPointerCapability);
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    window.addEventListener("blur", clearPositionImmediately);
-    window.addEventListener("pagehide", clearPositionImmediately);
-    window.addEventListener("pageshow", clearPositionImmediately);
+    window.addEventListener("blur", clearDesktopPosition);
+    window.addEventListener("pagehide", clearDesktopPosition);
+    window.addEventListener("pageshow", clearDesktopPosition);
 
     return () => {
       pointerQuery.removeEventListener("change", syncPointerCapability);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
-      window.removeEventListener("blur", clearPositionImmediately);
-      window.removeEventListener("pagehide", clearPositionImmediately);
-      window.removeEventListener("pageshow", clearPositionImmediately);
+      window.removeEventListener("blur", clearDesktopPosition);
+      window.removeEventListener("pagehide", clearDesktopPosition);
+      window.removeEventListener("pageshow", clearDesktopPosition);
     };
   }, [clearPositionImmediately]);
 
