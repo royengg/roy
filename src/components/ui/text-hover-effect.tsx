@@ -96,13 +96,12 @@ export function TextHoverEffect({
           <motion.radialGradient
             id={revealId}
             gradientUnits="userSpaceOnUse"
-            r="28%"
+            r="20%"
             initial={{ cx: "50%", cy: "50%" }}
             animate={maskPosition}
             transition={{ duration: shouldReduceMotion ? 0 : duration, ease: "easeOut" }}
           >
             <stop offset="0%" stopColor="white" />
-            <stop offset="35%" stopColor="white" />
             <stop offset="100%" stopColor="black" />
           </motion.radialGradient>
           <mask id={maskId}>
@@ -114,7 +113,7 @@ export function TextHoverEffect({
           y={baseline ?? 0}
           fill="none"
           stroke={`url(#${gradientId})`}
-          strokeWidth="0.026em"
+          strokeWidth="1"
           mask={`url(#${maskId})`}
           opacity={hovered && baseline !== null ? 1 : 0}
           style={{
