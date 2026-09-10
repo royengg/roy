@@ -10,6 +10,7 @@ import ArrowUpRight01Icon from "@hugeicons/core-free-icons/ArrowUpRight01Icon";
 import ArrowUp02Icon from "@hugeicons/core-free-icons/ArrowUp02Icon";
 import Github01Icon from "@hugeicons/core-free-icons/Github01Icon";
 import Globe02Icon from "@hugeicons/core-free-icons/Globe02Icon";
+import File02Icon from "@hugeicons/core-free-icons/File02Icon";
 import Cancel01Icon from "@hugeicons/core-free-icons/Cancel01Icon";
 import Add01Icon from "@hugeicons/core-free-icons/Add01Icon";
 import CloudIcon from "@hugeicons/core-free-icons/CloudIcon";
@@ -122,6 +123,13 @@ const contactLinks = [
     title: "GitHub",
     icon: <HugeiconsIcon icon={Github01Icon} className="h-full w-full" strokeWidth={1.5} />,
     href: "https://github.com/royengg",
+    target: "_blank",
+    rel: "noreferrer",
+  },
+  {
+    title: "CV (PDF)",
+    icon: <HugeiconsIcon icon={File02Icon} className="h-full w-full" strokeWidth={1.5} />,
+    href: "/Rudraksh-Roy-CV.pdf",
     target: "_blank",
     rel: "noreferrer",
   },
