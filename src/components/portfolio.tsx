@@ -127,7 +127,7 @@ const contactLinks = [
     rel: "noreferrer",
   },
   {
-    title: "CV (PDF)",
+    title: "Resume",
     icon: <HugeiconsIcon icon={File02Icon} className="h-full w-full" strokeWidth={1.5} />,
     href: "/Rudraksh-Roy-CV.pdf",
     target: "_blank",
