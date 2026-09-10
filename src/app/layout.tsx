@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { DevelopmentTools } from "@/components/development-tools";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -19,6 +19,10 @@ const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",
 });
+
+export const viewport: Viewport = {
+  themeColor: "#000000",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://roydev.in"),
