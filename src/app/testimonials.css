@@ -2,9 +2,9 @@
 :root {
   --board-surface: #e8e7e2;
   --board-paper: #f5efda;
-  --board-yellow: #f5e89d;
-  --board-sage: #dbe5be;
-  --board-rose: #efd2cc;
+  --board-yellow: #f5df80;
+  --board-sage: #c5dc9c;
+  --board-rose: #efaeb1;
   --board-ink: #302e27;
 }
 .testimonials {
@@ -276,6 +276,45 @@
   right: 6px;
   display: flex;
   justify-content: space-between;
+}
+.sticky-composer:has(.sticky-colors) {
+  padding-top: 76px;
+}
+.sticky-colors {
+  position: absolute;
+  top: 37px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+}
+.sticky-colors button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.sticky-colors button span {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--note-color);
+  border: 1px solid #302e2750;
+  box-shadow: inset 0 1px 1px #ffffff60;
+}
+.sticky-colors button:focus-visible {
+  outline: 2px solid var(--board-ink);
+  outline-offset: 0;
+}
+.sticky-colors button:disabled {
+  cursor: wait;
+  opacity: 0.6;
 }
 .sticky-composer[data-draggable="true"] {
   cursor: grab;

@@ -321,6 +321,26 @@ try {
       });
       await tap('[aria-label="Your name"]');
       await send("Input.insertText", { text: "Touch test" });
+      for (const [label, color] of [
+        ["Butter", "YELLOW"],
+        ["Sage", "SAGE"],
+        ["Rose", "ROSE"],
+      ]) {
+        await tap(`[aria-label="${label} note"]`);
+        assert.equal(
+          await run(`document.querySelector('.sticky-composer').dataset.color`),
+          color,
+        );
+        assert.equal(
+          await run(
+            `document.querySelectorAll('.sticky-colors [aria-pressed="true"]').length`,
+          ),
+          1,
+        );
+        assert.ok(
+          await run(`!document.activeElement.matches('textarea, input')`),
+        );
+      }
       const oldY = await run(
         `document.querySelector('.sticky-composer').getBoundingClientRect().y`,
       );
@@ -360,6 +380,8 @@ try {
         `document.querySelector('.sticky-status')?.textContent === 'Waiting for approval'`,
       );
       assert.equal(submissions, before + 1);
+      assert.equal(lastSubmission.color, "ROSE");
+      assert.ok(await run(`!document.querySelector('.sticky-colors')`));
       assert.ok(Math.abs(lastSubmission.x - placement.x) < 0.01);
       assert.ok(Math.abs(lastSubmission.y - placement.y) < 0.01);
       assert.equal(

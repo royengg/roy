@@ -6,6 +6,9 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import Cancel01Icon from "@hugeicons/core-free-icons/Cancel01Icon";
 import Tick02Icon from "@hugeicons/core-free-icons/Tick02Icon";
 import { NotePin } from "./note-pin";
+import { noteColorLabels, type NoteColor } from "@/lib/testimonials";
+
+const editingColors = ["YELLOW", "SAGE", "ROSE"] as const;
 
 export type ComposerProps = {
   position: { x: number; y: number };
@@ -25,6 +28,7 @@ export function TestimonialComposer({
   const submitting = useRef(false);
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
+  const [color, setColor] = useState<NoteColor>("YELLOW");
   const [promptLength, setPromptLength] = useState(0);
   const [sent, setSent] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -65,7 +69,7 @@ export function TestimonialComposer({
         body: JSON.stringify({
           name,
           message,
-          color: "YELLOW",
+          color,
           ...position,
           submissionKey,
           website: honeypot.current?.value || "",
@@ -90,7 +94,7 @@ export function TestimonialComposer({
     <motion.div
       className="sticky-composer nopan nowheel"
       data-draggable={!busy && !sent}
-      data-color="YELLOW"
+      data-color={color}
       role="group"
       aria-label="Write a sticky note"
       initial={{
@@ -149,6 +153,29 @@ export function TestimonialComposer({
         )}
       </div>
       <NotePin />
+      {!sent && (
+        <div
+          className="sticky-colors nodrag"
+          role="group"
+          aria-label="Note color"
+        >
+          {editingColors.map((option) => (
+            <button
+              key={option}
+              type="button"
+              className="nodrag"
+              data-color={option}
+              aria-label={`${noteColorLabels[option]} note`}
+              aria-pressed={color === option}
+              title={noteColorLabels[option]}
+              disabled={busy}
+              onClick={() => setColor(option)}
+            >
+              <span />
+            </button>
+          ))}
+        </div>
+      )}
       {sent ? (
         <>
           <p className="sticky-sent-message">{message}</p>
