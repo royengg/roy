@@ -53,6 +53,7 @@ import { MagneticButton } from "@/components/ui/magnetic-button";
 import { ShootingStars } from "@/components/ui/shooting-stars";
 import { StarsBackground } from "@/components/ui/stars-background";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
+import { TestimonialBoard } from "@/components/testimonials/testimonial-board";
 import { PullCord } from "@/components/pull-cord";
 import { NowShowing } from "@/components/now-showing";
 import { SpotifyPlayer } from "@/components/spotify-player";
@@ -978,8 +979,16 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
           <SpotifyPlayer staticMode={isWaveformPreview} />
         </section>
 
+        <section id="kind-words" className="section testimonials-section">
+          <SectionHeading index="08">What people say about me</SectionHeading>
+          <TestimonialBoard
+            staticMode={isWaveformPreview}
+            onResize={refreshScrollDimensions}
+          />
+        </section>
+
         <section id="contact" className="section contact-section">
-          <SectionHeading index="08">contact</SectionHeading>
+          <SectionHeading index="09">contact</SectionHeading>
           <p className="contact-lede">Have a difficult backend problem or a product that needs to become real?</p>
           <nav className="contact-dock" aria-label="Contact links">
             <FloatingDock

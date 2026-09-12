@@ -1,0 +1,467 @@
+/* A white writing surface in both themes, like a physical classroom board. */
+:root {
+  --board-paper: #f5efda;
+  --board-yellow: #f5e89d;
+  --board-sage: #dbe5be;
+  --board-rose: #efd2cc;
+  --board-ink: #302e27;
+}
+.testimonials {
+  margin-top: 28px;
+}
+.testimonial-board {
+  position: relative;
+  height: 600px;
+  background: #fff;
+  border: 6px solid #d6d5d1;
+  border-radius: 8px;
+  box-shadow:
+    inset 0 1px 5px #00000010,
+    0 3px 0 #b9b8b3,
+    0 8px 18px #00000008;
+  overflow: hidden;
+}
+.dark .testimonial-board {
+  border-color: #b7b6b1;
+  box-shadow:
+    inset 0 1px 5px #00000010,
+    0 3px 0 #888783;
+}
+.testimonial-board .react-flow {
+  --xy-background-color: transparent;
+  --xy-node-boxshadow-hover-default: none;
+  --xy-node-boxshadow-selected-default: none;
+}
+.testimonial-board .react-flow__pane {
+  cursor: crosshair;
+}
+.testimonial-board .react-flow__node {
+  background: none;
+  border: 0;
+  cursor: default;
+}
+.testimonial-board .react-flow__node:has(:focus-visible),
+.testimonial-board .react-flow__node:hover {
+  z-index: 999 !important;
+}
+.testimonial-board .react-flow__node-draft {
+  z-index: 1000 !important;
+}
+.testimonial-board:focus-visible,
+.board-note-button:focus-visible {
+  outline: 2px solid var(--color-accent-solid);
+  outline-offset: 5px;
+}
+[data-color="PAPER"] {
+  --note-color: var(--board-paper);
+}
+[data-color="YELLOW"] {
+  --note-color: var(--board-yellow);
+}
+[data-color="SAGE"] {
+  --note-color: var(--board-sage);
+}
+[data-color="ROSE"] {
+  --note-color: var(--board-rose);
+}
+.testimonial-note,
+.sticky-composer {
+  position: relative;
+  width: 224px;
+  padding: 22px;
+  color: var(--board-ink);
+  background: var(--note-color, var(--board-yellow));
+  border: 0;
+  border-radius: 1px 1px 5px 1px;
+  box-shadow:
+    1px 3px 5px #00000016,
+    3px 9px 12px #0000000d;
+  overflow-wrap: anywhere;
+}
+.testimonial-note::before,
+.sticky-composer::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 28px;
+  background: #00000003;
+  pointer-events: none;
+}
+.testimonial-note {
+  min-height: 224px;
+}
+.note-message {
+  white-space: pre-wrap;
+  font-size: 15px;
+  line-height: 1.55;
+  margin: 0 0 20px;
+}
+.note-signature strong {
+  font-size: 12px;
+  font-weight: 500;
+}
+.note-signature strong::before {
+  content: "— ";
+}
+.note-signature small {
+  display: block;
+  font-size: 11px;
+  margin-top: 4px;
+}
+.note-compact {
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+}
+.note-compact .note-message {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
+}
+.note-compact .note-signature {
+  margin-top: auto;
+}
+.note-compact .note-signature strong,
+.note-compact .note-signature small {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+}
+.board-note-button {
+  cursor: pointer;
+  text-align: left;
+}
+.sticky-composer {
+  height: 280px;
+  padding: 42px 18px 14px;
+  display: flex;
+  flex-direction: column;
+}
+.sticky-actions {
+  position: absolute;
+  top: 0;
+  left: 6px;
+  right: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.sticky-actions button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: none;
+  color: var(--board-ink);
+  cursor: pointer;
+}
+.sticky-actions button:hover {
+  background: #00000008;
+}
+.sticky-actions button:disabled {
+  opacity: 0.45;
+  cursor: wait;
+}
+.sticky-composer textarea,
+.sticky-name {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--board-ink);
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.sticky-composer textarea {
+  flex: 1;
+  min-height: 60px;
+  resize: none;
+  outline: none;
+}
+.sticky-composer textarea::placeholder,
+.sticky-name::placeholder {
+  color: #68603f;
+  opacity: 1;
+}
+.sticky-name {
+  margin-top: 12px;
+  border-bottom: 1px solid #302e2726;
+}
+.sticky-name:focus {
+  outline: none;
+  border-bottom-color: #302e27;
+}
+.sticky-actions button:focus-visible {
+  outline: 2px solid #302e27;
+  outline-offset: -5px;
+}
+.sticky-status {
+  flex-shrink: 0;
+  font-size: 10px;
+  line-height: 1.4;
+  color: #625a39;
+  margin: 9px 0 0;
+}
+.sticky-error {
+  font-size: 11px;
+  line-height: 1.35;
+  color: #922b20;
+  margin: 5px 0 0;
+}
+.sticky-sent-message {
+  white-space: pre-wrap;
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.sticky-sent-name {
+  font-size: 12px;
+  margin: 10px 0 0;
+}
+.note-honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+}
+.board-pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  font-size: 12px;
+}
+.board-pagination button {
+  background: none;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+}
+.board-pagination button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.board-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid var(--color-border-default);
+  border-radius: 999px;
+  padding: 11px 18px;
+  min-height: 44px;
+  background: transparent;
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.board-button:hover:not(:disabled) {
+  background: var(--color-bg-control-hover);
+}
+.board-button-primary {
+  background: var(--color-text-primary);
+  color: var(--color-bg-page);
+  border-color: var(--color-text-primary);
+}
+.board-button-primary:hover:not(:disabled) {
+  background: var(--color-text-emphasis);
+}
+.board-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.board-error {
+  font-size: 13px;
+  color: var(--color-accent-solid);
+  margin: 15px 0;
+}
+.board-eyebrow {
+  display: block;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+}
+.board-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.board-field input {
+  width: 100%;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 9px;
+  background: var(--color-bg-control);
+  color: var(--color-text-primary);
+  padding: 12px;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.note-dialog {
+  padding: 0;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 14px;
+  width: 380px;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100dvh - 40px);
+  margin: auto;
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+  overflow: auto;
+}
+.note-dialog::backdrop {
+  background: #00000099;
+}
+.note-reader > div {
+  padding: 26px;
+}
+.note-reader .testimonial-note {
+  width: 100%;
+  margin: 0 0 24px;
+}
+.board-admin {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 48px 24px 96px;
+}
+.board-back {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+.admin-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+  margin: 60px 0 40px;
+}
+.admin-heading h1 {
+  font-size: clamp(40px, 6vw, 64px);
+  line-height: 1;
+  letter-spacing: -0.06em;
+  font-weight: 520;
+  margin: 20px 0;
+}
+.admin-heading p,
+.admin-login p,
+.admin-empty p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+.admin-login {
+  max-width: 420px;
+  background: var(--color-bg-surface);
+  padding: 30px;
+  border-radius: 18px;
+  border: 1px solid var(--color-border-subtle);
+}
+.admin-login h2,
+.admin-empty h2 {
+  font-family: var(--font-instrument-serif), serif;
+  font-size: 32px;
+  font-weight: 400;
+}
+.admin-login .board-field {
+  margin: 24px 0;
+}
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 36px;
+}
+.admin-tabs [aria-pressed="true"] {
+  background: var(--color-bg-control-hover);
+  border-color: var(--color-text-primary);
+}
+.admin-note-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  align-items: start;
+}
+.admin-note .testimonial-note {
+  width: 100%;
+}
+.admin-note-date {
+  display: block;
+  font-size: 10px;
+  color: var(--color-text-secondary);
+  margin: 16px 0 12px;
+}
+.admin-note-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.admin-placement {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin: 12px 0 18px;
+}
+.admin-placement summary {
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+.admin-placement input {
+  padding: 0;
+}
+.admin-placement small {
+  font-size: 11px;
+}
+.admin-notice {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 16px 22px;
+  max-width: calc(100vw - 32px);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-default);
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+  font-size: 13px;
+  z-index: 30;
+}
+
+@media (max-width: 767px) {
+  .testimonial-board {
+    height: 600px;
+  }
+  .sticky-actions button {
+    width: 44px;
+    height: 44px;
+  }
+  .admin-note-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 480px) {
+  .admin-note-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (forced-colors: active) {
+  .sticky-composer textarea:focus,
+  .sticky-name:focus {
+    outline: 2px solid Highlight;
+  }
+}

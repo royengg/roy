@@ -206,6 +206,16 @@ Motion is purposeful and occasional: cards provide press feedback, disclosure in
 
 ## Do's and Don'ts
 
+The “What people say about me” section uses a clean white classroom-style board
+in both appearances, with a narrow neutral frame and no promotional copy or
+add-note button. React Flow places small yellow stickies directly at a click or
+tap; the note itself is the editor, with Geist text, a name line, and small
+Hugeicons confirm/cancel controls. Motion adds a brief paper reveal, and a
+one-shot typing placeholder invites writing. Reduced motion removes both.
+Approved notes use dark ink, restrained shadows, and slight rotation. The white
+surface stays white against the dark portfolio, like a physical object; it is
+not inverted into a dark canvas. Moderation stays outside the public composition.
+
 - Do keep the reading column narrow and centered, even on wide displays.
 - Do use real project imagery and recognized technology marks.
 - Do let project surfaces and images carry the loudest color.

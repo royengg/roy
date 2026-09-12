@@ -38,3 +38,11 @@ model Testimonial {
 
   @@index([status, createdAt])
 }
+
+model BoardRateLimit {
+  key       String   @id
+  count     Int      @default(1)
+  expiresAt DateTime
+
+  @@index([expiresAt])
+}

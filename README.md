@@ -49,8 +49,40 @@ const notes = await prisma.testimonial.findMany({
 Set `DATABASE_URL` in Vercel for the appropriate environment, and keep preview
 and production databases separate. Never prefix it with `NEXT_PUBLIC_`.
 Installation and builds generate the client; generated files are not committed.
-The initial testimonial schema defaults submissions to `PENDING`; moderation
-authorization and submission validation will be implemented with the board.
+The testimonial schema defaults submissions to `PENDING`. Only approved notes
+are returned by the public API.
+
+## Sticky-note board
+
+The React Flow board appears before Contact. Click an empty spot (or focus the
+board and press Enter) to write directly on a yellow sticky. The checkmark sends
+it for approval; Escape or the cross cancels it. Failed submissions retain the
+text. The pending confirmation is private to the submitting browser.
+
+Set `BOARD_ADMIN_PASSWORD` in `.env` to a unique random password of at least 24
+characters. Sign in at `/admin/testimonials` to approve, reject, reposition, or
+unpublish notes. Sessions expire after eight hours; changing the password revokes
+existing sessions. Never commit this password or use a `NEXT_PUBLIC_` variable.
+Set `BOARD_SUBMISSIONS_PAUSED=true` to pause new submissions.
+
+Run `bun run db:deploy` to apply the committed initial migration to a new local
+development database. No migration or deployment runs automatically on commit.
+Public content refreshes every 30 seconds while visible and when the tab regains
+focus. Public and moderation API responses are never cached.
+
+Local verification (uses temporary, explicitly labeled fixtures and removes them):
+
+```bash
+BOARD_TEST_URL=http://127.0.0.1:3112 node scripts/test-board.mjs
+# Requires a private Chromium instance exposing CDP on localhost:9335.
+BOARD_TEST_URL=http://127.0.0.1:3112 node scripts/test-board-browser.mjs
+```
+
+Use a development database for tests, not production. Rejected notes remain
+private until the owner removes them from the database. Expired rate-limit
+records are cleaned on subsequent submission/login requests. The local/tunnel
+rate limiter trusts Cloudflare's overwritten client-IP header; deployments must
+use the intended trusted proxy, not expose the dev server directly.
 
 Setup follows [Prisma's Next.js guide](https://www.prisma.io/docs/guides/v7/frameworks/nextjs)
 and [PostgreSQL connection guidance](https://www.prisma.io/docs/orm/v7/core-concepts/supported-databases/postgresql).

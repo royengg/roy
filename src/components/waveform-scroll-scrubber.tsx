@@ -35,7 +35,8 @@ const PAGE_SECTIONS = [
   { id: "work", index: "05", label: "Projects" },
   { id: "now-showing", index: "06", label: "Now showing" },
   { id: "now-playing", index: "07", label: "Now playing" },
-  { id: "contact", index: "08", label: "Contact" },
+  { id: "kind-words", index: "08", label: "Kind words" },
+  { id: "contact", index: "09", label: "Contact" },
 ] as const;
 type PageSectionId = (typeof PAGE_SECTIONS)[number]["id"];
 const SCROLL_KEYS = new Set([
