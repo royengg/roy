@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TestimonialStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum NoteColor {
+  PAPER
+  YELLOW
+  SAGE
+  ROSE
+}
+
+model Testimonial {
+  id            String            @id @default(cuid())
+  submissionKey String            @unique @db.Uuid
+  name          String            @db.VarChar(60)
+  message       String            @db.VarChar(280)
+  context       String?           @db.VarChar(80)
+  color         NoteColor         @default(PAPER)
+  x             Float             @default(0.5)
+  y             Float             @default(0.5)
+  rotation      Float             @default(0)
+  status        TestimonialStatus @default(PENDING)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  reviewedAt    DateTime?
+  reviewedBy    String?
+
+  @@index([status, createdAt])
+}

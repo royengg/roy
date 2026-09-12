@@ -1,6 +1,6 @@
 # What people say about me — feature plan
 
-Status: proposed implementation, September 12, 2026. Branch: `feat/testimonial-board`, based on main at `8f3aa9a`. This branch contains planning only.
+Status: implementation started, September 12, 2026. Branch: `feat/testimonial-board`, based on main at `8f3aa9a`. React Flow + Motion and Neon PostgreSQL + Prisma are confirmed. Prisma scaffolding is implemented; the board, moderation, and database connection remain to be completed. The original proposal below is retained for design context; the confirmed stack supersedes its Supabase and custom-board recommendations.
 
 ## Product decision
 
@@ -74,7 +74,7 @@ Preview deployments must use a separate database/project or isolated dataset and
 
 ## Open choices
 
-Awaiting preference: shared approved notes only versus live visitor cursors; existing data service versus proposed Supabase. Owner login identity must be supplied during backend setup. These do not block planning or the visual prototype. No paid services, accounts, credentials, or infrastructure are created by this planning change.
+Confirmed: React Flow + Motion, Neon PostgreSQL + Prisma. Default scope remains shared approved notes, without live cursors. Neon DATABASE_URL and owner authentication setup remain outstanding. No services, accounts, or infrastructure have been provisioned. Supabase-specific auth/RLS instructions above must be replaced by owner authorization in Next.js and least-privilege PostgreSQL access during backend implementation.
 
 ## References
 
