@@ -56,7 +56,7 @@
   --shadow-reveal: 0 2px 4px rgba(30, 26, 20, 0.1), 0 0 0 1px rgba(30, 26, 20, 0.12);
   --shadow-reveal-hover: 0 4px 9px rgba(30, 26, 20, 0.14), 0 0 0 1px rgba(30, 26, 20, 0.14);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --content-width: 1200px;
+  --content-width: 1000px;
 }
 
 .dark {
