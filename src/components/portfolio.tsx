@@ -909,7 +909,7 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
               <ShootingStars />
             </div>
           )}
-          <div className="availability"><span /> Available for backend &amp; full-stack work</div>
+          <div className="availability"><span /> open for work</div>
           <p className="hero-kicker"><VisitorGreeting /></p>
           <h1 aria-label="Rudraksh Roy"><TextHoverEffect text="Rudraksh Roy" /></h1>
           <p className="hero-role">Product engineer with a full-stack habit.</p>
