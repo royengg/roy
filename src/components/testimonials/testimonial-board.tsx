@@ -16,8 +16,10 @@ type NoteNode = Node<
 >;
 type DraftNode = Node<ComposerProps, "draft">;
 type BoardNode = NoteNode | DraftNode;
-const NOTE_WIDTH = 224;
-const NOTE_HEIGHT = 280;
+const NOTE_WIDTH = 204;
+const NOTE_HEIGHT = 250;
+const PUBLISHED_NOTE_HEIGHT = 226;
+const NOTE_SLOT_WIDTH = 248;
 const INSET = 16;
 
 function PaperNode({ data }: NodeProps<NoteNode>) {
@@ -63,7 +65,7 @@ export function TestimonialBoard({
   const frame = useRef<HTMLDivElement>(null);
   const columns = Math.min(
     3,
-    Math.max(1, Math.floor((size.width - INSET * 2 + 24) / (NOTE_WIDTH + 24))),
+    Math.max(1, Math.floor((size.width - INSET * 2 + 24) / NOTE_SLOT_WIDTH)),
   );
   const pageSize = Math.min(NOTES_PER_PAGE, columns * 2);
 
@@ -167,7 +169,7 @@ export function TestimonialBoard({
         (b, j) =>
           i < j &&
           Math.abs(a.x - b.x) < NOTE_WIDTH + 20 &&
-          Math.abs(a.y - b.y) < 270,
+          Math.abs(a.y - b.y) < PUBLISHED_NOTE_HEIGHT + 20,
       ),
     );
     const slots = Array.from({ length: pageSize }, (_, i) => ({
@@ -197,7 +199,7 @@ export function TestimonialBoard({
       data: { note, onRead: setReading },
       position: positions[index],
       width: NOTE_WIDTH,
-      height: 250,
+      height: PUBLISHED_NOTE_HEIGHT,
       draggable: false,
       focusable: false,
       // Read-only canvas nodes still contain interactive controls.

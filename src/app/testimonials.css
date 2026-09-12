@@ -67,8 +67,8 @@
 .testimonial-note,
 .sticky-composer {
   position: relative;
-  width: 224px;
-  padding: 22px;
+  width: 204px;
+  padding: 20px;
   color: var(--board-ink);
   background: var(--note-color, var(--board-yellow));
   border: 0;
@@ -88,7 +88,7 @@
   pointer-events: none;
 }
 .testimonial-note {
-  min-height: 224px;
+  min-height: 204px;
 }
 .note-message {
   white-space: pre-wrap;
@@ -109,14 +109,14 @@
   margin-top: 4px;
 }
 .note-compact {
-  height: 250px;
+  height: 226px;
   display: flex;
   flex-direction: column;
 }
 .note-compact .note-message {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 6;
+  -webkit-line-clamp: 5;
   overflow: hidden;
 }
 .note-compact .note-signature {
@@ -134,7 +134,7 @@
   text-align: left;
 }
 .sticky-composer {
-  height: 280px;
+  height: 250px;
   padding: 42px 18px 14px;
   display: flex;
   flex-direction: column;
