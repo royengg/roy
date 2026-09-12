@@ -141,7 +141,7 @@ try {
       await add();
       await tap('[aria-label="Your note"]');
       await send("Input.insertText", {
-        text: "Temporary touch interaction test. This never reaches the database.",
+        text: "!", // Short notes must also work through the inline editor.
       });
       await tap('[aria-label="Your name"]');
       await send("Input.insertText", { text: "Touch test" });

@@ -30,7 +30,7 @@ const call = async (path, method = "GET", body, headers = {}) => {
 const note = {
   submissionKey: key,
   name: "Integration test",
-  message: "This is a temporary verification note, not a testimonial.",
+  message: "!", // Even a single character must pass validation and persist.
   context: "Automated test",
   color: "SAGE",
   x: 0.3,
@@ -68,7 +68,7 @@ try {
     403,
   );
   assert.equal(
-    (await call("/api/testimonials", "POST", { ...note, message: "short" }))
+    (await call("/api/testimonials", "POST", { ...note, message: "   " }))
       .response.status,
     400,
   );

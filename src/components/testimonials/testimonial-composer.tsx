@@ -49,8 +49,8 @@ export function TestimonialComposer({ position, onClose }: ComposerProps) {
 
   async function submit() {
     if (submitting.current || sent) return;
-    if (message.trim().length < 10) {
-      setError("Write at least 10 characters.");
+    if (!message.trim()) {
+      setError("Write something before sending.");
       textarea.current?.focus();
       return;
     }

@@ -46,7 +46,7 @@ export function parseSubmission(value: unknown): NoteSubmission {
   const input = value as Record<string, unknown>;
   if (input.website) throw new BoardError("Unable to submit this note.");
   const name = boundedText(input.name, "Your name", 2, 60);
-  const message = boundedText(input.message, "Your note", 10, 280);
+  const message = boundedText(input.message, "Your note", 1, 280);
   const context = input.context
     ? boundedText(input.context, "Context", 0, 80)
     : null;
