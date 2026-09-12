@@ -90,7 +90,8 @@ export function TestimonialComposer({ position, onClose }: ComposerProps) {
 
   return (
     <motion.div
-      className="sticky-composer nodrag nopan nowheel"
+      className="sticky-composer nopan nowheel"
+      data-draggable={!busy && !sent}
       data-color="YELLOW"
       role="group"
       aria-label="Write a sticky note"
@@ -114,6 +115,7 @@ export function TestimonialComposer({ position, onClose }: ComposerProps) {
     >
       <div className="sticky-actions">
         <button
+          className="nodrag"
           type="button"
           aria-label={sent ? "Dismiss pending note" : "Cancel note"}
           title="Close"
@@ -124,6 +126,7 @@ export function TestimonialComposer({ position, onClose }: ComposerProps) {
         </button>
         {!sent && (
           <button
+            className="nodrag"
             type="button"
             aria-label="Submit for approval"
             title="Submit for approval"
@@ -145,6 +148,7 @@ export function TestimonialComposer({ position, onClose }: ComposerProps) {
       ) : (
         <>
           <textarea
+            className="nodrag"
             ref={textarea}
             aria-label="Your note"
             value={message}
@@ -154,7 +158,7 @@ export function TestimonialComposer({ position, onClose }: ComposerProps) {
             placeholder={reducedMotion ? prompt : prompt.slice(0, promptLength)}
           />
           <input
-            className="sticky-name"
+            className="sticky-name nodrag"
             aria-label="Your name"
             autoComplete="name"
             value={name}

@@ -60,6 +60,7 @@ export function TestimonialBoard({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [position, setPosition] = useState<Point | null>(null);
+  const [dragging, setDragging] = useState(false);
   const [reading, setReading] = useState<PublicNote | null>(null);
   const [size, setSize] = useState({ width: 800, height: 600 });
   const frame = useRef<HTMLDivElement>(null);
@@ -145,6 +146,7 @@ export function TestimonialBoard({
 
   const closeDraft = useCallback(() => {
     setPosition(null);
+    setDragging(false);
     document
       .querySelector<HTMLElement>("#kind-words .testimonial-board")
       ?.focus({ preventScroll: true });
@@ -217,13 +219,29 @@ export function TestimonialBoard({
           x: INSET + position.x * extent.x,
           y: INSET + position.y * extent.y,
         },
-        draggable: false,
+        draggable: !staticMode,
+        dragging,
+        dragHandle: '.sticky-composer[data-draggable="true"]',
+        extent: [
+          [INSET, INSET],
+          [size.width - INSET, size.height - INSET],
+        ],
         focusable: false,
         style: { pointerEvents: "auto" },
         zIndex: 1000,
       });
     return placed;
-  }, [notes, extent, position, closeDraft, columns, pageSize]);
+  }, [
+    notes,
+    extent,
+    position,
+    closeDraft,
+    columns,
+    pageSize,
+    dragging,
+    staticMode,
+    size,
+  ]);
 
   const add = (point: Point) => {
     if (staticMode) return;
@@ -267,7 +285,24 @@ export function TestimonialBoard({
           nodes={nodes}
           edges={[]}
           nodeTypes={nodeTypes}
+          onNodesChange={(changes) => {
+            for (const change of changes) {
+              if (change.type !== "position" || change.id !== "draft") continue;
+              if (change.position) {
+                const point = change.position;
+                setPosition(
+                  (current) =>
+                    current && {
+                      x: Math.max(0, Math.min(1, (point.x - INSET) / extent.x)),
+                      y: Math.max(0, Math.min(1, (point.y - INSET) / extent.y)),
+                    },
+                );
+              }
+              if (change.dragging !== undefined) setDragging(change.dragging);
+            }
+          }}
           nodesDraggable={false}
+          autoPanOnNodeDrag={false}
           nodesConnectable={false}
           elementsSelectable={false}
           deleteKeyCode={null}

@@ -13,6 +13,8 @@ await new Promise((resolve) =>
 );
 let id = 0;
 let submissions = 0;
+let lastSubmission;
+let mouseMode = false;
 const pending = new Map();
 const send = (method, params = {}) =>
   new Promise((resolve, reject) => {
@@ -28,7 +30,10 @@ ws.addEventListener("message", ({ data }) => {
   const message = JSON.parse(data);
   if (message.method === "Fetch.requestPaused") {
     const post = message.params.request.method === "POST";
-    if (post) submissions++;
+    if (post) {
+      submissions++;
+      lastSubmission = JSON.parse(message.params.request.postData);
+    }
     void send("Fetch.fulfillRequest", {
       requestId: message.params.requestId,
       responseCode: post ? 202 : 200,
@@ -66,6 +71,23 @@ const until = async (expression) => {
   throw new Error(`Timed out: ${expression}`);
 };
 const tapPoint = async (point) => {
+  if (mouseMode) {
+    await send("Input.dispatchMouseEvent", {
+      type: "mousePressed",
+      ...point,
+      button: "left",
+      buttons: 1,
+      clickCount: 1,
+    });
+    await send("Input.dispatchMouseEvent", {
+      type: "mouseReleased",
+      ...point,
+      button: "left",
+      buttons: 0,
+      clickCount: 1,
+    });
+    return;
+  }
   await send("Input.dispatchTouchEvent", {
     type: "touchStart",
     touchPoints: [{ ...point, radiusX: 2, radiusY: 2, force: 1, id: 1 }],
@@ -82,6 +104,64 @@ const tap = async (selector) => {
   console.log(`Touch target for ${selector}: ${target}`);
   await tapPoint(point);
 };
+const dragDraft = async (dx, dy, mouse = false) => {
+  const start = await run(
+    `(() => { const r = document.querySelector('.sticky-composer').getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + 20 }; })()`,
+  );
+  if (mouse)
+    await send("Input.dispatchMouseEvent", {
+      type: "mousePressed",
+      ...start,
+      button: "left",
+      buttons: 1,
+      clickCount: 1,
+    });
+  else
+    await send("Input.dispatchTouchEvent", {
+      type: "touchStart",
+      touchPoints: [{ ...start, id: 1 }],
+    });
+  for (let step = 1; step <= 8; step++) {
+    const point = {
+      x: start.x + (dx * step) / 8,
+      y: start.y + (dy * step) / 8,
+    };
+    if (mouse)
+      await send("Input.dispatchMouseEvent", {
+        type: "mouseMoved",
+        ...point,
+        button: "left",
+        buttons: 1,
+      });
+    else
+      await send("Input.dispatchTouchEvent", {
+        type: "touchMove",
+        touchPoints: [{ ...point, id: 1 }],
+      });
+    await sleep(25);
+  }
+  assert.equal(
+    await run(
+      `getComputedStyle(document.querySelector('.sticky-composer')).cursor`,
+    ),
+    "grabbing",
+  );
+  if (mouse)
+    await send("Input.dispatchMouseEvent", {
+      type: "mouseReleased",
+      x: start.x + dx,
+      y: start.y + dy,
+      button: "left",
+      buttons: 0,
+      clickCount: 1,
+    });
+  else
+    await send("Input.dispatchTouchEvent", {
+      type: "touchEnd",
+      touchPoints: [],
+    });
+  await sleep(100);
+};
 mkdirSync(".codex-artifacts", { recursive: true });
 const capture = async (name) => {
   const shot = await send("Page.captureScreenshot", { format: "png" });
@@ -93,6 +173,13 @@ const capture = async (name) => {
 try {
   await send("Page.enable");
   await send("Runtime.enable");
+  await send("Input.dispatchMouseEvent", {
+    type: "mouseReleased",
+    x: 0,
+    y: 0,
+    button: "left",
+    buttons: 0,
+  });
   await send("Fetch.enable", {
     patterns: [{ urlPattern: `${base}/api/testimonials*` }],
   });
@@ -103,12 +190,14 @@ try {
   await send("Emulation.setEmulatedMedia", {
     features: [{ name: "prefers-reduced-motion", value: "no-preference" }],
   });
-  for (const width of [390, 320]) {
+  for (const width of [390, 320, 1440]) {
+    mouseMode = width === 1440;
+    await send("Emulation.setTouchEmulationEnabled", { enabled: !mouseMode });
     await send("Emulation.setDeviceMetricsOverride", {
       width,
       height: 900,
       deviceScaleFactor: 1,
-      mobile: true,
+      mobile: width < 768,
     });
     await send("Page.navigate", { url: `${base}/#kind-words` });
     await until(
@@ -145,6 +234,38 @@ try {
       });
       await tap('[aria-label="Your name"]');
       await send("Input.insertText", { text: "Touch test" });
+      const oldY = await run(
+        `document.querySelector('.sticky-composer').getBoundingClientRect().y`,
+      );
+      assert.equal(
+        await run(
+          `getComputedStyle(document.querySelector('.sticky-composer')).cursor`,
+        ),
+        "grab",
+      );
+      await dragDraft(12, 65, width === 1440);
+      assert.ok(
+        await run(
+          `document.querySelector('.sticky-composer').getBoundingClientRect().y > ${oldY + 40}`,
+        ),
+      );
+      assert.equal(
+        await run(`document.querySelector('.sticky-composer textarea').value`),
+        "!",
+      );
+      assert.equal(
+        await run(`document.querySelector('.sticky-name').value`),
+        "Touch test",
+      );
+      await dragDraft(900, 700, width === 1440);
+      assert.ok(
+        await run(
+          `(() => {const note = document.querySelector('.sticky-composer').getBoundingClientRect(); const board = document.querySelector('.testimonial-board').getBoundingClientRect(); return note.left >= board.left && note.top >= board.top && note.right <= board.right && note.bottom <= board.bottom;})()`,
+        ),
+      );
+      const placement = await run(
+        `(() => { const node = document.querySelector('.react-flow__node-draft'); const board = document.querySelector('.testimonial-board'); const transform = new DOMMatrix(getComputedStyle(node).transform); return { x: (transform.e - 16) / (board.clientWidth - node.offsetWidth - 32), y: (transform.f - 16) / (board.clientHeight - node.offsetHeight - 32) }; })()`,
+      );
       await capture(`board-touch-filled-${theme}-${width}`);
       const before = submissions;
       await tap('[aria-label="Submit for approval"]');
@@ -152,14 +273,25 @@ try {
         `document.querySelector('.sticky-status')?.textContent === 'Waiting for approval'`,
       );
       assert.equal(submissions, before + 1);
+      assert.ok(Math.abs(lastSubmission.x - placement.x) < 0.01);
+      assert.ok(Math.abs(lastSubmission.y - placement.y) < 0.01);
+      assert.equal(
+        await run(
+          `document.querySelector('.sticky-composer').dataset.draggable`,
+        ),
+        "false",
+      );
       await capture(`board-touch-sent-${theme}-${width}`);
       await tap('[aria-label="Dismiss pending note"]');
       await until(`!document.querySelector('.sticky-composer')`);
       console.log(
-        `PASS: ${width}px ${theme}: real touch cancel, field entry, submit once, dismiss.`,
+        `PASS: ${width}px ${theme}: touch cancel, editing, drag/cursors, saved position, submit once, dismiss.`,
       );
     }
   }
+} catch (error) {
+  await capture("board-interaction-failure");
+  throw error;
 } finally {
   await send("Fetch.disable");
   await send("Emulation.setTouchEmulationEnabled", { enabled: false });

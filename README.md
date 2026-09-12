@@ -56,7 +56,10 @@ are returned by the public API.
 
 The React Flow board appears before Contact. Click an empty spot (or focus the
 board and press Enter) to write directly on a yellow sticky. The checkmark sends
-it for approval; Escape or the cross cancels it. Failed submissions retain the
+it for approval; Escape or the cross cancels it. Drag the paper around the fields
+to choose a position before sending; text fields and buttons do not start drags.
+Notes stay inside the board and lock in place while sending or awaiting approval.
+Failed submissions retain the
 text. The pending confirmation is private to the submitting browser.
 
 Set `BOARD_ADMIN_PASSWORD` in `.env` to a unique random password of at least 24

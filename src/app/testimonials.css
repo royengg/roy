@@ -147,6 +147,17 @@
   display: flex;
   justify-content: space-between;
 }
+.sticky-composer[data-draggable="true"] {
+  cursor: grab;
+  touch-action: none;
+}
+.react-flow__node.dragging .sticky-composer[data-draggable="true"] {
+  cursor: grabbing;
+}
+.sticky-composer textarea,
+.sticky-composer input {
+  cursor: text;
+}
 .sticky-actions button {
   display: grid;
   place-items: center;

@@ -19,6 +19,9 @@ Delivery is local only: no remote push or Vercel deployment without a new reques
   inside the draft. Sending and pending states still provide feedback.
 - One draft at a time. A failed submission preserves its contents. A successful
   submission shows a private pending state until dismissed, not a public note.
+- Draft paper can be dragged with touch or mouse, using grab/grabbing cursors.
+  Text fields and action buttons are excluded. Positions stay inside the board
+  and the chosen coordinates are submitted; sending/pending notes cannot move.
 - Approved cards have subtle depth and slight rotation. Opening an approved
   note shows its full text with keyboard dismissal and focus restoration.
 
