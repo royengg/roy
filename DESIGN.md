@@ -213,8 +213,12 @@ tap; the note itself is the editor, with Geist text, a name line, and small
 Hugeicons confirm/cancel controls. Motion adds a brief paper reveal, and a
 one-shot typing placeholder invites writing. Reduced motion removes both.
 Approved notes use dark ink, restrained shadows, and slight rotation. The enamel
-surface uses #E8E7E2 in light mode and #D6D5CF in dark mode, with a faint square
-guide pattern, subtle wipe haze, and inset frame shading. Decorative layers never
+surface uses #E8E7E2 in light mode and #D6D5CF in dark mode, with faint square
+guides and erased-marker traces limited to the edges. A slim metallic frame and
+small bottom tray ground the board, with one red-capped marker echoing the
+portfolio accent. Material gradients are restricted to enamel, metal, and paper
+shading; notes have a lightly lifted corner and directional contact shadows.
+All details are CSS/SVG rather than downloaded images. Decorative layers never
 capture input. Empty-board swipes scroll the page; only draft paper captures
 dragging. Moderation stays outside the public composition.
 

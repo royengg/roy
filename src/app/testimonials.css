@@ -10,14 +10,27 @@
 .testimonials {
   margin-top: 28px;
 }
+.board-assembly {
+  position: relative;
+  margin-bottom: 20px;
+}
 .testimonial-board {
   position: relative;
   height: 600px;
-  background-color: var(--board-surface);
-  background-image:
-    radial-gradient(ellipse at 24% 18%, #ffffff30, transparent 65%),
-    radial-gradient(ellipse at 78% 76%, #777b7009, transparent 55%);
-  border: 6px solid #c9c9c3;
+  background:
+    radial-gradient(ellipse at 24% 18%, #ffffff30, transparent 65%) padding-box,
+    radial-gradient(ellipse at 78% 76%, #777b7009, transparent 55%) padding-box,
+    linear-gradient(var(--board-surface), var(--board-surface)) padding-box,
+    linear-gradient(
+        135deg,
+        #eeefeb,
+        #b5b9b3 24%,
+        #dfe1dc 48%,
+        #979d96 76%,
+        #d1d5ce
+      )
+      border-box;
+  border: 6px solid transparent;
   border-radius: 8px;
   box-shadow:
     inset 0 2px 6px #4a4d4220,
@@ -32,18 +45,90 @@
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(#686e600b 1px, transparent 1px),
-    linear-gradient(90deg, #686e600b 1px, transparent 1px);
+    linear-gradient(#686e6006 1px, transparent 1px),
+    linear-gradient(90deg, #686e6006 1px, transparent 1px);
   background-size: 32px 32px;
   background-position: center;
 }
 .dark .testimonial-board {
   --board-surface: #d6d5cf;
-  border-color: #b7b6b1;
   box-shadow:
     inset 0 2px 6px #4a4d4228,
     inset 0 -1px 0 #ffffff50,
     0 3px 0 #888783;
+}
+.board-wipe-marks {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: #55604e;
+  opacity: 0.075;
+  filter: blur(1px);
+  pointer-events: none;
+}
+.board-tray {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(170px, 40%, 340px);
+  height: 13px;
+  border: 1px solid #949b91;
+  border-top-color: #eef0e9;
+  border-radius: 2px 2px 5px 5px;
+  background: linear-gradient(#d7dad2, #b5bbb0 45%, #e5e8df 52%, #a0a89b);
+  box-shadow:
+    0 4px 6px #0000001a,
+    inset 0 -1px 0 #747c7066;
+  pointer-events: none;
+}
+.board-tray::before {
+  content: "";
+  position: absolute;
+  inset: -5px 3px auto;
+  height: 5px;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(#a5aca0, #dfe3d9);
+}
+.board-marker {
+  position: absolute;
+  bottom: 10px;
+  left: 18%;
+  width: 108px;
+  height: 12px;
+  transform: rotate(-3deg);
+  border: 1px solid #898e83;
+  border-radius: 3px 5px 5px 3px;
+  background: linear-gradient(#f6f6ed, #e3e5da 40%, #c5cabc);
+  box-shadow: 0 3px 3px #00000025;
+}
+.board-marker::before {
+  content: "";
+  position: absolute;
+  inset: -1px auto -1px -1px;
+  width: 27px;
+  border: 1px solid #943529;
+  border-radius: 3px 2px 2px 3px;
+  background: linear-gradient(#f27260, #e74432 38%, #b73124);
+}
+.board-marker::after {
+  content: "";
+  position: absolute;
+  inset: 1px 1px 1px auto;
+  width: 5px;
+  border-radius: 0 3px 3px 0;
+  background: #c04132;
+}
+.board-marker > span {
+  position: absolute;
+  left: 40px;
+  top: 3px;
+  width: 38px;
+  height: 3px;
+  border-left: 15px solid #747c70;
+  border-right: 18px solid #a8ad9f;
+  opacity: 0.6;
 }
 .testimonial-board .react-flow {
   --xy-background-color: transparent;
@@ -92,10 +177,11 @@
   color: var(--board-ink);
   background: var(--note-color, var(--board-yellow));
   border: 0;
-  border-radius: 1px 1px 5px 1px;
+  border-radius: 1px 1px 13px 1px;
   box-shadow:
-    1px 3px 5px #00000016,
-    3px 9px 12px #0000000d;
+    0 1px 2px #00000014,
+    2px 7px 10px #00000012,
+    7px 13px 17px -9px #00000030;
   overflow-wrap: anywhere;
 }
 .testimonial-note::before,
@@ -104,7 +190,20 @@
   position: absolute;
   inset: 0 0 auto;
   height: 28px;
-  background: #00000003;
+  background: linear-gradient(#00000006, #00000002);
+  pointer-events: none;
+}
+.testimonial-note::after,
+.sticky-composer::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 15px;
+  height: 15px;
+  border-radius: 11px 0 13px 0;
+  background: linear-gradient(135deg, #ffffff50, #0000000d 60%, #0000001a);
+  box-shadow: -1px -1px 2px #ffffff20;
   pointer-events: none;
 }
 .testimonial-note {

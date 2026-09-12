@@ -269,75 +269,109 @@ export function TestimonialBoard({
 
   return (
     <div className="testimonials">
-      <div
-        className="testimonial-board"
-        ref={frame}
-        tabIndex={staticMode ? -1 : 0}
-        aria-busy={loading}
-        role="group"
-        aria-label="Whiteboard. Click an empty space, or press Enter, to write a sticky note."
-        onKeyDown={(event) => {
-          if (
-            event.target === event.currentTarget &&
-            (event.key === "Enter" || event.key === " ")
-          ) {
-            event.preventDefault();
-            add({ x: 0.5, y: 0.5 });
-          }
-        }}
-      >
-        <ReactFlow<BoardNode>
-          nodes={nodes}
-          edges={[]}
-          nodeTypes={nodeTypes}
-          onNodesChange={(changes) => {
-            for (const change of changes) {
-              if (
-                change.type !== "position" ||
-                change.id !== `draft-${draftVersion}`
-              )
-                continue;
-              if (change.position) {
-                const point = change.position;
-                setPosition(
-                  (current) =>
-                    current && {
-                      x: Math.max(0, Math.min(1, (point.x - INSET) / extent.x)),
-                      y: Math.max(0, Math.min(1, (point.y - INSET) / extent.y)),
-                    },
-                );
-              }
-              if (change.dragging !== undefined) setDragging(change.dragging);
+      <div className="board-assembly">
+        <div
+          className="testimonial-board"
+          ref={frame}
+          tabIndex={staticMode ? -1 : 0}
+          aria-busy={loading}
+          role="group"
+          aria-label="Whiteboard. Click an empty space, or press Enter, to write a sticky note."
+          onKeyDown={(event) => {
+            if (
+              event.target === event.currentTarget &&
+              (event.key === "Enter" || event.key === " ")
+            ) {
+              event.preventDefault();
+              add({ x: 0.5, y: 0.5 });
             }
           }}
-          nodesDraggable={false}
-          autoPanOnNodeDrag={false}
-          nodesConnectable={false}
-          elementsSelectable={false}
-          deleteKeyCode={null}
-          panOnDrag={false}
-          zoomOnScroll={false}
-          zoomOnPinch={false}
-          zoomOnDoubleClick={false}
-          preventScrolling={false}
-          minZoom={1}
-          maxZoom={1}
-          autoPanOnNodeFocus={false}
-          proOptions={{ hideAttribution: true }}
-          onPaneClick={(event) => {
-            const rect = frame.current!.getBoundingClientRect();
-            add({
-              x: Math.max(
-                0,
-                Math.min(1, (event.clientX - rect.left - INSET) / extent.x),
-              ),
-              y: Math.max(
-                0,
-                Math.min(1, (event.clientY - rect.top - INSET) / extent.y),
-              ),
-            });
-          }}
-        />
+        >
+          <svg
+            className="board-wipe-marks"
+            viewBox="0 0 1000 600"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <g fill="none" stroke="currentColor" strokeLinecap="round">
+              <path
+                d="M26 38 Q88 30 152 39 M32 43 Q96 36 167 44 M24 48 Q88 42 136 48"
+                strokeWidth="3"
+              />
+              <path
+                d="M930 83 Q961 120 947 155 M937 88 Q966 124 952 161"
+                strokeWidth="2"
+              />
+              <path
+                d="M775 554 Q860 541 965 551 M802 560 Q883 549 959 556 M842 566 L936 561"
+                strokeWidth="4"
+              />
+            </g>
+          </svg>
+          <ReactFlow<BoardNode>
+            nodes={nodes}
+            edges={[]}
+            nodeTypes={nodeTypes}
+            onNodesChange={(changes) => {
+              for (const change of changes) {
+                if (
+                  change.type !== "position" ||
+                  change.id !== `draft-${draftVersion}`
+                )
+                  continue;
+                if (change.position) {
+                  const point = change.position;
+                  setPosition(
+                    (current) =>
+                      current && {
+                        x: Math.max(
+                          0,
+                          Math.min(1, (point.x - INSET) / extent.x),
+                        ),
+                        y: Math.max(
+                          0,
+                          Math.min(1, (point.y - INSET) / extent.y),
+                        ),
+                      },
+                  );
+                }
+                if (change.dragging !== undefined) setDragging(change.dragging);
+              }
+            }}
+            nodesDraggable={false}
+            autoPanOnNodeDrag={false}
+            nodesConnectable={false}
+            elementsSelectable={false}
+            deleteKeyCode={null}
+            panOnDrag={false}
+            zoomOnScroll={false}
+            zoomOnPinch={false}
+            zoomOnDoubleClick={false}
+            preventScrolling={false}
+            minZoom={1}
+            maxZoom={1}
+            autoPanOnNodeFocus={false}
+            proOptions={{ hideAttribution: true }}
+            onPaneClick={(event) => {
+              const rect = frame.current!.getBoundingClientRect();
+              add({
+                x: Math.max(
+                  0,
+                  Math.min(1, (event.clientX - rect.left - INSET) / extent.x),
+                ),
+                y: Math.max(
+                  0,
+                  Math.min(1, (event.clientY - rect.top - INSET) / extent.y),
+                ),
+              });
+            }}
+          />
+        </div>
+        <div className="board-tray" aria-hidden="true">
+          <span className="board-marker">
+            <span />
+          </span>
+        </div>
       </div>
       {total > pageSize && (
         <div className="board-pagination">
