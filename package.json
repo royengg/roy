@@ -12,8 +12,7 @@
     "db:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
     "start": "next start",
-    "lint": "eslint",
-    "sync:repository-context": "node scripts/sync-repository-context.mjs"
+    "lint": "eslint"
   },
   "dependencies": {
     "@ai-sdk/google": "^4.0.50",

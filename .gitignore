@@ -17,6 +17,7 @@
 /scripts/test-board.mjs
 /scripts/test-board-browser.mjs
 /scripts/test-board-touch.mjs
+/scripts/sync-repository-context.mjs
 /docs/testimonial-board-plan.md
 
 # next.js

@@ -96,15 +96,7 @@ and [PostgreSQL connection guidance](https://www.prisma.io/docs/orm/v7/core-conc
 
 The API route at `src/app/api/projects/[slug]/chat/route.ts` streams answers from Gemini. Its system context combines portfolio metadata with curated repository snapshots from `src/data/repository-context.json`.
 
-To refresh those snapshots after the source repositories change, place local checkouts of the repositories configured in `scripts/sync-repository-context.mjs` in one directory, then run:
-
-```bash
-REPOSITORY_SOURCE_DIR=/absolute/path/to/checkouts bun run sync:repository-context
-```
-
-The configured checkouts currently include `SaveKaro`, `directorscut`, `1auction`, `homeworkai`, `vedaai-assignment`, `Litmus-AI`, `noteformula`, `leadly-live`, `yunami-bot`, and `payme-app`. Some are private repositories and must already be available locally. To refresh only selected snapshots, pass their slugs through `REPOSITORY_SLUGS`, for example `REPOSITORY_SLUGS=directors-cut,noteformula`.
-
-The sync script excludes dependency folders, environment files, generated output, backups, binaries, and lockfiles. It records the exact source revision for each project.
+Snapshot generation is maintained as local-only tooling, not included in this repository. The site builds and runs using the committed JSON snapshots without that tooling. When refreshing snapshots locally, review the generated content before committing it and exclude credentials, environment files, and unrelated private data.
 
 ## Commands
 
@@ -122,7 +114,6 @@ bunx @google/design.md lint DESIGN.md
 - `src/components/ui` — shadcn-compatible source components, including the keyboard, magnetic button, floating dock, and 3D marquee
 - `src/data` — portfolio content, GitHub contributions, and repository snapshots
 - `src/lib` — server-only repository prompt assembly
-- `scripts` — repeatable repository-context generation
 - `public/projects` — project imagery
 - `DESIGN.md` — design tokens and interface guidance
 
