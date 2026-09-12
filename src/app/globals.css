@@ -566,7 +566,6 @@ button { font: inherit; }
 
 .section {
   padding-block: 92px;
-  border-top: 1px solid var(--color-border-subtle);
   scroll-margin-top: 30px;
 }
 
@@ -1108,7 +1107,7 @@ button { font: inherit; }
 .contact-dock-mobile > button,
 .contact-dock-mobile a { border: 1px solid var(--color-border-dock); background: var(--color-bg-dock-control); color: var(--color-text-primary); box-shadow: var(--shadow-dock-control); }
 .contact-note { margin-block-start: 35px; color: var(--color-text-secondary); font-size: 12px; }
-.site-footer { padding-block: 24px 34px; border-top: 1px solid var(--color-border-subtle); display: flex; justify-content: space-between; gap: 24px; color: var(--color-text-secondary); font-size: 11px; }
+.site-footer { padding-block: 24px 34px; display: flex; justify-content: space-between; gap: 24px; color: var(--color-text-secondary); font-size: 11px; }
 .site-footer a { min-height: 24px; display: inline-flex; align-items: center; gap: 5px; color: var(--color-text-primary); }
 
 .modal-backdrop { position: fixed; inset: 0; z-index: 100; padding: 32px; display: grid; place-items: center; overscroll-behavior: contain; background: rgba(15, 14, 12, 0.5); backdrop-filter: blur(18px) saturate(0.75); }
