@@ -52,6 +52,9 @@ import { FloatingDock, type FloatingDockItem } from "@/components/ui/floating-do
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { ShootingStars } from "@/components/ui/shooting-stars";
 import { StarsBackground } from "@/components/ui/stars-background";
+import { LinkPreview } from "@/components/ui/link-preview";
+import { HeroSignature } from "@/components/hero-signature";
+import { HeroClock } from "@/components/hero-clock";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import { TestimonialBoard } from "@/components/testimonials/testimonial-board";
 import { PullCord } from "@/components/pull-cord";
@@ -868,6 +871,17 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
   const reduceMotion = useReducedMotion();
   const lenisRef = useRef<Lenis | null>(null);
 
+  useEffect(() => {
+    const field = document.querySelector<HTMLElement>("#intro .hero-starfield");
+    if (!field) return;
+    // Use the visible page width, excluding desktop scrollbars.
+    const resize = () => field.parentElement?.style.setProperty("--hero-viewport-width", `${document.documentElement.clientWidth}px`);
+    resize();
+    const observer = new ResizeObserver(resize);
+    observer.observe(document.documentElement);
+    return () => observer.disconnect();
+  }, [isWaveformPreview]);
+
   const refreshScrollDimensions = useCallback(() => {
     lenisRef.current?.resize();
   }, []);
@@ -912,9 +926,9 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
           <div className="availability"><span /> open for work</div>
           <p className="hero-kicker"><VisitorGreeting /></p>
           <h1 aria-label="Rudraksh Roy"><TextHoverEffect text="Rudraksh Roy" /></h1>
-          <p className="hero-role">Product engineer with a full-stack habit.</p>
+
           <p className="hero-intro">
-            I am a product-focused engineer from India who likes to ship fast and work with a business oriented mindset that can handle more than the fullstack work. Always keep it real with no bs and set expectations which i always keep.
+            I am a product-focused engineer from India who likes to ship fast, currently working at <LinkPreview url="https://go-gym-gules.vercel.app/" imageSrc="/link-previews/gogym.jpg" label="GoGym">GoGym</LinkPreview> and <LinkPreview url="https://tryhanabi.com" imageSrc="/link-previews/hanabi.jpg" label="Hanabi">Hanabi</LinkPreview>. I work with a business oriented mindset that can handle more than the fullstack work. Always keep it real with no bs and set expectations which i always keep.
           </p>
           <div className="hero-links">
             <MagneticButton className="rounded-full">
@@ -924,6 +938,11 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
               <a href="https://github.com/royengg" target="_blank" rel="noreferrer">GitHub <HugeiconsIcon icon={Github01Icon} size={16} strokeWidth={1.5} /></a>
             </MagneticButton>
             <CalBookingButton />
+          </div>
+          {isWaveformPreview ? null : <HeroClock />}
+          <div className="hero-corner-label">
+            <HeroSignature />
+            <span>Product Engineer</span>
           </div>
         </section>
 
