@@ -152,8 +152,7 @@
 .testimonial-board .react-flow__node-draft {
   z-index: 1000 !important;
 }
-.testimonial-board:focus-visible,
-.board-note-button:focus-visible {
+.testimonial-board:focus-visible {
   outline: 2px solid var(--color-accent-solid);
   outline-offset: 5px;
 }
@@ -259,8 +258,8 @@
   -webkit-line-clamp: 1;
   overflow: hidden;
 }
-.board-note-button {
-  cursor: pointer;
+.board-note {
+  cursor: default;
   text-align: left;
 }
 .sticky-composer {
@@ -493,28 +492,6 @@
   font: inherit;
   font-size: 16px;
   line-height: 1.5;
-}
-.note-dialog {
-  padding: 0;
-  border: 1px solid var(--color-border-subtle);
-  border-radius: 14px;
-  width: 380px;
-  max-width: calc(100vw - 24px);
-  max-height: calc(100dvh - 40px);
-  margin: auto;
-  background: var(--color-bg-elevated);
-  color: var(--color-text-primary);
-  overflow: auto;
-}
-.note-dialog::backdrop {
-  background: #00000099;
-}
-.note-reader > div {
-  padding: 26px;
-}
-.note-reader .testimonial-note {
-  width: 100%;
-  margin: 0 0 24px;
 }
 .board-admin {
   max-width: 1000px;

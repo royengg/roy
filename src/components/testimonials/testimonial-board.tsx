@@ -10,10 +10,7 @@ import {
 } from "./testimonial-composer";
 
 type Point = { x: number; y: number };
-type NoteNode = Node<
-  { note: PublicNote; onRead: (note: PublicNote) => void },
-  "note"
->;
+type NoteNode = Node<{ note: PublicNote }, "note">;
 type DraftNode = Node<ComposerProps, "draft">;
 type BoardNode = NoteNode | DraftNode;
 const NOTE_WIDTH = 204;
@@ -24,19 +21,7 @@ const INSET = 16;
 
 function PaperNode({ data }: NodeProps<NoteNode>) {
   return (
-    <div
-      className="board-note-button nodrag nopan"
-      role="button"
-      tabIndex={0}
-      aria-label={`Read note from ${data.note.name}`}
-      onClick={() => data.onRead(data.note)}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          data.onRead(data.note);
-        }
-      }}
-    >
+    <div className="board-note nodrag nopan">
       <TestimonialNote note={data.note} compact />
     </div>
   );
@@ -63,7 +48,6 @@ export function TestimonialBoard({
   const [draftVersion, setDraftVersion] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [dragging, setDragging] = useState(false);
-  const [reading, setReading] = useState<PublicNote | null>(null);
   const [size, setSize] = useState({ width: 800, height: 600 });
   const frame = useRef<HTMLDivElement>(null);
   const columns = Math.min(
@@ -200,14 +184,13 @@ export function TestimonialBoard({
     const placed: BoardNode[] = visible.map((note, index) => ({
       id: note.id,
       type: "note",
-      data: { note, onRead: setReading },
+      data: { note },
       position: positions[index],
       width: NOTE_WIDTH,
       height: PUBLISHED_NOTE_HEIGHT,
       draggable: false,
       focusable: false,
-      // Read-only canvas nodes still contain interactive controls.
-      // React Flow otherwise disables hit-testing when selection/dragging are off.
+      // Keep taps on paper from falling through to the empty board.
       style: { pointerEvents: "auto" },
     }));
     if (position)
@@ -399,49 +382,6 @@ export function TestimonialBoard({
           {error}
         </p>
       )}
-      {reading && (
-        <NoteReader note={reading} onClose={() => setReading(null)} />
-      )}
     </div>
-  );
-}
-
-function NoteReader({
-  note,
-  onClose,
-}: {
-  note: PublicNote;
-  onClose: () => void;
-}) {
-  const dialog = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
-    const previous = document.activeElement as HTMLElement | null;
-    const element = dialog.current;
-    element?.showModal();
-    return () => {
-      element?.close();
-      previous?.focus();
-    };
-  }, []);
-  return (
-    <dialog
-      ref={dialog}
-      className="note-dialog note-reader"
-      aria-label={`Note from ${note.name}`}
-      onCancel={(event) => {
-        event.preventDefault();
-        onClose();
-      }}
-      onClick={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
-      <div data-lenis-prevent>
-        <TestimonialNote note={note} preview />
-        <button className="board-button" onClick={onClose}>
-          Close
-        </button>
-      </div>
-    </dialog>
   );
 }
