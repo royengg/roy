@@ -76,6 +76,8 @@ Local verification (uses temporary, explicitly labeled fixtures and removes them
 BOARD_TEST_URL=http://127.0.0.1:3112 node scripts/test-board.mjs
 # Requires a private Chromium instance exposing CDP on localhost:9335.
 BOARD_TEST_URL=http://127.0.0.1:3112 node scripts/test-board-browser.mjs
+# Real touch hit-testing at phone sizes; intercepts the API, no database writes.
+BOARD_TEST_URL=http://127.0.0.1:3112 node scripts/test-board-touch.mjs
 ```
 
 Use a development database for tests, not production. Rejected notes remain

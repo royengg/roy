@@ -200,6 +200,9 @@ export function TestimonialBoard({
       height: 250,
       draggable: false,
       focusable: false,
+      // Read-only canvas nodes still contain interactive controls.
+      // React Flow otherwise disables hit-testing when selection/dragging are off.
+      style: { pointerEvents: "auto" },
     }));
     if (position)
       placed.push({
@@ -214,6 +217,7 @@ export function TestimonialBoard({
         },
         draggable: false,
         focusable: false,
+        style: { pointerEvents: "auto" },
         zIndex: 1000,
       });
     return placed;
