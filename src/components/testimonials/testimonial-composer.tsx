@@ -171,9 +171,11 @@ export function TestimonialComposer({ position, onClose }: ComposerProps) {
             name="website"
             aria-hidden="true"
           />
-          <p className="sticky-status" role="status">
-            {busy ? "Sending…" : "Public after Roy approves."}
-          </p>
+          {busy && (
+            <p className="sticky-status" role="status">
+              Sending…
+            </p>
+          )}
           {error && (
             <p className="sticky-error" role="alert">
               {error}

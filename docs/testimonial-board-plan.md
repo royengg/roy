@@ -15,8 +15,8 @@ Delivery is local only: no remote push or Vercel deployment without a new reques
   caret. Keep Geist, not a separate handwriting font. Reduced motion removes
   the typing and spatial animations.
 - A name line signs the note. A checkmark submits; the cross or Escape cancels.
-  No composer modal, separate submission form, or preview step. The small
-  approval disclosure remains inside the draft so publication is not a surprise.
+  No composer modal, separate submission form, preview step, or approval copy
+  inside the draft. Sending and pending states still provide feedback.
 - One draft at a time. A failed submission preserves its contents. A successful
   submission shows a private pending state until dismissed, not a public note.
 - Approved cards have subtle depth and slight rotation. Opening an approved
