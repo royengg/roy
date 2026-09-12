@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { useNodesInitialized } from "@xyflow/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Cancel01Icon from "@hugeicons/core-free-icons/Cancel01Icon";
 import Tick02Icon from "@hugeicons/core-free-icons/Tick02Icon";
@@ -10,11 +9,16 @@ import Tick02Icon from "@hugeicons/core-free-icons/Tick02Icon";
 export type ComposerProps = {
   position: { x: number; y: number };
   onClose: () => void;
+  onBusyChange: (busy: boolean) => void;
 };
 
-export function TestimonialComposer({ position, onClose }: ComposerProps) {
+export function TestimonialComposer({
+  position,
+  onClose,
+  onBusyChange,
+}: ComposerProps) {
   const reducedMotion = useReducedMotion();
-  const nodesInitialized = useNodesInitialized();
+  const didAutoFocus = useRef(false);
   const textarea = useRef<HTMLTextAreaElement>(null);
   const honeypot = useRef<HTMLInputElement>(null);
   const submitting = useRef(false);
@@ -26,15 +30,6 @@ export function TestimonialComposer({ position, onClose }: ComposerProps) {
   const [error, setError] = useState("");
   const [submissionKey] = useState(() => crypto.randomUUID());
   const prompt = "Write something…";
-
-  useEffect(() => {
-    // React Flow hides a newly mounted node until its dimensions are measured.
-    if (!nodesInitialized) return;
-    const frame = requestAnimationFrame(() =>
-      textarea.current?.focus({ preventScroll: true }),
-    );
-    return () => cancelAnimationFrame(frame);
-  }, [nodesInitialized]);
 
   useEffect(() => {
     if (reducedMotion) return;
@@ -59,6 +54,7 @@ export function TestimonialComposer({ position, onClose }: ComposerProps) {
       return;
     }
     submitting.current = true;
+    onBusyChange(true);
     setBusy(true);
     setError("");
     try {
@@ -84,6 +80,7 @@ export function TestimonialComposer({ position, onClose }: ComposerProps) {
       );
     } finally {
       submitting.current = false;
+      onBusyChange(false);
       setBusy(false);
     }
   }
@@ -102,6 +99,19 @@ export function TestimonialComposer({ position, onClose }: ComposerProps) {
       }}
       animate={{ opacity: 1, scale: 1, rotate: 0 }}
       transition={{ duration: 0.18 }}
+      onAnimationComplete={() => {
+        if (didAutoFocus.current) return;
+        didAutoFocus.current = true;
+        // Wait until the new paper is visible; never steal focus from someone
+        // who has already tapped its name field or an action during the reveal.
+        if (
+          !textarea.current
+            ?.closest(".sticky-composer")
+            ?.contains(document.activeElement)
+        ) {
+          textarea.current?.focus({ preventScroll: true });
+        }
+      }}
       onKeyDown={(event) => {
         if (event.key === "Escape" && !busy) {
           event.stopPropagation();

@@ -60,6 +60,8 @@ export function TestimonialBoard({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [position, setPosition] = useState<Point | null>(null);
+  const [draftVersion, setDraftVersion] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [reading, setReading] = useState<PublicNote | null>(null);
   const [size, setSize] = useState({ width: 800, height: 600 });
@@ -210,9 +212,13 @@ export function TestimonialBoard({
     }));
     if (position)
       placed.push({
-        id: "draft",
+        id: `draft-${draftVersion}`,
         type: "draft",
-        data: { position, onClose: closeDraft },
+        data: {
+          position,
+          onClose: closeDraft,
+          onBusyChange: setSubmitting,
+        },
         width: NOTE_WIDTH,
         height: NOTE_HEIGHT,
         position: {
@@ -235,6 +241,7 @@ export function TestimonialBoard({
     notes,
     extent,
     position,
+    draftVersion,
     closeDraft,
     columns,
     pageSize,
@@ -244,7 +251,7 @@ export function TestimonialBoard({
   ]);
 
   const add = (point: Point) => {
-    if (staticMode) return;
+    if (staticMode || submitting) return;
     if (!accepting) {
       setError(
         loading
@@ -253,12 +260,10 @@ export function TestimonialBoard({
       );
       return;
     }
-    if (position) {
-      frame.current
-        ?.querySelector<HTMLTextAreaElement>("textarea")
-        ?.focus({ preventScroll: true });
-      return;
-    }
+    // Remount only for a new empty-space click, never for a drag or resize.
+    // This resets text, validation, animation, and the submission identity.
+    setDraftVersion((version) => version + 1);
+    setDragging(false);
     setPosition(point);
   };
 
@@ -287,7 +292,11 @@ export function TestimonialBoard({
           nodeTypes={nodeTypes}
           onNodesChange={(changes) => {
             for (const change of changes) {
-              if (change.type !== "position" || change.id !== "draft") continue;
+              if (
+                change.type !== "position" ||
+                change.id !== `draft-${draftVersion}`
+              )
+                continue;
               if (change.position) {
                 const point = change.position;
                 setPosition(

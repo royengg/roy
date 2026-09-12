@@ -227,9 +227,11 @@ try {
       deviceScaleFactor: 1,
       mobile: width < 768,
     });
-    await send("Page.navigate", { url: `${base}/#kind-words` });
+    // Force a fresh document, including after an interrupted test left a draft.
+    const testUrl = `${base}/?board-touch-test=${Date.now()}#kind-words`;
+    await send("Page.navigate", { url: testUrl });
     await until(
-      `document.querySelector('.testimonial-board[aria-busy="false"]')`,
+      `location.href === ${JSON.stringify(testUrl)} && document.querySelector('.testimonial-board[aria-busy="false"]')`,
     );
     await sleep(500);
     await run(
@@ -260,6 +262,52 @@ try {
         await sleep(300);
       };
       await add();
+      await tap('[aria-label="Submit for approval"]');
+      await until(`document.querySelector('.sticky-error')`);
+      await tap('[aria-label="Your note"]');
+      await send("Input.insertText", { text: "Discard this unfinished note" });
+      await tap('[aria-label="Your name"]');
+      await send("Input.insertText", { text: "Old signature" });
+      const beforeReset = submissions;
+      await run(
+        `void (window.previousDraft = document.querySelector('.sticky-composer'))`,
+      );
+      const emptySpot = await run(
+        `(() => { const r = document.querySelector('.testimonial-board').getBoundingClientRect(); return { x: r.x + 50, y: r.y + 420 }; })()`,
+      );
+      await tapPoint(emptySpot);
+      await until(
+        `document.querySelector('.sticky-composer textarea')?.value === ''`,
+      );
+      await until(
+        `document.activeElement?.matches('.sticky-composer textarea')`,
+      );
+      assert.equal(
+        await run(`document.querySelector('.sticky-name').value`),
+        "",
+      );
+      assert.equal(
+        await run(`document.querySelectorAll('.sticky-composer').length`),
+        1,
+      );
+      assert.ok(
+        await run(
+          `!window.previousDraft.isConnected && !document.querySelector('.sticky-error')`,
+        ),
+      );
+      assert.ok(
+        await run(
+          `document.querySelector('.sticky-composer').getBoundingClientRect().y > 250`,
+        ),
+      );
+      assert.equal(
+        submissions,
+        beforeReset,
+        "Replacing an unfinished note must not submit it.",
+      );
+      console.log(
+        `PASS: ${width}px ${theme}: empty-space click replaces the draft, clears name/text/errors, and restores typing focus.`,
+      );
       await capture(`board-touch-before-cancel-${theme}-${width}`);
       await tap('[aria-label="Cancel note"]');
       await until(`!document.querySelector('.sticky-composer')`);

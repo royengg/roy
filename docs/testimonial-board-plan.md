@@ -20,6 +20,9 @@ Delivery is local only: no remote push or Vercel deployment without a new reques
   inside the draft. Sending and pending states still provide feedback.
 - One draft at a time. A failed submission preserves its contents. A successful
   submission shows a private pending state until dismissed, not a public note.
+- Clicking another empty spot discards the unfinished draft and starts a blank
+  note there with a fresh typing animation. This is disabled during submission;
+  dragging and clicks inside the editor preserve the existing draft.
 - Draft paper can be dragged with touch or mouse, using grab/grabbing cursors.
   Text fields and action buttons are excluded. Positions stay inside the board
   and the chosen coordinates are submitted; sending/pending notes cannot move.
