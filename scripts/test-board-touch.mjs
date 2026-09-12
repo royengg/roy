@@ -104,6 +104,34 @@ const tap = async (selector) => {
   console.log(`Touch target for ${selector}: ${target}`);
   await tapPoint(point);
 };
+const swipeBoard = async (dy) => {
+  const start = await run(
+    `(() => { const r = document.querySelector('.testimonial-board').getBoundingClientRect(); return { x: r.x + r.width / 2, y: Math.max(200, r.y + 250) }; })()`,
+  );
+  const before = await run("scrollY");
+  await send("Input.dispatchTouchEvent", {
+    type: "touchStart",
+    touchPoints: [{ ...start, id: 1 }],
+  });
+  for (let step = 1; step <= 10; step++) {
+    await send("Input.dispatchTouchEvent", {
+      type: "touchMove",
+      touchPoints: [{ x: start.x, y: start.y + (dy * step) / 10, id: 1 }],
+    });
+    await sleep(30);
+  }
+  await send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  await sleep(350);
+  const after = await run("scrollY");
+  assert.ok(
+    dy < 0 ? after > before + 50 : after < before - 50,
+    `Swipe ${dy}: page scroll ${before} → ${after}`,
+  );
+  assert.ok(
+    await run("!document.querySelector('.sticky-composer')"),
+    "Swiping must not create a draft.",
+  );
+};
 const dragDraft = async (dx, dy, mouse = false) => {
   const start = await run(
     `(() => { const r = document.querySelector('.sticky-composer').getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + 20 }; })()`,
@@ -208,6 +236,17 @@ try {
       `document.querySelector('.testimonial-board').scrollIntoView({block:'start'})`,
     );
     await sleep(400);
+    if (!mouseMode) {
+      await swipeBoard(-160);
+      await swipeBoard(160);
+      await run(
+        `document.querySelector('.testimonial-board').scrollIntoView({block:'start'})`,
+      );
+      await sleep(400);
+      console.log(
+        `PASS: ${width}px: empty-board swipes scroll the page in both directions without creating notes.`,
+      );
+    }
     for (const theme of ["light", "dark"]) {
       await run(
         `document.documentElement.classList.toggle('dark', ${theme === "dark"})`,

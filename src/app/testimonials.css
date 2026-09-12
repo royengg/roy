@@ -1,5 +1,6 @@
-/* A white writing surface in both themes, like a physical classroom board. */
+/* Soft enamel, faint guide squares, and wipe haze suggest a classroom board. */
 :root {
+  --board-surface: #e8e7e2;
   --board-paper: #f5efda;
   --board-yellow: #f5e89d;
   --board-sage: #dbe5be;
@@ -12,19 +13,36 @@
 .testimonial-board {
   position: relative;
   height: 600px;
-  background: #fff;
-  border: 6px solid #d6d5d1;
+  background-color: var(--board-surface);
+  background-image:
+    radial-gradient(ellipse at 24% 18%, #ffffff30, transparent 65%),
+    radial-gradient(ellipse at 78% 76%, #777b7009, transparent 55%);
+  border: 6px solid #c9c9c3;
   border-radius: 8px;
   box-shadow:
-    inset 0 1px 5px #00000010,
+    inset 0 2px 6px #4a4d4220,
+    inset 0 -1px 0 #ffffff70,
     0 3px 0 #b9b8b3,
     0 8px 18px #00000008;
   overflow: hidden;
 }
+.testimonial-board::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(#686e600b 1px, transparent 1px),
+    linear-gradient(90deg, #686e600b 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: center;
+}
 .dark .testimonial-board {
+  --board-surface: #d6d5cf;
   border-color: #b7b6b1;
   box-shadow:
-    inset 0 1px 5px #00000010,
+    inset 0 2px 6px #4a4d4228,
+    inset 0 -1px 0 #ffffff50,
     0 3px 0 #888783;
 }
 .testimonial-board .react-flow {
@@ -34,6 +52,8 @@
 }
 .testimonial-board .react-flow__pane {
   cursor: crosshair;
+  /* Let the page scroll on touch; only draggable paper captures gestures. */
+  touch-action: pan-y pinch-zoom;
 }
 .testimonial-board .react-flow__node {
   background: none;

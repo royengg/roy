@@ -7,7 +7,8 @@ Delivery is local only: no remote push or Vercel deployment without a new reques
 
 - Existing section heading before Contact; no introductory sentence, invitation,
   empty-state illustration, extra labels, or “Leave a note” button.
-- A clean white classroom-style board in both themes, with a quiet neutral frame.
+- A soft chalk-white classroom board in both themes, with a quiet neutral frame,
+  faint square guides, and subtle enamel shading. Empty-space swipes scroll the page.
   The surrounding portfolio keeps its existing theme, type, and spacing.
 - Clicking or tapping empty space creates a small yellow sticky at that point,
   clamped inside the board. Enter/Space on the focused board also creates one.
