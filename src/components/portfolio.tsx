@@ -980,7 +980,7 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
         </section>
 
         <section id="kind-words" className="section testimonials-section">
-          <SectionHeading index="08">What people say about me</SectionHeading>
+          <SectionHeading index="08">what people say about me</SectionHeading>
           <TestimonialBoard
             staticMode={isWaveformPreview}
             onResize={refreshScrollDimensions}
