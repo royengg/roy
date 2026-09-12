@@ -208,6 +208,17 @@
 }
 .testimonial-note {
   min-height: 204px;
+  padding-top: 34px;
+}
+.note-pin {
+  position: absolute;
+  top: -9px;
+  left: calc(50% - 16px);
+  width: 32px;
+  height: 38px;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(2px 3px 1px #30231b24);
 }
 .note-message {
   white-space: pre-wrap;

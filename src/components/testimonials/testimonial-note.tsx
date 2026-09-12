@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import type { PublicNote } from "@/lib/testimonials";
+import { NotePin } from "./note-pin";
 
 export function TestimonialNote({
   note,
@@ -22,6 +23,7 @@ export function TestimonialNote({
       whileHover={reducedMotion || preview ? undefined : { rotate: 0, y: -4 }}
       transition={{ duration: 0.2 }}
     >
+      <NotePin />
       <p className="note-message">{note.message}</p>
       <footer className="note-signature">
         <span>
