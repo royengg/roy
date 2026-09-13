@@ -902,7 +902,7 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
           )}
           <div className="availability"><span /> Available for backend &amp; full-stack work</div>
           <p className="hero-kicker"><VisitorGreeting /></p>
-          <h1 aria-label="Rudraksh Roy"><TextHoverEffect text="Portfolio harness check" /></h1>
+          <h1 aria-label="Portfolio harness check"><TextHoverEffect text="Portfolio harness check" /></h1>
           <p className="hero-role">Product engineer with a full-stack habit.</p>
           <p className="hero-intro">
             I am a product-focused engineer from India who likes to ship fast and work with a business oriented mindset that can handle more than the fullstack work. Always keep it real with no bs and set expectations which i always keep.
