@@ -262,6 +262,14 @@
   cursor: default;
   text-align: left;
 }
+.react-flow__node.draggable .board-note {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.react-flow__node.dragging .board-note {
+  cursor: grabbing;
+}
 .sticky-composer {
   height: 250px;
   padding: 42px 18px 14px;

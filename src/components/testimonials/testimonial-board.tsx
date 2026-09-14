@@ -21,7 +21,7 @@ const INSET = 16;
 
 function PaperNode({ data }: NodeProps<NoteNode>) {
   return (
-    <div className="board-note nodrag nopan">
+    <div className="board-note nopan">
       <TestimonialNote note={data.note} compact />
     </div>
   );
@@ -45,6 +45,8 @@ export function TestimonialBoard({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [position, setPosition] = useState<Point | null>(null);
+  // Visitor-only positions: never persisted or sent to the API.
+  const [movedNotes, setMovedNotes] = useState<Record<string, Point>>({});
   const [draftVersion, setDraftVersion] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [dragging, setDragging] = useState(false);
@@ -185,10 +187,19 @@ export function TestimonialBoard({
       id: note.id,
       type: "note",
       data: { note },
-      position: positions[index],
+      position: movedNotes[note.id]
+        ? {
+            x: INSET + movedNotes[note.id].x * extent.x,
+            y: INSET + movedNotes[note.id].y * extent.y,
+          }
+        : positions[index],
       width: NOTE_WIDTH,
       height: PUBLISHED_NOTE_HEIGHT,
-      draggable: false,
+      draggable: !staticMode,
+      extent: [
+        [INSET, INSET],
+        [size.width - INSET, size.height - INSET],
+      ],
       focusable: false,
       // Keep taps on paper from falling through to the empty board.
       style: { pointerEvents: "auto" },
@@ -222,6 +233,7 @@ export function TestimonialBoard({
     return placed;
   }, [
     notes,
+    movedNotes,
     extent,
     position,
     draftVersion,
@@ -245,6 +257,7 @@ export function TestimonialBoard({
     }
     // Remount only for a new empty-space click, never for a drag or resize.
     // This resets text, validation, animation, and the submission identity.
+    setMovedNotes({});
     setDraftVersion((version) => version + 1);
     setDragging(false);
     setPosition(point);
@@ -297,6 +310,21 @@ export function TestimonialBoard({
             nodeTypes={nodeTypes}
             onNodesChange={(changes) => {
               for (const change of changes) {
+                if (
+                  change.type === "position" &&
+                  change.position &&
+                  notes.some((note) => note.id === change.id)
+                ) {
+                  const point = change.position;
+                  setMovedNotes((current) => ({
+                    ...current,
+                    [change.id]: {
+                      x: Math.max(0, Math.min(1, (point.x - INSET) / extent.x)),
+                      y: Math.max(0, Math.min(1, (point.y - INSET) / extent.y)),
+                    },
+                  }));
+                  continue;
+                }
                 if (
                   change.type !== "position" ||
                   change.id !== `draft-${draftVersion}`
