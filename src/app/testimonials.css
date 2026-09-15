@@ -608,6 +608,7 @@
 }
 
 @media (max-width: 767px) {
+  .board-pagination > span { display: none; }
   .testimonial-board {
     height: 600px;
   }
