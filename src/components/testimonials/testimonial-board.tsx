@@ -393,9 +393,6 @@ export function TestimonialBoard({
           >
             ←
           </button>
-          <span>
-            {page + 1} / {Math.ceil(total / pageSize)}
-          </span>
           <button
             aria-label="Next notes"
             disabled={(page + 1) * pageSize >= total || !!position}
