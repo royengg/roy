@@ -212,7 +212,7 @@ export const projects: Project[] = [
       "Cursor-based collection, rate limiting, and Redis idempotency protect the pipeline",
     ],
     github: "https://github.com/royengg/leadly-live",
-    live: "https://leadly.live",
+    live: "https://leadly.tryhanabi.com/",
   },
   {
     slug: "yunami-bot",
