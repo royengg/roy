@@ -28,6 +28,8 @@ export function TextHoverEffect({
   const gradientId = `${id}-gradient`;
   const revealId = `${id}-reveal`;
   const maskId = `${id}-mask`;
+  const glowId = `${id}-glow`;
+  const textClipId = `${id}-text-clip`;
 
   useEffect(() => {
     const container = containerRef.current;
@@ -107,7 +109,70 @@ export function TextHoverEffect({
           <mask id={maskId}>
             <rect width="100%" height="100%" fill={`url(#${revealId})`} />
           </mask>
+          <motion.radialGradient
+            id={glowId}
+            gradientUnits="userSpaceOnUse"
+            r="24%"
+            initial={{ cx: "16%", cy: "48%" }}
+            animate={
+              shouldReduceMotion || hovered
+                ? undefined
+                : {
+                    cx: ["16%", "72%", "38%", "88%", "54%", "16%"],
+                    cy: ["48%", "62%", "34%", "50%", "68%", "48%"],
+                    r: ["20%", "27%", "18%", "24%", "21%", "20%"],
+                  }
+            }
+            transition={{
+              duration: 10.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+              times: [0, 0.17, 0.39, 0.63, 0.82, 1],
+            }}
+          >
+            <stop offset="0%" stopColor="white" stopOpacity="1" />
+            <stop offset="38%" stopColor="white" stopOpacity="0.62" />
+            <stop offset="100%" stopColor="white" stopOpacity="0" />
+          </motion.radialGradient>
+          <clipPath id={textClipId}>
+            <text
+              x="0"
+              y={baseline ?? 0}
+              style={{
+                fontFamily: "inherit",
+                fontSize: "inherit",
+                fontWeight: "inherit",
+                letterSpacing: "inherit",
+              }}
+            >
+              {text}
+            </text>
+          </clipPath>
         </defs>
+        <motion.rect
+          width="100%"
+          height="100%"
+          fill={`url(#${glowId})`}
+          clipPath={`url(#${textClipId})`}
+          initial={false}
+          animate={
+            hovered
+              ? { opacity: 0 }
+              : shouldReduceMotion
+              ? { opacity: 0.14 }
+              : { opacity: [0.12, 0.78, 0.2, 0.66, 0.1, 0.12] }
+          }
+          transition={
+            hovered
+              ? { duration: 0.16, ease: "easeOut" }
+              : {
+                  duration: 10.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  times: [0, 0.17, 0.39, 0.63, 0.82, 1],
+                }
+          }
+        />
         <text
           x="0"
           y={baseline ?? 0}
