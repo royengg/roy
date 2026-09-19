@@ -11,6 +11,44 @@
   -webkit-box-decoration-break: clone;
 }
 
+.trigger[data-tone="green"] {
+  color: inherit;
+  padding-bottom: 0;
+  background-image: none;
+}
+
+.trigger[data-tone="green"] .label {
+  color: #142019;
+  padding: 0 2px;
+  border-radius: 2px;
+  background-image: linear-gradient(
+    100deg,
+    light-dark(#cde5d3, #86b99a),
+    light-dark(#e0edc9, #abc985)
+  );
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.trigger[data-tone="orange"] {
+  color: inherit;
+  padding-bottom: 0;
+  background-image: none;
+}
+
+.trigger[data-tone="orange"] .label {
+  color: #21170f;
+  padding: 0 2px;
+  border-radius: 2px;
+  background-image: linear-gradient(
+    100deg,
+    light-dark(#ffdac3, #f3a06b),
+    light-dark(#ffebbd, #eecb68)
+  );
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
 .trigger:hover {
   --dot-color: var(--color-accent-solid);
   color: var(--color-text-primary);
@@ -25,6 +63,14 @@
   outline: 2px solid var(--color-accent-solid);
   outline-offset: 4px;
   border-radius: 3px;
+}
+
+@media (forced-colors: active) {
+  .trigger[data-tone="green"] .label,
+  .trigger[data-tone="orange"] .label {
+    color: LinkText;
+    background: none;
+  }
 }
 
 .content {

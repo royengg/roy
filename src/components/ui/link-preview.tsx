@@ -18,11 +18,13 @@ export function LinkPreview({
   url,
   imageSrc,
   label,
+  tone,
 }: {
   children: ReactNode;
   url: string;
   imageSrc: string;
   label: string;
+  tone?: "green" | "orange";
 }) {
   const [open, setOpen] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
@@ -43,6 +45,7 @@ export function LinkPreview({
     >
       <HoverCard.Trigger
         className={styles.trigger}
+        data-tone={tone}
         href={url}
         target="_blank"
         rel="noopener noreferrer"
@@ -58,7 +61,7 @@ export function LinkPreview({
         }}
         onMouseLeave={() => x.set(0)}
       >
-        {children}
+        <span className={styles.label}>{children}</span>
       </HoverCard.Trigger>
       <AnimatePresence>
         {open && (

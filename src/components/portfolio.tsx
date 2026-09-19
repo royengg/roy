@@ -928,7 +928,7 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
           <h1 aria-label="Rudraksh Roy"><TextHoverEffect text="Rudraksh Roy" /></h1>
 
           <p className="hero-intro">
-            I am a product-focused engineer from India who likes to ship fast, currently working at <LinkPreview url="https://go-gym-gules.vercel.app/" imageSrc="/link-previews/gogym.jpg" label="GoGym">GoGym</LinkPreview> and <LinkPreview url="https://tryhanabi.com" imageSrc="/link-previews/hanabi.jpg" label="Hanabi">Hanabi</LinkPreview>. I work with a business oriented mindset that can handle more than the fullstack work. Always keep it real with no bs and set expectations which i always keep.
+            I am a product-focused engineer from India who likes to ship fast, currently working at <LinkPreview url="https://go-gym-gules.vercel.app/" imageSrc="/link-previews/gogym.jpg" label="GoGym" tone="green">GoGym</LinkPreview> and <LinkPreview url="https://tryhanabi.com" imageSrc="/link-previews/hanabi.jpg" label="Hanabi" tone="orange">Hanabi</LinkPreview>. I work with a business oriented mindset that can handle more than the fullstack work. Always keep it real with no bs and set expectations which i always keep.
           </p>
           <div className="hero-links">
             <MagneticButton className="rounded-full">
