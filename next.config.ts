@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
     "localhost",
     "100.112.188.54",
     "ai-agent-vps.tail366850.ts.net",
+    "singapore-paseo.tail366850.ts.net",
     "*.trycloudflare.com",
   ],
 };

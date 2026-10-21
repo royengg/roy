@@ -1,0 +1,36 @@
+.idleGlow {
+  display: none;
+  opacity: 1;
+  transition: opacity 160ms ease-out;
+}
+
+:global(.dark) .idleGlow {
+  display: inline;
+}
+
+.idleGlow[data-hovered="true"] {
+  opacity: 0;
+}
+
+.breath {
+  opacity: 0.08;
+}
+
+:global(.dark) .breath {
+  animation: breathe 4.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px rgb(255 255 255 / 28%));
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.08; }
+  50% { opacity: 0.88; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(.dark) .breath {
+    animation: none;
+    opacity: 0.18;
+  }
+
+  .idleGlow { transition: none; }
+}
