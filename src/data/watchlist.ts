@@ -7,6 +7,12 @@ export type WatchlistItem = {
 
 export const watchlist: WatchlistItem[] = [
   {
+    title: "The Mentalist",
+    year: "2008",
+    poster: "/posters/the-mentalist-2008.jpg",
+    posterAlt: "The Mentalist series poster featuring Simon Baker as Patrick Jane",
+  },
+  {
     title: "The Good Doctor",
     year: "2017",
     poster: "/posters/the-good-doctor-2017.jpg",
