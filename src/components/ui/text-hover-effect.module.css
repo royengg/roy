@@ -1,36 +1,25 @@
-.idleGlow {
-  display: none;
-  opacity: 1;
-  transition: opacity 160ms ease-out;
+.name {
+  color: inherit;
+  text-shadow: none;
 }
 
-:global(.dark) .idleGlow {
-  display: inline;
-}
-
-.idleGlow[data-hovered="true"] {
-  opacity: 0;
-}
-
-.breath {
-  opacity: 0.08;
-}
-
-:global(.dark) .breath {
+:global(.dark) .name[data-hovered="false"] {
   animation: breathe 4.8s ease-in-out infinite;
-  filter: drop-shadow(0 0 4px rgb(255 255 255 / 28%));
 }
 
 @keyframes breathe {
-  0%, 100% { opacity: 0.08; }
-  50% { opacity: 0.88; }
+  0%, 100% {
+    color: var(--color-text-primary);
+    text-shadow: 0 0 4px rgb(255 255 255 / 2%);
+  }
+  50% {
+    color: #fff;
+    text-shadow: 0 0 4px rgb(255 255 255 / 25%), 0 0 10px rgb(255 255 255 / 10%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :global(.dark) .breath {
+  :global(.dark) .name[data-hovered="false"] {
     animation: none;
-    opacity: 0.18;
   }
-
-  .idleGlow { transition: none; }
 }

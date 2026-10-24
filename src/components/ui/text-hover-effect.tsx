@@ -77,7 +77,7 @@ export function TextHoverEffect({
         className,
       )}
     >
-      <span>{text}</span>
+      <span className={styles.name} data-hovered={hovered}>{text}</span>
       <span ref={baselineRef} aria-hidden="true" className="inline-block h-0 w-0 align-baseline" />
       <svg
         aria-hidden="true"
@@ -109,23 +109,6 @@ export function TextHoverEffect({
             <rect width="100%" height="100%" fill={`url(#${revealId})`} />
           </mask>
         </defs>
-        <g className={styles.idleGlow} data-hovered={hovered}>
-          <text
-            className={styles.breath}
-            x="0"
-            y={baseline ?? 0}
-            fill="white"
-            visibility={baseline === null ? "hidden" : "visible"}
-            style={{
-              fontFamily: "inherit",
-              fontSize: "inherit",
-              fontWeight: "inherit",
-              letterSpacing: "inherit",
-            }}
-          >
-            {text}
-          </text>
-        </g>
         <text
           x="0"
           y={baseline ?? 0}
