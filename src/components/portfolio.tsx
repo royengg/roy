@@ -17,6 +17,9 @@ import CloudIcon from "@hugeicons/core-free-icons/CloudIcon";
 import Linkedin01Icon from "@hugeicons/core-free-icons/Linkedin01Icon";
 import Mail01Icon from "@hugeicons/core-free-icons/Mail01Icon";
 import Queue01Icon from "@hugeicons/core-free-icons/Queue01Icon";
+import AdobePhotoshopIcon from "@hugeicons/core-free-icons/AdobePhotoshopIcon";
+import AdobeIllustratorIcon from "@hugeicons/core-free-icons/AdobeIllustratorIcon";
+import PaintBrush04Icon from "@hugeicons/core-free-icons/PaintBrush04Icon";
 import {
   SiBetterauth,
   SiBun,
@@ -31,6 +34,7 @@ import {
   SiHono,
   SiLangchain,
   SiLivekit,
+  SiMedibangpaint,
   SiNextdotjs,
   SiNodedotjs,
   SiPaypal,
@@ -167,6 +171,10 @@ const PineconeIcon: IconType = ({ size = 20, color = "currentColor", ...props })
 );
 
 const techIcons: Record<string, TechIconDefinition> = {
+  "Adobe Photoshop": { type: "interface", icon: AdobePhotoshopIcon, color: "#31a8ff" },
+  "Adobe Illustrator": { type: "interface", icon: AdobeIllustratorIcon, color: "#ff9a00" },
+  "MediBang Paint": { type: "brand", icon: SiMedibangpaint, color: "#58b6e7" },
+  "Clip Studio Paint": { type: "interface", icon: PaintBrush04Icon, color: "#f5f5f2" },
   "Amazon S3": { type: "interface", icon: CloudIcon, color: "#ff6b35" },
   "Better Auth": { type: "brand", icon: SiBetterauth, color: "#f5f5f2" },
   BullMQ: { type: "interface", icon: Queue01Icon, color: "#c8ff58" },

@@ -350,5 +350,11 @@ export const experiences = [
     location: "Kolkata, India · Remote",
     detail:
       "Leading freelance designers, client acquisition, project operations, and international payments while maintaining long-term client relationships and consistent delivery.",
+    stack: [
+      "Adobe Photoshop",
+      "Adobe Illustrator",
+      "MediBang Paint",
+      "Clip Studio Paint",
+    ],
   },
 ];
