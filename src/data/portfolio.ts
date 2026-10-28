@@ -289,6 +289,15 @@ export const experiences = [
     location: "United Kingdom · Remote",
     detail:
       "Technical leadership across client and internal projects, delivering scalable, modern web platforms.",
+    stack: [
+      "TypeScript",
+      "React Native",
+      "Expo",
+      "Next.js",
+      "Tailwind CSS",
+      "Supabase",
+      "PostgreSQL",
+    ],
   },
   {
     index: "02",
