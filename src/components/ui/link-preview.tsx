@@ -24,7 +24,7 @@ export function LinkPreview({
   url: string;
   imageSrc: string;
   label: string;
-  tone?: "green" | "orange";
+  tone?: "green" | "orange" | "blue";
 }) {
   const [open, setOpen] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
