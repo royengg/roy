@@ -282,6 +282,16 @@ export const projects: Project[] = [
 export const experiences = [
   {
     index: "01",
+    name: "Quantum",
+    role: "Software Engineer",
+    type: "freelance",
+    period: "Sep 2026—now",
+    location: "United Kingdom · Remote",
+    detail:
+      "Technical leadership across client and internal projects, delivering scalable, modern web platforms.",
+  },
+  {
+    index: "02",
     name: "Go Gym",
     role: "Software Engineer",
     type: "freelance",
@@ -302,7 +312,7 @@ export const experiences = [
     ],
   },
   {
-    index: "02",
+    index: "03",
     name: "Hanabi Labs",
     role: "Software Engineer",
     type: "freelance",
@@ -323,7 +333,7 @@ export const experiences = [
     ],
   },
   {
-    index: "03",
+    index: "04",
     name: "Wabi Sabi",
     role: "Founder",
     type: "self-employed",
