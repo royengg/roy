@@ -645,7 +645,6 @@ button { font: inherit; }
 }
 
 .section-heading { margin-block-end: 42px; }
-.section-index { display: block; margin-block-end: 16px; font-family: var(--font-geist-mono), monospace; font-size: 11px; color: var(--color-text-secondary); font-variant-numeric: tabular-nums; }
 .section-heading h2 { margin: 0; font-size: clamp(36px, 6vw, 55px); line-height: 1; font-weight: 520; letter-spacing: -0.055em; text-wrap: balance; }
 .section-note { max-width: 56ch; margin: -18px 0 36px; color: var(--color-text-secondary); line-height: 1.6; font-size: 14px; text-wrap: pretty; }
 

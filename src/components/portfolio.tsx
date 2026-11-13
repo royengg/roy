@@ -228,10 +228,9 @@ function TechIcon({ name }: { name: string }) {
   );
 }
 
-function SectionHeading({ index, children }: { index: string; children: React.ReactNode }) {
+function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
     <div className="section-heading">
-      <span className="section-index">({index})</span>
       <h2>
         {children}<span className="accent-dot"></span>
       </h2>
@@ -955,7 +954,7 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
         </section>
 
         <section id="about" className="section about-section">
-          <SectionHeading index="01">about</SectionHeading>
+          <SectionHeading>about</SectionHeading>
           <div className="about-grid">
             <div className="about-lede-column">
               <KeyboardDemo />
@@ -968,7 +967,7 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
         </section>
 
         <section id="stack" className="section stack-section">
-          <SectionHeading index="02">tech stack</SectionHeading>
+          <SectionHeading>tech stack</SectionHeading>
          
           <div className="stack-marquee-frame">
             <ThreeDMarquee
@@ -980,34 +979,34 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
         </section>
 
         <section id="open-source" className="section github-section">
-          <SectionHeading index="03">open source</SectionHeading>
+          <SectionHeading>open source</SectionHeading>
           <ContributionGraph />
         </section>
 
         <section id="experience" className="section experience-section">
-          <SectionHeading index="04">experience</SectionHeading><ExperienceRows />
+          <SectionHeading>experience</SectionHeading><ExperienceRows />
         </section>
 
         <section id="work" className="section projects-section">
-          <SectionHeading index="05">projects</SectionHeading>
+          <SectionHeading>projects</SectionHeading>
          
           <ProjectList onOpen={setSelectedProject} onExpand={refreshScrollDimensions} />
         </section>
 
         <section id="now-showing" className="section now-showing-section">
-          <SectionHeading index="06">now showing</SectionHeading>
+          <SectionHeading>now showing</SectionHeading>
         
           <NowShowing staticMode={isWaveformPreview} />
         </section>
 
         <section id="now-playing" className="section spotify-section">
-          <SectionHeading index="07">now playing</SectionHeading>
+          <SectionHeading>now playing</SectionHeading>
          
           <SpotifyPlayer staticMode={isWaveformPreview} />
         </section>
 
         <section id="kind-words" className="section testimonials-section">
-          <SectionHeading index="08">what people say about me</SectionHeading>
+          <SectionHeading>what people say about me</SectionHeading>
           <TestimonialBoard
             staticMode={isWaveformPreview}
             onResize={refreshScrollDimensions}
@@ -1015,7 +1014,7 @@ export default function Portfolio({ isWaveformPreview = false }: PortfolioProps)
         </section>
 
         <section id="contact" className="section contact-section">
-          <SectionHeading index="09">contact</SectionHeading>
+          <SectionHeading>contact</SectionHeading>
           <p className="contact-lede">Have a difficult backend problem or a product that needs to become real?</p>
           <nav className="contact-dock" aria-label="Contact links">
             <FloatingDock
